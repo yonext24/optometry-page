@@ -9,21 +9,20 @@ import {
 } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIRABASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIRABASE_AUTHDOMAIN,
-  projectId: process.env.REACT_APP_FIRABASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIRABASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIRABASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIRABASE_APPID,
-  measurementId: process.env.REACT_APP_FIRABASE_MEASUREMENTID,
-  databaseURL: process.env.REACT_APP_FIRABASE_DATABASEURL
+  apiKey: 'AIzaSyDeUbC9dNte22gqGASi2r6Pwx_ObhzenG8',
+  authDomain: 'la-salle-nuevo.firebaseapp.com',
+  projectId: 'la-salle-nuevo',
+  storageBucket: 'la-salle-nuevo.appspot.com',
+  messagingSenderId: '377695167984',
+  appId: '1:377695167984:web:40e10d1645d94b20512935',
+  measurementId: 'G-89HN9KXMR6'
 }
 
 // fundamental firebase
 export const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
 export const db = getFirestore(app)
-export const storage = getStorage(app)
+export const auth = getAuth()
+export const storage = getStorage()
 
 // Create
 export async function addToDB (uid, email, nombre, apellido, table) {

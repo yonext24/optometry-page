@@ -1,2 +1,11 @@
+.nav, .nav > div {
+  display: flex;
+  align-items: center;
+}
 .nav {
+  justify-content: space-between;
+  background-color: var(--semi-blanco);
+}
+.entry {
+
 }
