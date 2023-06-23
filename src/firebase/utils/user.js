@@ -3,6 +3,7 @@ import { adminCollection, doctorsCollection, patientsCollection } from '../colle
 
 export const getUser = async (id, claim) => {
   const collection = claim === 'admin' ? adminCollection : claim === 'doctor' ? doctorsCollection : patientsCollection
+  console.log({ collection, claim, id })
 
   const docRef = doc(collection, id)
 

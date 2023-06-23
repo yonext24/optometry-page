@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import { useUser } from '../../hooks/useUser'
 import { USER_POSSIBLE_STATES } from '../../utils/user-possible-states'
 import { NavbarEntry } from './navbar-entry'
@@ -12,20 +13,21 @@ const entrys = [
 
 export function Navbar () {
   const user = useUser()
+  const { pathname } = useLocation()
 
   return <nav className={styles.nav}>
-      <div>
-        <div style={{ width: 150, height: 50, backgroundColor: 'red' }} />
+      <img className='' src='/logo.webp' height={35} />
+      <div className={styles.entrysContainer}>
         {
-          entrys.map(el => <NavbarEntry key={el.name} {...el} />)
+          entrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname === el.href} />)
         }
-    </div>
-    <div>
-      {
-        user === USER_POSSIBLE_STATES.NOT_LOGGED
-          ? <NavbarLoginEntry />
-          : null
-      }
-    </div>
+      </div>
+      <div className={styles.loginContainer}>
+        {
+          user === USER_POSSIBLE_STATES.NOT_LOGGED
+            ? <NavbarLoginEntry />
+            : null
+        }
+      </div>
   </nav>
 }

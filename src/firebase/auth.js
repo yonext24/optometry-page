@@ -1,3 +1,5 @@
+/* eslint-disable dot-notation */
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { auth } from './config'
 import { getUser } from './utils/user'
@@ -7,7 +9,7 @@ export async function getUserRole () {
     if (auth.currentUser === null) resolve(USER_POSSIBLE_STATES.NOT_LOGGED)
     auth.currentUser?.getIdTokenResult()
       .then((idTokenResult) => {
-        resolve(idTokenResult.claims.role)
+        resolve(idTokenResult.claims['role'])
       })
       .catch(reject)
   })
@@ -15,19 +17,28 @@ export async function getUserRole () {
 
 export const onAuthStateChanged = (setState) => {
   return auth.onAuthStateChanged(async (user) => {
+    console.log(user)
     if (user === null) {
       setState(USER_POSSIBLE_STATES.NOT_LOGGED)
       return
     }
     try {
-      const claim = await getUserRole()
-      if (!claim) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
+      const role = await getUserRole()
 
-      const userFromFirestore = await getUser(user.id, claim)
+      if (!role) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
+      const userFromFirestore = await getUser(user.uid, role)
 
-      setState({ ...user, ...userFromFirestore })
-    } catch {
+      setState({ ...user, ...userFromFirestore, role })
+    } catch (err) {
+      console.log({ ERROR_EN_AUTHSTATECHANGED: err })
       setState(USER_POSSIBLE_STATES.NOT_LOGGED)
     }
   })
+}
+
+export const iniciarSesion = async (
+  email,
+  password
+) => {
+  return await signInWithEmailAndPassword(auth, email, password)
 }
