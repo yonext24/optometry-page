@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { iniciarSesion } from '../../firebase/auth'
 import styles from './login.module.css'
 import { Spinner } from '../../components/spinner/spinner'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '../../hooks/useUser'
 
 export function Login () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const user = useUser()
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -14,17 +19,19 @@ export function Login () {
 
     const data = new FormData(e.target)
     const { email, password } = Object.fromEntries(data)
-    console.log({ email, password })
 
     iniciarSesion(String(email), String(password))
       .catch(err => {
-        console.log(err)
         if (['auth/invalid-email', 'auth/wrong-password'].includes(err.code)) {
           setError('Email inválido')
         } else setError('Error al iniciar sesión')
       })
       .finally(() => { setLoading(false) })
   }
+
+  useEffect(() => {
+    if (user) navigate('/')
+  }, [user])
 
   return <main className={styles.main}>
     <section className={styles.sectionForm}>

@@ -6,7 +6,7 @@ export const UserContext = createContext(USER_POSSIBLE_STATES.NOT_KNOWN)
 
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(USER_POSSIBLE_STATES.NOT_KNOWN)
-  console.log(user)
+  console.log({ user })
 
   useEffect(() => {
     onAuthStateChanged(setUser)

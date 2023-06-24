@@ -17,7 +17,6 @@ export async function getUserRole () {
 
 export const onAuthStateChanged = (setState) => {
   return auth.onAuthStateChanged(async (user) => {
-    console.log(user)
     if (user === null) {
       setState(USER_POSSIBLE_STATES.NOT_LOGGED)
       return
@@ -26,11 +25,10 @@ export const onAuthStateChanged = (setState) => {
       const role = await getUserRole()
 
       if (!role) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
-      const userFromFirestore = await getUser(user.uid, role)
+      const userFromFirestore = await getUser(user.email, role)
 
-      setState({ ...user, ...userFromFirestore, role })
+      setState({ ...userFromFirestore, role })
     } catch (err) {
-      console.log({ ERROR_EN_AUTHSTATECHANGED: err })
       setState(USER_POSSIBLE_STATES.NOT_LOGGED)
     }
   })

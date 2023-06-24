@@ -1,6 +1,8 @@
 import { storage } from '../config'
 import { ref, uploadBytes } from 'firebase/storage'
-import { adminCollection } from '../collections'
+import { patientsCollection } from '../collections'
+import { getUserRole } from '../auth'
+import { getDocs } from 'firebase/firestore'
 
 // Create
 export async function createAdmin (email, password, name, lastName) {
@@ -23,4 +25,22 @@ export async function setAdminProfilePic (uid, file) {
   } catch (error) {
     console.error('Error al subir archivo: ' + error)
   }
+}
+
+export async function getAllPatients () {
+  if (await getUserRole() !== 'admin') throw new Error('No estás autorizado')
+
+  return await getDocs(patientsCollection)
+    .then(docs => {
+      if (docs.empty) return []
+
+      const datas = docs.docs.map(doc => {
+        const id = doc.id
+        const data = doc.data()
+
+        return { ...data, id }
+      })
+
+      return datas
+    })
 }
