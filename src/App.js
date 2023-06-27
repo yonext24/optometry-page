@@ -7,8 +7,9 @@ import { Login } from './pages/Login/login'
 import { ProtectedRoute } from './components/protected-route/protected-route'
 import { useUser } from './hooks/useUser'
 import { USER_POSSIBLE_STATES } from './utils/user-possible-states'
-import { Dashboard } from './pages/Dashboard/Dashboard'
+import { DashboardLayout } from './pages/Dashboard/DashboardLayout'
 import { Pacientes } from './pages/Pacientes/Pacientes'
+import { Asignacion } from './pages/Dashboard/Asignacion'
 
 function App () {
   const user = useUser()
@@ -23,8 +24,27 @@ function App () {
         <Route
           path='/dashboard'
           element={
-            <ProtectedRoute condition={defaultCondition || user !== USER_POSSIBLE_STATES.NOT_LOGGED}>
-              <Dashboard />
+            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
+              <DashboardLayout></DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/dashboard/asignacion'
+          element={
+            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
+              <DashboardLayout>
+                <Asignacion />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/dashboard/register'
+          element={
+            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
+              <DashboardLayout>
+              </DashboardLayout>
             </ProtectedRoute>
           }
         />

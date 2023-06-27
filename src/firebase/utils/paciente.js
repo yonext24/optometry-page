@@ -1,5 +1,6 @@
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, getDocs, query, where } from 'firebase/firestore'
 import { patientsCollection } from '../collections'
+import { getUserRole } from '../auth'
 
 export async function createPatient (email, password, name, lastName) {
 }
@@ -12,6 +13,24 @@ export async function getPatientAvailableData (id) {
       const data = doc.data()
 
       return { deberes: data.deberes, historia_clinica: data.historia_clinica }
+    })
+}
+
+export async function getAllPatientsWithoutDoctor () {
+  if (await getUserRole() !== 'admin') throw new Error('No estás autorizado')
+
+  return await getDocs(query(patientsCollection, where('medico_asignado', '==', null)))
+    .then(docs => {
+      if (docs.empty) return []
+
+      const datas = docs.docs.map(doc => {
+        const id = doc.id
+        const data = doc.data()
+
+        return { ...data, id }
+      })
+
+      return datas
     })
 }
 

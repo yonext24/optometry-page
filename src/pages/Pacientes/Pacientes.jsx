@@ -15,7 +15,7 @@ export function Pacientes () {
         </div>
         : user?.role === 'admin'
           ? <PacientesPageAdminRender />
-          : ''
+          : null
     }
   </main>
 }

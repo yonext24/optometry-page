@@ -45,6 +45,9 @@
   transition: .1s ease;
   padding: 15px 5px;
 }
+.table tbody tr:hover td {
+  background-color: rgb(var(--amarillo) / .5);
+}
 .table tbody tr td:first-of-type {
   padding-left: 20px;
   font-weight: bold;

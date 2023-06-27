@@ -12,7 +12,7 @@ const entrys = [
 ]
 const adminEntrys = [
   { name: 'Pacientes', href: '/pacientes' },
-  { name: 'Dashboard', href: '/dashboard' }
+  { name: 'Dashboard', href: '/dashboard/asignacion' }
 ]
 const doctorEntrys = [
   { name: 'Pacientes', href: '/pacientes' }

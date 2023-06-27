@@ -4,6 +4,11 @@
   width: 125px;
   background-color: var(--semi-blanco);
   padding: 10px 0 0;
+  max-width: 500px;
+  transition: max-width .2s ease-in;
+}
+.closed {
+  max-width: 0px;
 }
 .menu > * {
   display: flex;
@@ -12,6 +17,13 @@
   position: relative;
   padding: 10px 0;
   gap: 5px;
+  border-radius: 10px;
+  width: 80%;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.menu > *:hover {
+  background-color: rgb(var(--amarillo) / .5)
 }
 .menu > *::after {
   content: "";
@@ -24,11 +36,4 @@
 }
 .menu h4 {
   font-weight: normal;
-}
-.userImage {
-  background-color: var(--azul-profundo);
-  height: 36px;
-  width: 36px;
-  border-radius: 9999px;
-  box-shadow: var(--shadow-medium);
 }
