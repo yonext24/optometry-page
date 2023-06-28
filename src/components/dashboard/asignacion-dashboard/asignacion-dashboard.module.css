@@ -17,8 +17,10 @@
 }
 .grid > div > header {
   background-color: var(--azul-oscuro);
+  display: flex;
+  justify-content: space-between;
   color: white;
-  padding: 5px;
+  padding: 5px 12px;
   font-weight: 600;
   font-size: 17px;
   position: sticky;
@@ -75,6 +77,10 @@
   align-items: center;
   column-gap: .75rem;
   transition: .15s ease
+}
+.person p {
+  margin-left: auto;
+  font-weight: bold;
 }
 .person:hover {
   background-color: var(--azul-claro);

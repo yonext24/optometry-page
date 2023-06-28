@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-case-declarations */
 export const INITIAL_ASIGNACION_STATE = {
   doctors: {
     data: null,
@@ -39,8 +41,8 @@ export function asignacionReducer (state, action) {
       return { ...state, patients: { ...state.assigned, error: null, loading: true } }
     case 'setPatientsError':
       return { ...state, patients: { error: action.payload, loading: false, data: null } }
-    case 'removePatientFromPatients':
-      return { ...state, patients: { error: null, loading: false, data: state.patients.data.filter(el => el.id !== action.payload) } }
+    // case 'removePatientFromPatients':
+    //   return { ...state, patients: { error: null, loading: false, data: state.patients.data.filter(el => el.id !== action.payload) } }
     case 'addToPatients':
       return {
         ...state,
@@ -54,15 +56,63 @@ export function asignacionReducer (state, action) {
       return { ...state, assigned: { error: null, loading: false, data: action.payload } }
     case 'removePatientFromAssigned':
       return { ...state, assigned: { error: null, loading: false, data: state.assigned.data.filter(el => el.id !== action.payload) } }
-    case 'addToAssigned':
+
+    case 'assignPatient':
+      const assign_doctors = [...state.doctors.data]
+      const doctorGettingAssignedIndex = assign_doctors.findIndex(el => el.id === action.payload.doctor.id)
+      if (doctorGettingAssignedIndex > -1) {
+        if (!assign_doctors[doctorGettingAssignedIndex]?.pacientes_asignados?.some(el => el.id === action.payload.patient.id)) {
+          assign_doctors[doctorGettingAssignedIndex].pacientes_asignados = assign_doctors[doctorGettingAssignedIndex].pacientes_asignados.concat(action.payload.patient)
+        }
+      }
       return {
         ...state,
+        doctors: {
+          ...state.doctors,
+          data: assign_doctors
+        },
+        patients: {
+          ...state.patients,
+          data: state.patients.data.filter(el => el.id !== action.payload.patient.id)
+        },
         assigned: {
           error: null,
           loading: false,
-          data: state.assigned.data !== null ? state.assigned.data.concat(action.payload) : [action.payload]
+          data: state.assigned.data !== null ? state.assigned.data.concat(action.payload.patient) : [action.payload.patient]
         }
       }
+    case 'deassignPatient':
+      const deassign_doctors = [...state.doctors.data]
+      const doctorGettingDeassignedIndex = deassign_doctors.findIndex(el => el.id === action.payload.doctor.id)
+      if (doctorGettingDeassignedIndex > -1) {
+        deassign_doctors[doctorGettingDeassignedIndex].pacientes_asignados = deassign_doctors[doctorGettingDeassignedIndex].pacientes_asignados.filter(el => el.id !== action.payload.patient.id)
+      }
+      return {
+        ...state,
+        doctors: {
+          ...state.doctors,
+          data: deassign_doctors
+        },
+        patients: {
+          ...state.patients,
+          data: state.patients.data.concat(action.payload.patient)
+        },
+        assigned: {
+          error: null,
+          loading: false,
+          data: state.assigned.data !== null ? state.assigned.data.filter(el => el.id !== action.payload.patient.id) : [action.payload.patient]
+        }
+      }
+
+    // case 'addToAssigned':
+    //   return {
+    //     ...state,
+    //     assigned: {
+    //       error: null,
+    //       loading: false,
+    //       data: state.assigned.data !== null ? state.assigned.data.concat(action.payload) : [action.payload]
+    //     }
+    //   }
     case 'setAssignedLoading':
       return { ...state, assigned: { ...state.assigned, error: null, loading: true } }
     case 'setSelectedDoctor':

@@ -95,6 +95,7 @@
   cursor: pointer;
   transition: .1s ease;
   background-color: inherit;
+  text-align: start;
 }
 .userModal button:hover, .userModal a:hover {
   background-color: var(--azul-profundo);

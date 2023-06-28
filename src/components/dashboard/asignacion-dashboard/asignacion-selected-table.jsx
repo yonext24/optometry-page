@@ -6,7 +6,7 @@ function AsignacionAssignedRender ({ data, deassignPatient, selectedDoctor }) {
   return <div className={styles.tableData}>
     {
       data.loading
-        ? <Spinner style={{ height: 15, width: 15, color: 'var(--azul-profundo)' }} />
+        ? <Spinner style={{ height: 15, width: 15, color: 'var(--azul-profundo)', margin: 'auto' }} />
         : data.error
           ? <span>{data.error}</span>
           : data.data
@@ -26,7 +26,7 @@ function AsignacionAssignedRender ({ data, deassignPatient, selectedDoctor }) {
 export function AsignacionSelectedTable ({ assignedData, deassignPatient, selectedDoctor }) {
   if (!assignedData.data) return null
   return <div className={styles.assignedTable}>
-    <header>Pacientes asignados</header>
+    <header>Pacientes asignados al Dr. {selectedDoctor.nombre} {selectedDoctor.apellido}</header>
     {
       <AsignacionAssignedRender data={assignedData} deassignPatient={deassignPatient} selectedDoctor={selectedDoctor} />
     }

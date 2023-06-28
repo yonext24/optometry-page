@@ -13,8 +13,9 @@ function AsignacionPacientesTableRender ({ data, selectedDoctor, assignPatient }
             ? data.data.map(el => <PersonEntry key={el.id}>
               <div id={'userImage'} />
               <span>{el.nombre} {el.apellido}</span>
+              <p style={{ fontWeight: 'normal' }}>DNI {el.documento}</p>
               {
-                selectedDoctor && <button onClick={() => assignPatient({ patient: el, doctor: selectedDoctor })} className={styles.assign}>Asignar</button>
+                selectedDoctor && <button onClick={() => { assignPatient({ patient: el, doctor: selectedDoctor }) }} className={styles.assign}>Asignar</button>
               }
             </PersonEntry>
             )
@@ -25,7 +26,7 @@ function AsignacionPacientesTableRender ({ data, selectedDoctor, assignPatient }
 
 export function AsignacionPatientsTable ({ patientsData, selectedDoctor, assignPatient }) {
   return <div className={styles.patientsTable} data-loading={patientsData.loading}>
-    <header>Pacientes</header>
+    <header>Pacientes disponibles (sin médico)</header>
     <AsignacionPacientesTableRender data={patientsData} selectedDoctor={selectedDoctor} assignPatient={assignPatient} />
   </div>
 }

@@ -14,8 +14,8 @@ export function NavbarUserEntry () {
   return <div className={styles.userEntry}>
     <button onClick={() => { setOpen(prev => !prev) }} className={styles.userEntry} >
       {
-        user.photo !== ''
-          ? <img className={styles.userImage} src={user.photo} height={36} width={36} />
+        user.image
+          ? <img className={styles.userImage} src={user.image.url} height={36} width={36} />
           : <div className={styles.userImage + ' ' + styles.imagePlaceholder} />
       }
       <span>{user.nombre} {user.apellido}</span>

@@ -29,6 +29,8 @@
   --azul-intermedio: #5e83ba;
   --azul-claro:#c2d2e9;
   --semi-blanco: #f1f1f0;
+  --toastify-color-light: var(--azul-profundo);
+  --toastify-text-color-light: white;
   
 
   --navbar-height: 75px;

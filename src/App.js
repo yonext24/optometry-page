@@ -9,7 +9,10 @@ import { useUser } from './hooks/useUser'
 import { USER_POSSIBLE_STATES } from './utils/user-possible-states'
 import { DashboardLayout } from './pages/Dashboard/DashboardLayout'
 import { Pacientes } from './pages/Pacientes/Pacientes'
-import { Asignacion } from './pages/Dashboard/Asignacion'
+import { Asignacion } from './pages/Dashboard/asignacion/Asignacion'
+import { Register } from './pages/Dashboard/register/Register'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App () {
   const user = useUser()
@@ -17,6 +20,19 @@ function App () {
 
   return (
     <div className='App'>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000000000}
+        limit={2}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
 
       <Navbar />
       <Routes>
@@ -44,6 +60,7 @@ function App () {
           element={
             <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
               <DashboardLayout>
+                <Register />
               </DashboardLayout>
             </ProtectedRoute>
           }

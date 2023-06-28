@@ -36,16 +36,14 @@ export function AsignacionDashboard () {
     dispatch({ type: 'setAssignedLoading' })
     await assignPatientToDoctor(doctor, patient)
       .then(() => {
-        dispatch({ type: 'addToAssigned', payload: patient })
-        dispatch({ type: 'removePatientFromPatients', payload: patient.id })
+        dispatch({ type: 'assignPatient', payload: { patient, doctor } })
       })
   }, [])
   const deassignPatient = useCallback(async ({ patient, doctor }) => {
     if (!patient || !doctor) return
     await deassignPatientToDoctor(doctor, patient)
       .then(() => {
-        dispatch({ type: 'addToPatients', payload: patient })
-        dispatch({ type: 'removePatientFromAssigned', payload: patient.id })
+        dispatch({ type: 'deassignPatient', payload: { patient, doctor } })
       })
   }, [])
 
@@ -57,6 +55,7 @@ export function AsignacionDashboard () {
   }, [user])
 
   return <div className={styles.grid}>
+    {/* I could have done this with a map but now its too late */}
     <AsignacionDoctorsTable doctorsData={state.doctors} refetch={getDoctors} selectedDoctor={state.selectedDoctor} setSelectedDoctor={setSelectedDoctor} />
     <AsignacionPatientsTable patientsData={state.patients} refetchPatients={getPatients} selectedDoctor={state.selectedDoctor} assignPatient={assignPatient} />
     <AsignacionSelectedTable assignedData={state.assigned} deassignPatient={deassignPatient} selectedDoctor={state.selectedDoctor} />
