@@ -7,18 +7,17 @@ import styles from './navbar.module.css'
 import { NavbarUserEntry } from './navbar-user-entry'
 
 const entrys = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Contacto', href: '/contacto' }
+  { name: 'Contacto', includes: '/contacto', href: '/contacto' }
 ]
 const adminEntrys = [
-  { name: 'Pacientes', href: '/pacientes' },
-  { name: 'Dashboard', href: '/dashboard/asignacion' }
+  { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
+  { name: 'Dashboard', includes: '/dashboard', href: '/dashboard/asignacion' }
 ]
 const doctorEntrys = [
-  { name: 'Pacientes', href: '/pacientes' }
+  { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' }
 ]
 const patientEntrys = [
-  { name: 'Progreso', href: '/progreso' }
+  { name: 'Progreso', includes: '/progreso', href: '/progreso' }
 ]
 
 export function Navbar () {
@@ -36,11 +35,12 @@ export function Navbar () {
   return <nav className={styles.nav}>
       <img className='' src='/logo.webp' height={35} />
       <div className={styles.entrysContainer}>
+        <NavbarEntry name='Inicio' href='/' isSelected={pathname === '/'} />
         {
-          entrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname === el.href} />)
+          entrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname.includes(el.includes)} />)
         }
         {
-          userEntrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname === el.href} />)
+          userEntrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname.includes(el.includes)} />)
         }
       </div>
       <div className={styles.loginContainer}>

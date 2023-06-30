@@ -1,7 +1,6 @@
 import styles from './pacientes.module.css'
 
 export function PacienteRow ({ apellido, email, nombre, active, handleClick, isSelected }) {
-  console.log({ isSelected })
   return <tr className={isSelected ? styles.selected : ''} onClick={handleClick}>
     <td className={styles.nombre}>{nombre} {apellido}</td>
     <td className={styles.email}>{email}</td>

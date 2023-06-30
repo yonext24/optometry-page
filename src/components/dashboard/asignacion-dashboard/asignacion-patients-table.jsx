@@ -11,7 +11,11 @@ function AsignacionPacientesTableRender ({ data, selectedDoctor, assignPatient }
           ? <span>{data.error}</span>
           : data.data
             ? data.data.map(el => <PersonEntry key={el.id}>
-              <div id={'userImage'} />
+              {
+                el.image?.url
+                  ? <img className={styles.userImage} src={el.image.url} alt='Foto de usuario' />
+                  : <div id={'userImage'} />
+              }
               <span>{el.nombre} {el.apellido}</span>
               <p style={{ fontWeight: 'normal' }}>DNI {el.documento}</p>
               {

@@ -5,13 +5,14 @@ import { PacientesAdmin } from '../../components/tablas/pacientes/pacientes-admi
 import styles from './pacientes-page.module.css'
 import { getAllPatients } from '../../firebase/utils/admin'
 import { useUser } from '../../hooks/useUser'
+import { UserProfile } from '../../components/user-profile/user-profile'
 
 export function PacientesPageAdminRender () {
   const [patients, setPatients] = useState([])
   const [selectedRowId, setSelectedRowId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  console.log({ selectedRowId })
+  const [isEditing, setIsEditing] = useState(false)
 
   const user = useUser()
   if (!user) return null
@@ -25,10 +26,18 @@ export function PacientesPageAdminRender () {
   }, [])
 
   return <>
-      <Menu patient={patients.find(el => el.id === selectedRowId)} />
+      <Menu patient={patients.find(el => el.id === selectedRowId)} setIsEditing={setIsEditing} />
       <section className={styles.tableSection}>
         <h1 className={styles.heading}>Todos los pacientes</h1>
         <PacientesAdmin patients={patients} selectedRowId={selectedRowId} setSelectedRowId={setSelectedRowId} />
       </section>
+      {
+        isEditing &&
+        <div className={styles.modalContainer} onClick={() => setIsEditing(false)}>
+          <div onClick={e => e.stopPropagation()}>
+            <UserProfile id={selectedRowId} />
+          </div>
+        </div>
+      }
     </>
 }

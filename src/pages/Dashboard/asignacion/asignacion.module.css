@@ -9,3 +9,8 @@
   text-align: center;
   margin: 20px 0;
 }
+.loading {
+  height: calc(100vh - var(--navbar-height));
+  display: grid;
+  place-content: center;
+}

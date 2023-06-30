@@ -25,7 +25,7 @@ export const onAuthStateChanged = (setState) => {
       const role = await getUserRole()
 
       if (!role) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
-      const userFromFirestore = await getUser(user.email, role)
+      const userFromFirestore = await getUser(user.uid, role)
 
       setState({ ...userFromFirestore, role })
     } catch (err) {

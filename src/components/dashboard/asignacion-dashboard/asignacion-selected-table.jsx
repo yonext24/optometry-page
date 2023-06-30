@@ -12,7 +12,11 @@ function AsignacionAssignedRender ({ data, deassignPatient, selectedDoctor }) {
           : data.data
             ? data.data.map(el => (
               <PersonEntry key={el.id} className={styles.person}>
-                <div id={'userImage'} />
+                {
+                  el.image?.url
+                    ? <img className={styles.userImage} src={el.image.url} alt='Foto de usuario' />
+                    : <div id={'userImage'} />
+                }
                 <span>{el.nombre} {el.apellido}</span>
                 <button onClick={() => deassignPatient({ patient: el, doctor: selectedDoctor })} className={styles.assign}>Quitar</button>
               </PersonEntry>

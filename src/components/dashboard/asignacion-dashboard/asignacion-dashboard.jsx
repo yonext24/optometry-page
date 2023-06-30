@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react'
 import styles from './asignacion-dashboard.module.css'
-import { INITIAL_ASIGNACION_STATE, asignacionReducer } from '../../reducers/asignacion-reducer'
+import { INITIAL_ASIGNACION_STATE, asignacionReducer } from '../../../reducers/asignacion-reducer'
 import { AsignacionDoctorsTable } from './asignacion-doctors-table'
 import { AsignacionPatientsTable } from './asignacion-patients-table'
 import { AsignacionSelectedTable } from './asignacion-selected-table'

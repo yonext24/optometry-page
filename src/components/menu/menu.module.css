@@ -21,9 +21,10 @@
   width: 80%;
   margin: 0 auto;
   cursor: pointer;
+  transition: .1s ease-in;
 }
 .menu > *:hover {
-  background-color: rgb(var(--amarillo) / .5)
+  background-color: var(--azul-claro)
 }
 .menu > *::after {
   content: "";

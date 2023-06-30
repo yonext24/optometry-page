@@ -1,8 +1,18 @@
 import styles from './register.module.css'
 import { useRegisterUser } from '../../../hooks/useRegisterUser'
 import { Spinner } from '../../../components/spinner/spinner'
+import { useUser } from '../../../hooks/useUser'
+import { USER_POSSIBLE_STATES } from '../../../utils/user-possible-states'
 
 export function Register () {
+  const user = useUser()
+
+  if (user === USER_POSSIBLE_STATES.NOT_KNOWN) {
+    return <div className={styles.loading}>
+        <Spinner style={{ color: 'var(--azul-profundo)', width: 20, height: 20, borderWidth: '2px' }} />
+      </div>
+  }
+
   const { handleSubmit, handleImage, setImage, image, error, loading } = useRegisterUser()
 
   return <div className={styles.main}>

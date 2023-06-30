@@ -1,7 +1,7 @@
 export const EditIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
+    fill="transparent"
     stroke="currentColor"
     strokeWidth={1.5}
     className="w-6 h-6"

@@ -3,7 +3,7 @@ import styles from './asignacion-dashboard.module.css'
 import { PersonEntry } from './person-entry'
 import { TableError } from './table-error'
 
-function AsignacionDoctorsTableRender ({ data, refetch, setSelectedDoctor }) {
+function AsignacionDoctorsTableRender ({ data, refetch, selectedDoctor, setSelectedDoctor }) {
   return <div className={styles.tableData}>
     {
       data.loading
@@ -12,8 +12,12 @@ function AsignacionDoctorsTableRender ({ data, refetch, setSelectedDoctor }) {
           ? <TableError refetch={refetch} err={data.error} />
           : data.data
             ? data.data.map(el => (
-              <PersonEntry key={el.id} data-selected={el.id === {}?.id} className={styles.person} onClick={() => { setSelectedDoctor(el) }}>
-                <div id={'userImage'} />
+              <PersonEntry key={el.id} data-selected={el.id === selectedDoctor?.id} className={styles.person} onClick={() => { setSelectedDoctor(el) }}>
+                {
+                  el.image?.url
+                    ? <img className={styles.userImage} src={el.image.url} alt='Foto de usuario' />
+                    : <div id={'userImage'} />
+                }
                 <span>Dr. {el.nombre} {el.apellido}</span>
                 <p>{el.pacientes_asignados.length}</p>
               </PersonEntry>

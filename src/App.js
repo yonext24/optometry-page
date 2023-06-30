@@ -7,12 +7,14 @@ import { Login } from './pages/Login/login'
 import { ProtectedRoute } from './components/protected-route/protected-route'
 import { useUser } from './hooks/useUser'
 import { USER_POSSIBLE_STATES } from './utils/user-possible-states'
-import { DashboardLayout } from './pages/Dashboard/DashboardLayout'
+import { DashboardLayout } from './components/layouts/DashboardLayout'
 import { Pacientes } from './pages/Pacientes/Pacientes'
 import { Asignacion } from './pages/Dashboard/asignacion/Asignacion'
 import { Register } from './pages/Dashboard/register/Register'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Usuario } from './pages/Usuario/Usuario'
+import { UserLayout } from './components/layouts/user-layout/user-layout'
 
 function App () {
   const user = useUser()
@@ -20,20 +22,6 @@ function App () {
 
   return (
     <div className='App'>
-      <ToastContainer
-        position="top-right"
-        autoClose={1000000000}
-        limit={2}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover={false}
-        theme="colored"
-      />
-
       <Navbar />
       <Routes>
         <Route exact path='/' element={<Home />} />
@@ -73,6 +61,16 @@ function App () {
             </ProtectedRoute>
           }
         />
+        <Route
+          path={'/usuario/:id'}
+          element={
+            <ProtectedRoute condition={true}>
+              <UserLayout>
+                <Usuario />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
 
         {/* <Route path='/Admins' element={<Admins/>} />
         <Route path='/Register' element={<RegisterView/>} />
@@ -86,6 +84,20 @@ function App () {
 
       </Routes>
       <Footer />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        limit={2}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </div>
   )
 }

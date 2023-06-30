@@ -1,23 +1,27 @@
-import { getDocs, limit, query, where } from 'firebase/firestore'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { adminCollection, doctorsCollection, patientsCollection } from '../collections'
 import { auth, storage } from '../config'
-import { getUserRole } from '../auth'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 
-export const getUser = async (email, claim) => {
+export const getUser = async (id, claim) => {
   const collection = claim === 'admin' ? adminCollection : claim === 'doctor' ? doctorsCollection : patientsCollection
-  const docRef = query(collection, where('email', '==', email), limit(1))
+  const docRef = doc(collection, id)
 
-  return await getDocs(docRef)
-    .then(docs => {
-      if (docs.empty) {
-        console.log('EMPTY')
+  return await getDoc(docRef)
+    .then(doc => {
+      if (!doc.exists()) {
         throw new Error('No se encontró el usuario.')
       }
-      const id = docs.docs[0].id
-      const data = docs.docs[0].data()
+      const id = doc.id
+      const data = doc.data()
       return { ...data, id }
     })
+}
+export const updateUser = async (id, claim, update) => {
+  const collection = claim === 'admin' ? adminCollection : claim === 'doctor' ? doctorsCollection : patientsCollection
+  const docRef = doc(collection, id)
+
+  return updateDoc(docRef, update)
 }
 
 export const uploadImage = async (file) => {

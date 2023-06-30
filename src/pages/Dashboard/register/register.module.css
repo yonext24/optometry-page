@@ -7,6 +7,11 @@
   margin: 0 auto;
   justify-content: space-between;
 }
+.loading {
+  height: calc(100vh - var(--navbar-height));
+  display: grid;
+  place-content: center;
+}
 .imageSection {
   display: flex;
   flex-direction: column;
