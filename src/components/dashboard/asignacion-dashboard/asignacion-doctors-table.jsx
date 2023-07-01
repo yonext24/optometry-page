@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Spinner } from '../../spinner/spinner'
 import styles from './asignacion-dashboard.module.css'
 import { PersonEntry } from './person-entry'
@@ -19,6 +20,7 @@ function AsignacionDoctorsTableRender ({ data, refetch, selectedDoctor, setSelec
                     : <div id={'userImage'} />
                 }
                 <span>Dr. {el.nombre} {el.apellido}</span>
+                <Link className={styles.see} to={`/doctor/${el.id}`}>Ver</Link>
                 <p>{el.pacientes_asignados.length}</p>
               </PersonEntry>
             )

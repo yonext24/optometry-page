@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import styles from './user-profile.module.css'
 import { EditIcon } from '../icons/edit'
+import { useUser } from '../../hooks/useUser'
 
-export function UserEntry ({ children, success, name, notEditable, setEditedFields, slug, value, type, options, inputType = 'text' }) {
+export function UserEntry ({ children, id, success, name, notEditable, setEditedFields, slug, value, type, options, inputType = 'text', visibleOnlyToOwn = true, visibleToOwn = true }) {
+  const user = useUser()
+
   const [editing, setEditing] = useState(false)
 
   useEffect(() => {
@@ -28,6 +31,8 @@ export function UserEntry ({ children, success, name, notEditable, setEditedFiel
       }
     })
   }
+  if (!visibleToOwn && user.id === id && user.role !== 'admin') return
+  if (visibleOnlyToOwn && user.id !== id && user.role !== 'admin') return
 
   return <div className={styles.entry}>
     <label>{name}</label>
@@ -38,7 +43,7 @@ export function UserEntry ({ children, success, name, notEditable, setEditedFiel
               {children}
             </div>
             {
-              !notEditable && (
+              !notEditable && (user?.id === id || user?.role === 'admin') && (
                 <button className={styles.edit} onClick={() => setEditing(true)}>
                   <EditIcon height={25} width={25} style={{ strokeWidth: 2 }} />
                 </button>

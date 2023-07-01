@@ -3,16 +3,22 @@ import { useGetUserPage } from '../../hooks/useGetUserPage'
 import { Spinner } from '../spinner/spinner'
 import { UserEntry } from './user-entry'
 
-export function UserProfile ({ id }) {
+export function UserProfile ({ id, type }) {
   const {
     pageUser: user,
     loading,
+    error,
+    inputRef,
     entrys,
     editedFields,
     success,
+    updateLoading,
+    image,
+    handleImage,
+    handleImageClear,
     setEditedFields,
     handleSubmit
-  } = useGetUserPage({ id })
+  } = useGetUserPage({ id, type })
 
   return <section className={styles.userContainer}>
   {
@@ -20,7 +26,13 @@ export function UserProfile ({ id }) {
       ? <div className={styles.loading}>
         <Spinner style={{ color: 'var(--azul-profundo)', borderWidth: 2, height: 20, width: 20 }} />
       </div>
-      : <>
+      : error
+        ? <div className={styles.loading} style={{ textAlign: 'center', color: 'red' }}>
+          <span>Ocurrió un error inesperado:</span>
+          <p>{error}</p>
+          <p>Puede que el usuario al que estas tratando de acceder <br/> no exista en la base de datos.</p>
+        </div>
+        : <>
         <div className={styles.nameContainer}>
           <h1>{user.role === 'doctor' ? 'Dr.' : ''} {user.nombre} {user.apellido}</h1>
           <p>{user.role === 'patient' ? 'Paciente' : 'Doctor'}</p>
@@ -28,11 +40,19 @@ export function UserProfile ({ id }) {
 
         <div className={styles.imageSide}>
           {
-            user?.image?.url
-              ? <img src={user.image.url} alt='Foto de perfil del usuario' height={200} width={200} />
-              : <div className={styles.imagePlaceholder} />
+            image?.src
+              ? <img src={image.src} alt='Nueva foto de perfil' height={200} width={200} />
+              : user?.image?.src
+                ? <img src={user.image.src} alt='Foto de perfil del usuario' height={200} width={200} />
+                : <div className={styles.imagePlaceholder} />
           }
-          <button className={styles.changeImage}>Cambiar Imagen</button>
+          <div className={styles.buttonsContainer}>
+          <input type='file' ref={inputRef} hidden id='image' accept='image/jpg image/png image/webp image/jpeg image/jfif' onChange={handleImage} />
+          <label htmlFor='image'>Subir Imagen</label>
+          {
+            image && <button onClick={handleImageClear}>Quitar</button>
+          }
+        </div>
         </div>
         <div className={styles.dataSide}>
           {
@@ -40,15 +60,10 @@ export function UserProfile ({ id }) {
               return (
                 <UserEntry
                   key={el.slug}
+                  id={id}
                   success={success}
                   setEditedFields={setEditedFields}
-                  slug={el.slug}
-                  notEditable={el.notEditable || false}
-                  name={el.name}
-                  type={el.type}
-                  options={el.options}
-                  inputType={el.inputType}
-                  value={el.value}
+                  {...el}
                 >
                   {el.element}
                 </UserEntry>
@@ -59,10 +74,10 @@ export function UserProfile ({ id }) {
       </>
   }
   {
-    Object.entries(editedFields).length >= 1 &&
-    <button className={styles.saveButton} disabled={loading} onClick={handleSubmit}>
+    (Object.entries(editedFields).length >= 1 || image !== null) &&
+    <button className={styles.saveButton} disabled={updateLoading} onClick={handleSubmit}>
       {
-        loading
+        updateLoading
           ? <Spinner style={{ color: 'black', borderWidth: 2, width: 10, height: 10 }} />
           : 'Guardar'
       }

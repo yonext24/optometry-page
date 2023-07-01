@@ -35,6 +35,8 @@ export function useRegisterUser () {
       }
     }
 
+    console.log(imageSrc)
+
     const data = new FormData(e.target)
     const values = Object.fromEntries(data)
 

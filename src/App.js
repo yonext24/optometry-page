@@ -15,6 +15,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Usuario } from './pages/Usuario/Usuario'
 import { UserLayout } from './components/layouts/user-layout/user-layout'
+import { Deberes } from './pages/Deberes/Deberes'
 
 function App () {
   const user = useUser()
@@ -25,14 +26,7 @@ function App () {
       <Navbar />
       <Routes>
         <Route exact path='/' element={<Home />} />
-        <Route
-          path='/dashboard'
-          element={
-            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
-              <DashboardLayout></DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path='/dashboard/asignacion'
           element={
@@ -62,12 +56,30 @@ function App () {
           }
         />
         <Route
-          path={'/usuario/:id'}
+          path={'/paciente/:id'}
           element={
             <ProtectedRoute condition={true}>
               <UserLayout>
                 <Usuario />
               </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={'/paciente/:id/deberes'}
+          element={
+            <ProtectedRoute condition={true}>
+              <UserLayout>
+                <Deberes />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={'/doctor/:id'}
+          element={
+            <ProtectedRoute condition={true}>
+              <Usuario type='doctor' />
             </ProtectedRoute>
           }
         />

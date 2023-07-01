@@ -18,7 +18,7 @@ export function Menu ({ patient, setIsEditing }) {
                 <EditIcon height={36} width={36} style={{ color: 'transparent', stroke: 'black', strokeWidth: 1 }} />
                 <h4>Editar</h4>
               </button>
-              <Link to={`/usuario/${patient.id}`}>
+              <Link to={`/paciente/${patient.id}`}>
                 <EyeIcon height={36} width={36} style={{ color: 'transparent', stroke: 'black', strokeWidth: 1 }} />
                 <h4>Ver</h4>
               </Link>

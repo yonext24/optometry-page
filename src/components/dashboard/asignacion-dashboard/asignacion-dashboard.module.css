@@ -84,8 +84,10 @@
   border-radius: 9999px;
   box-shadow: var(--shadow-low);
 }
-.person p {
+.person a {
   margin-left: auto;
+}
+.person p {
   font-weight: bold;
 }
 .person:hover {
@@ -98,7 +100,7 @@
 .tableData .person:first-of-type {
   padding: 15px
 }
-.assign {
+.assign, .see {
   margin: 0 0 0 auto;
   padding: 5px 10px;
   background-color: rgb(var(--amarillo));
@@ -109,7 +111,7 @@
   transition: .15s ease;
   cursor: pointer;
 }
-.assign:hover {
-  background-color: var(--azul-oscuro);
+.assign:hover, .see:hover {
+  background-color: var(--azul-profundo);
   color: white;
 }

@@ -5,10 +5,10 @@ export function UserLayout ({ children }) {
   const location = useLocation()
   return <>
     <header className={styles.menu}>
-      <Link className={`${styles.menuEntry} ${location.pathname === '/dashboard/asignacion' ? styles.selected : ''}`} to='/dashboard/asignacion'>
+      <Link className={`${styles.menuEntry} ${location.pathname === '/paciente' ? styles.selected : ''}`} to='/paciente/deberes'>
         Deberes
       </Link>
-      <Link className={`${styles.menuEntry} ${location.pathname.includes('/usuario/') ? styles.selected : ''}`} to='/dashboard/register'>
+      <Link className={`${styles.menuEntry} ${location.pathname.includes('/paciente/') ? styles.selected : ''}`} to='/dashboard/register'>
         Perfil
       </Link>
     </header>
