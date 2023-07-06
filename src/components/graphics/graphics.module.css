@@ -1,0 +1,47 @@
+.aside {
+  width: 200px;
+  background-color: ;
+  padding: 15px 0;
+  border-radius: 5px;
+  box-shadow: var(--shadow-medium);
+}
+.navTitle {
+  font-size: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 130px;
+  margin: 0 auto;
+  row-gap: .25rem;
+  margin-top: 1rem;
+}
+.buttonsContainer button {
+  aspect-ratio: 1;
+  background-color: transparent;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+  border-radius: 8px;
+  position: relative;
+  transition: .15s ease-in-out;
+  cursor: pointer;
+}
+.buttonsContainer button:hover {
+  background-color: var(--azul-claro);
+}
+.buttonsContainer button[data-selected=true] {
+  background-color: rgb(var(--amarillo));
+  color: white
+}
+.buttonsContainer button::after {
+  content: "";
+  background-color: rgba(0,0,0,.1);
+  height: 1px;
+  width: 80%;
+  left: 10%;
+  bottom: 0;
+  position: absolute;
+}

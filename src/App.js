@@ -16,8 +16,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Usuario } from './pages/Usuario/Usuario'
 import { UserLayout } from './components/layouts/user-layout/user-layout'
 import { Deberes } from './pages/Deberes/Deberes'
+import { Resultados } from './pages/Resultados/resultados'
 
-function App () {
+function App() {
   const user = useUser()
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
 
@@ -30,7 +31,9 @@ function App () {
         <Route
           path='/dashboard/asignacion'
           element={
-            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
+            <ProtectedRoute
+              condition={defaultCondition || user?.role === 'admin'}
+            >
               <DashboardLayout>
                 <Asignacion />
               </DashboardLayout>
@@ -40,7 +43,9 @@ function App () {
         <Route
           path='/dashboard/register'
           element={
-            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin')}>
+            <ProtectedRoute
+              condition={defaultCondition || user?.role === 'admin'}
+            >
               <DashboardLayout>
                 <Register />
               </DashboardLayout>
@@ -50,7 +55,13 @@ function App () {
         <Route
           path='/pacientes'
           element={
-            <ProtectedRoute condition={defaultCondition || (user?.role === 'admin' || user?.role === 'doctor')}>
+            <ProtectedRoute
+              condition={
+                defaultCondition ||
+                user?.role === 'admin' ||
+                user?.role === 'doctor'
+              }
+            >
               <Pacientes />
             </ProtectedRoute>
           }
@@ -59,7 +70,7 @@ function App () {
           path={'/paciente/:id'}
           element={
             <ProtectedRoute condition={true}>
-              <UserLayout>
+              <UserLayout isRelative={true}>
                 <Usuario />
               </UserLayout>
             </ProtectedRoute>
@@ -69,8 +80,18 @@ function App () {
           path={'/paciente/:id/deberes'}
           element={
             <ProtectedRoute condition={true}>
-              <UserLayout>
+              <UserLayout isRelative={true}>
                 <Deberes />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={'/paciente/:id/resultados'}
+          element={
+            <ProtectedRoute condition={true}>
+              <UserLayout isRelative={true}>
+                <Resultados />
               </UserLayout>
             </ProtectedRoute>
           }
@@ -93,12 +114,11 @@ function App () {
         <Route path='/Historia-Clinica' element={<HistoriasC/>} />
       */}
         <Route path='/Login' element={<Login />} />
-
       </Routes>
       <Footer />
 
       <ToastContainer
-        position="top-right"
+        position='top-right'
         autoClose={3000}
         limit={2}
         hideProgressBar
@@ -108,7 +128,7 @@ function App () {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover={false}
-        theme="colored"
+        theme='colored'
       />
     </div>
   )

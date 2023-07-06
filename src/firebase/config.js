@@ -2,10 +2,12 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 import {
-  getFirestore, updateDoc, collection,
+  getFirestore,
+  updateDoc,
+  collection,
   doc,
   setDoc,
-  deleteDoc
+  deleteDoc,
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -15,7 +17,7 @@ const firebaseConfig = {
   storageBucket: 'la-salle-nuevo.appspot.com',
   messagingSenderId: '377695167984',
   appId: '1:377695167984:web:40e10d1645d94b20512935',
-  measurementId: 'G-89HN9KXMR6'
+  measurementId: 'G-89HN9KXMR6',
 }
 
 // fundamental firebase
@@ -25,7 +27,7 @@ export const auth = getAuth()
 export const storage = getStorage()
 
 // Create
-export async function addToDB (uid, email, nombre, apellido, table) {
+export async function addToDB(uid, email, nombre, apellido, table) {
   const collectionRef = collection(db, table)
   const docRef = doc(collectionRef, uid)
   try {
@@ -36,13 +38,13 @@ export async function addToDB (uid, email, nombre, apellido, table) {
 }
 
 // Update
-export async function updateDB (newName, newLastName, newEmail, docRef) {
+export async function updateDB(newName, newLastName, newEmail, docRef) {
   try {
     const userRef = docRef
     await updateDoc(userRef, {
       nombre: newName,
       apellido: newLastName,
-      email: newEmail
+      email: newEmail,
     })
   } catch (error) {
     console.log('Error actualizando la DB: ' + error)
@@ -51,7 +53,7 @@ export async function updateDB (newName, newLastName, newEmail, docRef) {
 
 // Delete
 
-export async function deleteFromDB (docRef) {
+export async function deleteFromDB(docRef) {
   try {
     const toBeDeleted = docRef
     await deleteDoc(toBeDeleted)

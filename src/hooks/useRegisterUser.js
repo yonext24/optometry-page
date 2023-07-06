@@ -4,14 +4,14 @@ import { uploadImage } from '../firebase/utils/user'
 import { API_ADMIN_URL } from '../utils/prod-dev-variables'
 import { toast } from 'react-toastify'
 
-export function useRegisterUser () {
+export function useRegisterUser() {
   const [image, setImage] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const handleImage = useCallback(e => {
+  const handleImage = useCallback((e) => {
     const files = e.target.files
-    if (!((files != null) && files.length > 0)) return
+    if (!(files != null && files.length > 0)) return
 
     const url = URL.createObjectURL(files[0])
     setImage({ file: files[0], url })
@@ -50,12 +50,12 @@ export function useRegisterUser () {
       body: JSON.stringify({ ...values, image: imageToAppend }),
       headers: {
         Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      method: 'POST'
+      method: 'POST',
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.error) {
           setError(res.error)
         } else {

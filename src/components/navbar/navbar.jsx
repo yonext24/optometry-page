@@ -5,50 +5,58 @@ import { NavbarEntry } from './navbar-entry'
 import { NavbarLoginEntry } from './navbar-login-entry'
 import styles from './navbar.module.css'
 import { NavbarUserEntry } from './navbar-user-entry'
+import { useMemo } from 'react'
 
-const entrys = [
-  { name: 'Contacto', includes: '/contacto', href: '/contacto' }
-]
 const adminEntrys = [
   { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
-  { name: 'Dashboard', includes: '/dashboard', href: '/dashboard/asignacion' }
+  { name: 'Dashboard', includes: '/dashboard', href: '/dashboard/asignacion' },
 ]
 const doctorEntrys = [
-  { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' }
-]
-const patientEntrys = [
-  { name: 'Progreso', includes: '/progreso', href: '/progreso' }
+  { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
 ]
 
-export function Navbar () {
+export function Navbar() {
   const user = useUser()
-  const userEntrys = user === USER_POSSIBLE_STATES.NOT_KNOWN || USER_POSSIBLE_STATES.NOT_LOGGED
-    ? []
-    : user?.role === 'admin'
-      ? adminEntrys
-      : user?.role === 'doctor'
-        ? doctorEntrys
-        : patientEntrys
+  const entrys = useMemo(() => {
+    if (
+      user === USER_POSSIBLE_STATES.NOT_KNOWN ||
+      USER_POSSIBLE_STATES.NOT_LOGGED
+    )
+      return []
+    if (user?.role === 'admin') return adminEntrys
+    if (user?.role === 'doctor') return doctorEntrys
+    if (user?.role === 'patient')
+      return [
+        {
+          name: 'Progreso',
+          includes: `/paciente`,
+          href: `/paciente/${user.id}/resultados`,
+        },
+      ]
+  })
 
   const { pathname } = useLocation()
 
-  return <nav className={styles.nav}>
+  return (
+    <nav className={styles.nav}>
       <img className='' src='/logo.webp' height={35} />
       <div className={styles.entrysContainer}>
         <NavbarEntry name='Inicio' href='/' isSelected={pathname === '/'} />
-        {
-          entrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname.includes(el.includes)} />)
-        }
-        {
-          userEntrys.map(el => <NavbarEntry key={el.name} {...el} isSelected={pathname.includes(el.includes)} />)
-        }
+        {entrys.map((el) => (
+          <NavbarEntry
+            key={el.name}
+            {...el}
+            isSelected={pathname.includes(el.includes)}
+          />
+        ))}
       </div>
       <div className={styles.loginContainer}>
-        {
-          user === USER_POSSIBLE_STATES.NOT_LOGGED
-            ? <NavbarLoginEntry />
-            : <NavbarUserEntry />
-        }
+        {user === USER_POSSIBLE_STATES.NOT_LOGGED ? (
+          <NavbarLoginEntry />
+        ) : (
+          <NavbarUserEntry />
+        )}
       </div>
-  </nav>
+    </nav>
+  )
 }

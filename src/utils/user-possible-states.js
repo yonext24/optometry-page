@@ -3,5 +3,5 @@
 
 export const USER_POSSIBLE_STATES = {
   NOT_KNOWN: undefined,
-  NOT_LOGGED: false
+  NOT_LOGGED: false,
 }

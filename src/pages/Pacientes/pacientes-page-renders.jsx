@@ -7,7 +7,7 @@ import { getAllPatients } from '../../firebase/utils/admin'
 import { useUser } from '../../hooks/useUser'
 import { UserProfile } from '../../components/user-profile/user-profile'
 
-export function PacientesPageAdminRender () {
+export function PacientesPageAdminRender() {
   const [patients, setPatients] = useState([])
   const [selectedRowId, setSelectedRowId] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -15,29 +15,45 @@ export function PacientesPageAdminRender () {
   const [isEditing, setIsEditing] = useState(false)
 
   const user = useUser()
-  if (!user) return null
 
   useEffect(() => {
+    if (user.role === 'doctor') {
+      setPatients(user.pacientes_asignados)
+      return
+    }
     setLoading(true)
     getAllPatients()
       .then(setPatients)
-      .catch(err => setError(err?.message))
+      .catch((err) => setError(err?.message))
       .finally(() => setLoading(false))
-  }, [])
+  }, [user])
 
-  return <>
-      <Menu patient={patients.find(el => el.id === selectedRowId)} setIsEditing={setIsEditing} />
+  if (!user) return null
+
+  return (
+    <>
+      <Menu
+        patient={patients.find((el) => el.id === selectedRowId)}
+        setIsEditing={setIsEditing}
+      />
       <section className={styles.tableSection}>
         <h1 className={styles.heading}>Todos los pacientes</h1>
-        <PacientesAdmin patients={patients} selectedRowId={selectedRowId} setSelectedRowId={setSelectedRowId} />
+        <PacientesAdmin
+          patients={patients}
+          selectedRowId={selectedRowId}
+          setSelectedRowId={setSelectedRowId}
+        />
       </section>
-      {
-        isEditing &&
-        <div className={styles.modalContainer} onClick={() => setIsEditing(false)}>
-          <div onClick={e => e.stopPropagation()}>
+      {isEditing && (
+        <div
+          className={styles.modalContainer}
+          onClick={() => setIsEditing(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
             <UserProfile id={selectedRowId} />
           </div>
         </div>
-      }
+      )}
     </>
+  )
 }

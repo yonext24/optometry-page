@@ -5,19 +5,16 @@ import { getUserRole } from '../auth'
 import { getDocs } from 'firebase/firestore'
 
 // Create
-export async function createAdmin (email, password, name, lastName) {
-}
+export async function createAdmin(email, password, name, lastName) {}
 
 // Read
-export async function getAllAdmins () {
-}
+export async function getAllAdmins() {}
 
-export async function getAdmin (uid) {
-}
+export async function getAdmin(uid) {}
 
 // Upload files
 // Upload Profile Picture
-export async function setAdminProfilePic (uid, file) {
+export async function setAdminProfilePic(uid, file) {
   try {
     const imageRef = ref(storage, `fotos-admins/${uid}`)
     const resUpload = await uploadBytes(imageRef, file)
@@ -27,20 +24,19 @@ export async function setAdminProfilePic (uid, file) {
   }
 }
 
-export async function getAllPatients () {
-  if (await getUserRole() !== 'admin') throw new Error('No estás autorizado')
+export async function getAllPatients() {
+  if ((await getUserRole()) !== 'admin') throw new Error('No estás autorizado')
 
-  return await getDocs(patientsCollection)
-    .then(docs => {
-      if (docs.empty) return []
+  return await getDocs(patientsCollection).then((docs) => {
+    if (docs.empty) return []
 
-      const datas = docs.docs.map(doc => {
-        const id = doc.id
-        const data = doc.data()
+    const datas = docs.docs.map((doc) => {
+      const id = doc.id
+      const data = doc.data()
 
-        return { ...data, id }
-      })
-
-      return datas
+      return { ...data, id }
     })
+
+    return datas
+  })
 }

@@ -6,7 +6,7 @@ const articles = [
   { text: 'Prescribe las tareas', image: '/home/carpeta.png' },
   { text: 'Control de progreso', image: '/home/lupa.png' },
   { text: 'El paciente trabaja desde casa', image: '/home/persona.png' },
-  { text: 'Supervisa el cumplimiento', image: '/home/carpeta.png' }
+  { text: 'Supervisa el cumplimiento', image: '/home/carpeta.png' },
 ]
 
 export const Home = () => {
@@ -16,9 +16,9 @@ export const Home = () => {
       <section className={styles.section}>
         <h3>Cómo funciona?</h3>
         <div className={styles.articlesContainer}>
-          {
-            articles.map(el => <HomeArticle key={el.text} {...el} />)
-          }
+          {articles.map((el) => (
+            <HomeArticle key={el.text} {...el} />
+          ))}
         </div>
       </section>
     </>

@@ -4,10 +4,11 @@ import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { auth } from './config'
 import { getUser } from './utils/user'
 
-export async function getUserRole () {
+export async function getUserRole() {
   return await new Promise((resolve, reject) => {
     if (auth.currentUser === null) resolve(USER_POSSIBLE_STATES.NOT_LOGGED)
-    auth.currentUser?.getIdTokenResult()
+    auth.currentUser
+      ?.getIdTokenResult()
       .then((idTokenResult) => {
         resolve(idTokenResult.claims['role'])
       })
@@ -34,9 +35,6 @@ export const onAuthStateChanged = (setState) => {
   })
 }
 
-export const iniciarSesion = async (
-  email,
-  password
-) => {
+export const iniciarSesion = async (email, password) => {
   return await signInWithEmailAndPassword(auth, email, password)
 }
