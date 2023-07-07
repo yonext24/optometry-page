@@ -33,6 +33,7 @@ export function Navbar() {
           href: `/paciente/${user.id}/resultados`,
         },
       ]
+    return []
   })
 
   const { pathname } = useLocation()
