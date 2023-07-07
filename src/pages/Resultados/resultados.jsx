@@ -93,7 +93,7 @@ export function Resultados() {
         )}
       </header>
       <section className={styles.dataSection}>
-        {pageUser && Object.values(pageUser?.deberes).every((el) => el) ? (
+        {pageUser && Object.values(pageUser?.deberes).some((el) => el) ? (
           selectedTest === 'contraste' ? (
             <OpacidadGraphic user={pageUser} />
           ) : (
