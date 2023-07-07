@@ -1,18 +1,23 @@
 .footer {
   display: flex;
-  background-color: var(--azul-claro);
+  background: linear-gradient(0deg, rgba(149, 146, 226, 0.6) 0%, rgba(176, 242, 217, 0.2) 100%);;
   padding: 15px 15px;
+  box-shadow: 0px -0.3px 0.3px hsl(var(--shadow-color) / 0.22),
+  0px -5.2px 5.9px -2.5px hsl(var(--shadow-color) / 0.22);
+  align-items: center;
+  margin-top: .75rem;
 }
 .footer > div {
   flex: 1;
   display: flex;
 }
 .footer > .logo {
-  display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 .footer > .logo > h4 {
-  font-size: 30px;
+  font-size: 50px;
   font-weight: bold;
 }
 .info {
@@ -26,7 +31,7 @@
 .info p {
   font-size: 14px;
 }
-.info p:nth-of-type(2) {
+.info span {
   font-size: 12px;
 }
 .redes {

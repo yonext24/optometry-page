@@ -28,38 +28,48 @@
   text-decoration: none;
   font-size: 17px;
   font-weight: normal;
+  transition: color .1s ease-in-out;
+}
+.entry:hover {
+  color: var(--azul-intermedio);
 }
 .selected {
   font-weight: bold;
-  color: var(--azul-profundo);
+  color: var(--azul-profundo)!important;
   position: relative;
   display: block;
 }
 .login {
   font-weight: bold;
   color: white;
-  padding: 5px 20px;
-  border-radius: 5px;
+  padding: 8px 24px;
+  border-radius: 2px;
   background-color: var(--azul-profundo);
+  transition: background-color .1s ease
+}
+.login:hover {
+  background-color: var(--azul-intermedio);
+  color: white
 }
 .selected::after {
   content: "";
   position: absolute;
   width: 100%;
   height: 2px;
-  background-color: var(--nav-link-color);
+  background-color: var(--azul-profundo);
   bottom: 0;
   left: 0
 }
 
 .userEntry {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   position: relative;
   border: none;
+  background-color: transparent;
 }
 .userImage {
   border-radius: 9999px;
@@ -71,7 +81,11 @@
   width: 36px;
 }
 .userEntry span {
-  color: var(--nav-link-color)
+  color: var(--nav-link-color);
+  transition: color .1s ease;
+}
+.userEntry:hover, .userEntry:hover > span {
+  color: var(--azul-profundo)
 }
 .userModal {
   background-color: white ;
@@ -80,13 +94,15 @@
   top: 110%;
   display: flex;
   flex-direction: column;
-  min-width: 100%;
+  width: 100%;
+  min-width: 120px;
   z-index: 10;
   background-color: white;
   box-shadow: var(--shadow-medium);
   animation: appear .6s ease-in;
   height: min-content;
   overflow: hidden;
+  padding: 10px 0;
 }
 .userModal button, .userModal a {
   width: 100%;

@@ -15,7 +15,7 @@ export function Footer() {
           dignissimos perferendis consequatur ea voluptates odit sed fugiat
           officia esse
         </p>
-        <p>© 2022 La Salle - Todos los Derechos Reservados</p>
+        <span>© 2022 La Salle - Todos los Derechos Reservados</span>
       </div>
 
       <div className={styles.redes}>Siguenos en</div>

@@ -52,7 +52,14 @@
 }
 .sectionForm button[type=submit] {
   height: 54px;
-  background-color: var(--amarillo);
+  background-color: rgb(var(--amarillo));
+  color: white;
+  font-weight: bold;
   border: none;
   cursor: pointer;
+  transition: .15s ease-in-out
+}
+.sectionForm button[type=submit]:hover {
+  background-color: rgb(var(--amarillo)/.8);
+  color: black
 }

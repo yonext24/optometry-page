@@ -17,12 +17,11 @@ export function NavbarUserEntry() {
         onClick={() => {
           setOpen((prev) => !prev)
         }}
-        className={styles.userEntry}
-      >
+        className={styles.userEntry}>
         {user.image ? (
           <img
             className={styles.userImage}
-            src={user.image.url}
+            src={user.image.src}
             height={36}
             width={36}
           />
@@ -32,7 +31,13 @@ export function NavbarUserEntry() {
         <span>
           {user.nombre} {user.apellido}
         </span>
-        <DownArrowIcon width={10} />
+        <DownArrowIcon
+          width={10}
+          style={{
+            transition: 'rotate .1s ease-in-out',
+            rotate: open ? '180deg' : '0deg',
+          }}
+        />
       </button>
       {open && <NavbarUserModal />}
     </div>

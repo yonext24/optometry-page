@@ -5,6 +5,7 @@ import styles from './menu.module.css'
 import { useUser } from '../../hooks/useUser'
 import { useMemo } from 'react'
 import { UserImage } from '../common/entry-placeholder/user-image/user-image'
+import { ResultsIcon } from '../icons/results'
 
 export function Menu({ patient, setIsEditing }) {
   const user = useUser()
@@ -20,8 +21,22 @@ export function Menu({ patient, setIsEditing }) {
             text: 'Deberes',
             key: 1,
           },
+          {
+            type: 'a',
+            to: `/paciente/${patient.id}/resultados`,
+            icon: ResultsIcon,
+            text: 'Resultados',
+            key: 2,
+          },
         ]
       : [
+          {
+            type: 'a',
+            to: `/paciente/${patient.id}/resultados`,
+            icon: ResultsIcon,
+            text: 'Resultados',
+            key: 3,
+          },
           {
             type: 'button',
             onClick: setIsEditing,
@@ -56,8 +71,7 @@ export function Menu({ patient, setIsEditing }) {
               <button
                 key={el.key}
                 onClick={el.onClick}
-                style={{ border: 'none' }}
-              >
+                style={{ border: 'none' }}>
                 <el.icon
                   height={36}
                   width={36}
