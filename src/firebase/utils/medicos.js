@@ -8,13 +8,9 @@ import {
 import { getUserRole } from '../auth'
 import { doctorsCollection, patientsCollection } from '../collections'
 
-// Create
-export async function createDoctor(email, password, name, lastName) {}
-
-// Read
 export async function getAllDoctors() {
   if ((await getUserRole()) !== 'admin') throw new Error('No estás autorizado')
-
+  
   return await getDocs(doctorsCollection).then((docs) => {
     if (docs.empty) return []
 
@@ -63,14 +59,3 @@ export async function deassignPatientToDoctor(selectedDoctor, patient) {
   return Promise.all([docPromise, patientPromise])
 }
 
-export async function getDoctor(uid) {}
-
-// update
-export async function updateDoctor(
-  uid,
-  newName,
-  newLastName,
-  newEmail,
-  formerEmail,
-  password,
-) {}

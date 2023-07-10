@@ -4,7 +4,7 @@ export function TableError({ err, refetch }) {
   return (
     <div className={styles.errorContainer}>
       <span>Ocurrió un error, {err}</span>
-      <button onClick={refetch}>Volver a intentar</button>
+      {refetch && <button onClick={refetch}>Volver a intentar</button>}
     </div>
   )
 }

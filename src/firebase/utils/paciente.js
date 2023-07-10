@@ -12,8 +12,6 @@ import { getUserRole } from '../auth'
 import { updateUser } from './user'
 import { db } from '../config'
 
-export async function createPatient(email, password, name, lastName) {}
-
 export async function getPatientAvailableData(id) {
   const docRef = doc(patientsCollection, id)
   return await getDoc(docRef).then((doc) => {

@@ -48,15 +48,26 @@ export function AsignacionDashboard() {
   const assignPatient = useCallback(async ({ patient, doctor }) => {
     if (!patient || !doctor) return
     dispatch({ type: 'setAssignedLoading' })
-    await assignPatientToDoctor(doctor, patient).then(() => {
-      dispatch({ type: 'assignPatient', payload: { patient, doctor } })
-    })
+    await assignPatientToDoctor(doctor, patient)
+      .then(() => {
+        dispatch({ type: 'assignPatient', payload: { patient, doctor } })
+      })
+      .catch((err) => {
+        const errorMessage =
+          err instanceof Error ? err.message : err.code ? err.code : err
+        dispatch({ type: 'setPatientsError', payload: errorMessage })
+      })
   }, [])
   const deassignPatient = useCallback(async ({ patient, doctor }) => {
     if (!patient || !doctor) return
-    await deassignPatientToDoctor(doctor, patient).then(() => {
-      dispatch({ type: 'deassignPatient', payload: { patient, doctor } })
-    })
+    await deassignPatientToDoctor(doctor, patient)
+      .then(() => {
+        dispatch({ type: 'deassignPatient', payload: { patient, doctor } })
+      })
+      .catch((err) => {
+        const errMessage = err instanceof Error ? err.message : err
+        dispatch({ type: 'setAssignedError', payload: errMessage })
+      })
   }, [])
 
   useEffect(() => {

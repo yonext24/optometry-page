@@ -5,6 +5,7 @@ import { API_ADMIN_URL } from '../utils/prod-dev-variables'
 import { toast } from 'react-toastify'
 
 export function useRegisterUser() {
+  console.log(API_ADMIN_URL)
   const [image, setImage] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -35,8 +36,6 @@ export function useRegisterUser() {
       }
     }
 
-    console.log(imageSrc)
-
     const data = new FormData(e.target)
     const values = Object.fromEntries(data)
 
@@ -58,6 +57,8 @@ export function useRegisterUser() {
       .then((res) => {
         if (res.error) {
           setError(res.error)
+          toast.error('Hubo un error al crear el usuario')
+          return
         } else {
           toast(`Se creó con exito el usuario ${res.nombre} ${res.apellido}`)
           e.target.reset()

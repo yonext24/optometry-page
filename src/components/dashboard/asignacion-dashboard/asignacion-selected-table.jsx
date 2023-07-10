@@ -1,6 +1,7 @@
 import { Spinner } from '../../spinner/spinner'
 import styles from './asignacion-dashboard.module.css'
 import { PersonEntry } from './person-entry'
+import { TableError } from './table-error'
 
 function AsignacionAssignedRender({ data, deassignPatient, selectedDoctor }) {
   return (
@@ -15,7 +16,7 @@ function AsignacionAssignedRender({ data, deassignPatient, selectedDoctor }) {
           }}
         />
       ) : data.error ? (
-        <span>{data.error}</span>
+        <TableError err={data.error} />
       ) : data.data ? (
         data.data.map((el) => (
           <PersonEntry key={el.id} className={styles.person}>

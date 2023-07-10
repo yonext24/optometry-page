@@ -177,7 +177,7 @@ export function useGetUserPage({ id, type }) {
         handleImageClear()
         setEditedFields({})
         toast(
-          `Se modificó correctamente el paciente ${pageUser.nombre} ${pageUser.apellido}`,
+          `Se modificó correctamente el ${type === 'patient' ? 'paciente' : 'doctor'} ${pageUser.nombre} ${pageUser.apellido}`,
         )
       })
       .catch((err) => {

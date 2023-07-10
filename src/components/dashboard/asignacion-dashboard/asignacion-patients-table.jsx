@@ -1,11 +1,13 @@
 import { Spinner } from '../../spinner/spinner'
 import styles from './asignacion-dashboard.module.css'
 import { PersonEntry } from './person-entry'
+import { TableError } from './table-error'
 
 function AsignacionPacientesTableRender({
   data,
   selectedDoctor,
   assignPatient,
+  refetch,
 }) {
   return (
     <div className={styles.tableData}>
@@ -14,7 +16,7 @@ function AsignacionPacientesTableRender({
           style={{ height: 15, width: 15, color: 'var(--azul-profundo)' }}
         />
       ) : data.error ? (
-        <span>{data.error}</span>
+        <TableError refetch={refetch} err={data.error} />
       ) : data.data ? (
         data.data.map((el) => (
           <PersonEntry key={el.id}>
@@ -51,12 +53,14 @@ export function AsignacionPatientsTable({
   patientsData,
   selectedDoctor,
   assignPatient,
+  refetchPatients,
 }) {
   return (
     <div className={styles.patientsTable} data-loading={patientsData.loading}>
       <header>Pacientes disponibles (sin médico)</header>
       <AsignacionPacientesTableRender
         data={patientsData}
+        refetch={refetchPatients}
         selectedDoctor={selectedDoctor}
         assignPatient={assignPatient}
       />

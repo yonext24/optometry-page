@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom'
 import styles from './navbar.module.css'
 import { cerrarSesion } from '../../firebase/utils/user'

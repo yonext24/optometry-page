@@ -6,6 +6,8 @@ import { USER_POSSIBLE_STATES } from '../../../utils/user-possible-states'
 
 export function Register() {
   const user = useUser()
+  const { handleSubmit, handleImage, setImage, image, error, loading } =
+    useRegisterUser()
 
   if (user === USER_POSSIBLE_STATES.NOT_KNOWN) {
     return (
@@ -21,9 +23,6 @@ export function Register() {
       </div>
     )
   }
-
-  const { handleSubmit, handleImage, setImage, image, error, loading } =
-    useRegisterUser()
 
   return (
     <div className={styles.main}>

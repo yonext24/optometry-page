@@ -104,15 +104,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* <Route path='/Admins' element={<Admins/>} />
-        <Route path='/Register' element={<RegisterView/>} />
-        <Route path='/Profile' element={<Profile/>} />
-        <Route path='/Seguimiento' element={<Seguimiento/>} />
-        <Route path='/Progreso' element={<Progreso/>} />
-        <Route path='/Terapias' element={<Terapias/>} />
-        <Route path='/Historia-Clinica' element={<HistoriasC/>} />
-      */}
         <Route path='/Login' element={<Login />} />
       </Routes>
       <Footer />

@@ -55,6 +55,7 @@ export function asignacionReducer(state, action) {
       return {
         ...state,
         patients: { error: action.payload, loading: false, data: null },
+        assigned: { ...state.assigned, loading: false }
       }
     // case 'removePatientFromPatients':
     //   return { ...state, patients: { error: null, loading: false, data: state.patients.data.filter(el => el.id !== action.payload) } }
@@ -159,20 +160,15 @@ export function asignacionReducer(state, action) {
               : [action.payload.patient],
         },
       }
-
-    // case 'addToAssigned':
-    //   return {
-    //     ...state,
-    //     assigned: {
-    //       error: null,
-    //       loading: false,
-    //       data: state.assigned.data !== null ? state.assigned.data.concat(action.payload) : [action.payload]
-    //     }
-    //   }
     case 'setAssignedLoading':
       return {
         ...state,
         assigned: { ...state.assigned, error: null, loading: true },
+      }
+    case 'setAssignedError':
+      return {
+        ...state,
+        assigned: {...state.assigned, error: action.payload, loading: false}
       }
     case 'setSelectedDoctor':
       return { ...state, selectedDoctor: action.payload }
