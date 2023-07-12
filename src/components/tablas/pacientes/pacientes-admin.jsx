@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { PacienteRow } from './paciente-row'
 import styles from './pacientes.module.css'
 

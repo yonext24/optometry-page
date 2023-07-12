@@ -78,7 +78,7 @@ export function Register() {
           <div className={styles.inputContainer}>
             <label htmlFor='documento'>Documento</label>
             <input
-              type='text'
+              type='number'
               id='documento'
               name='documento'
               placeholder='12345678'

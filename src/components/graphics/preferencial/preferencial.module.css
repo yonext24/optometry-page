@@ -1,6 +1,8 @@
 .App {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  margin-top: 2rem;
   font-family: Arial, sans-serif;
 }
 .content {
@@ -17,7 +19,6 @@
 }
 .tableContainer {
   flex: 1;
-  margin-right: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);

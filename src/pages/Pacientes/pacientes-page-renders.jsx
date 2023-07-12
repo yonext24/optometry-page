@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Menu } from '../../components/menu/menu'
 import { PacientesAdmin } from '../../components/tablas/pacientes/pacientes-admin'
 import styles from './pacientes-page.module.css'
@@ -28,6 +28,13 @@ export function PacientesPageAdminRender() {
       .finally(() => setLoading(false))
   }, [user])
 
+  const deletePatient = useCallback(
+    (id) => {
+      setPatients((prev) => prev.filter((el) => el.id !== id))
+    },
+    [patients],
+  )
+
   if (!user) return null
 
   return (
@@ -47,10 +54,13 @@ export function PacientesPageAdminRender() {
       {isEditing && (
         <div
           className={styles.modalContainer}
-          onClick={() => setIsEditing(false)}
-        >
+          onClick={() => setIsEditing(false)}>
           <div onClick={(e) => e.stopPropagation()}>
-            <UserProfile id={selectedRowId} />
+            <UserProfile
+              id={selectedRowId}
+              closeProfileModal={() => setIsEditing(false)}
+              deletePatient={deletePatient}
+            />
           </div>
         </div>
       )}

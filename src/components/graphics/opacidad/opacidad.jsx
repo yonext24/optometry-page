@@ -73,7 +73,7 @@ export function OpacidadGraphic({ user }) {
       />
       <div className={styles.data}>
         <div className={styles.chart + ' ' + styles.container}>
-          {selectedItemData && (
+          {chartData && (
             <ResponsiveContainer
               className={styles.chart}
               width='100%'

@@ -9,17 +9,15 @@ export function AdminDashboardMenu() {
         className={`${styles.menuEntry} ${
           location.pathname === '/dashboard/asignacion' ? styles.selected : ''
         }`}
-        to='/dashboard/asignacion'
-      >
+        to='/dashboard/asignacion'>
         Asignación de pacientes
       </Link>
       <Link
         className={`${styles.menuEntry} ${
           location.pathname === '/dashboard/register' ? styles.selected : ''
         }`}
-        to='/dashboard/register'
-      >
-        Registrar paciente
+        to='/dashboard/register'>
+        Registrar usuario
       </Link>
     </header>
   )

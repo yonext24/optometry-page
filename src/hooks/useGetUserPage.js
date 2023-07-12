@@ -7,8 +7,10 @@ import {
 } from '../firebase/utils/user'
 import { useUser } from './useUser'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { API_ADMIN_URL } from '../utils/prod-dev-variables'
+import { auth } from '../firebase/config'
 
 export function useGetUserPage({ id, type }) {
   const [pageUser, setPageUser] = useState(null)
@@ -18,6 +20,8 @@ export function useGetUserPage({ id, type }) {
   const [success, setSuccess] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
   const [image, setImage] = useState(null)
+  const [passwordEditing, setPasswordEditing] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const navigate = useNavigate()
   const loggedUser = useUser()
@@ -104,10 +108,9 @@ export function useGetUserPage({ id, type }) {
           element: (
             <>
               {pageUser.medico_asignado?.nombre ? (
-                <a href={`/usuario/${pageUser.medico_asignado.id}`}>
-                  Dr. {pageUser.medico_asignado.nombre}{' '}
-                  {pageUser.medico_asignado.apellido}
-                </a>
+                <Link to={`/doctor/${pageUser.medico_asignado.id}`}>
+                  Dr. {pageUser.medico_asignado.nombre}{' '}{pageUser.medico_asignado.apellido}
+                </Link>
               ) : (
                 <p>Ninguno</p>
               )}
@@ -116,7 +119,7 @@ export function useGetUserPage({ id, type }) {
         },
       ]
     }
-    if (pageUser.role === 'doctor') {
+    if (pageUser.role === 'doctor' || pageUser.role === 'admin') {
       return [
         {
           slug: 'email',
@@ -135,6 +138,7 @@ export function useGetUserPage({ id, type }) {
           visibleOnlyToOwn: true,
         },
       ]
+
     }
   }, [pageUser])
 
@@ -159,6 +163,22 @@ export function useGetUserPage({ id, type }) {
       }
       imageData = await uploadImage(image.file)
     }
+
+    const token = await auth.currentUser.getIdToken(true)
+
+    fetch(API_ADMIN_URL, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({ ...editedFields, userToModify: id }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('')
+      })
+      .catch(() => {
+      })
 
     const fieldsToUpdate = imageData
       ? { ...editedFields, image: imageData }
@@ -202,6 +222,10 @@ export function useGetUserPage({ id, type }) {
     updateLoading,
     image,
     loggedUser,
+    passwordEditing,
+    deleting,
+    setDeleting,
+    setPasswordEditing,
     handleImage,
     handleImageClear,
     setEditedFields,

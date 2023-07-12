@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-case-declarations */
 export const INITIAL_ASIGNACION_STATE = {
   doctors: {
     data: null,

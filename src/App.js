@@ -104,6 +104,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path={'/admin/:id'}
+          element={
+            <ProtectedRoute condition={true}>
+              <Usuario type='admin' />
+            </ProtectedRoute>
+          }
+        />
         <Route path='/Login' element={<Login />} />
       </Routes>
       <Footer />

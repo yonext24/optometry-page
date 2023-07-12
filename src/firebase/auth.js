@@ -1,4 +1,3 @@
-/* eslint-disable dot-notation */
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { auth } from './config'

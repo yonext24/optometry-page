@@ -11,6 +11,9 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage'
+import { deletePatientTests } from './paciente'
+import { API_ADMIN_URL } from '../../utils/prod-dev-variables'
+import { deassignAllPatientsToDoctor, deassignPatient } from './medicos'
 
 export const getUser = async (id, claim) => {
   const collection =
@@ -71,3 +74,33 @@ export const deleteImage = async (oldPath) => {
 export const cerrarSesion = async () => {
   return await auth.signOut()
 }
+
+export const deleteUser = async (user) => {
+  if (!user) return
+  console.log({ user })
+
+  if (user.role === 'patient') {
+    await deletePatientTests(user.documento)
+    if (user.medico_asignado !== null) {
+      await deassignPatient(user.medico_asignado, user)
+      .catch(err => {
+        console.log(err)
+      })
+    } 
+  } else if (user.role === 'doctor') {
+    if (user.pacientes_asignados.length > 0) {
+      await deassignAllPatientsToDoctor(user)
+    }
+  } 
+  const token = await auth.currentUser.getIdToken(true)
+    
+  return fetch(API_ADMIN_URL, {
+    method: 'DELETE',
+    body: JSON.stringify({ userToModify: user }),
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json',
+    }
+  })
+}
+

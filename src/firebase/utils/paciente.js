@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -56,6 +56,7 @@ export const getPatientTests = async (dni, test) => {
     return data
   })
 
+  // eslint-disable-next-line no-unused-vars
   const promises = Object.entries(testDoc).map(async ([_, value]) => {
     const [doc] = await getDocs(collection(docRef, value))
     .then((docs) =>
@@ -71,24 +72,28 @@ export const getPatientTests = async (dni, test) => {
   return Promise.all(promises)
 }
 
-// Read
-export async function getAllPatients() {}
+export const deletePatientTests = async (dni) => {
+  const tests = ['Terapia1', 'Terapia2']
 
-export async function getPatient(uid) {}
+  console.log({dni})
 
-// Update
-export async function updatePatient(
-  uid,
-  newName,
-  newLastName,
-  newEmail,
-  formerEmail,
-  password,
-  status,
-) {}
-// Delete
-export async function deletePatient(id, email, password) {}
+  const mainPromises = tests.map(async test => {
+    const docRef = doc(db, test, dni)
+    const docSnapshot = await getDoc(docRef)
+    const testDoc = docSnapshot.data()
 
-// Upload files
-// Upload Profile Picture
-export async function setPatientProfilePic(uid, file) {}
+    if (!testDoc) return null
+
+    const promises = Object.entries(testDoc).map(async ([_, value]) => { // eslint-disable-line no-unused-vars
+      const docs = await getDocs(collection(docRef, value))
+      const deletePromises = docs.docs.map(async (doc) => {
+        await deleteDoc(doc.ref)
+      })
+      return await Promise.all(deletePromises)
+    })
+
+    return await Promise.all(promises)
+  })
+
+  return Promise.all(mainPromises)
+}

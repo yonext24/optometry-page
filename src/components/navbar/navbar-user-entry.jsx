@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import styles from './navbar.module.css'
 import { useUser } from '../../hooks/useUser'

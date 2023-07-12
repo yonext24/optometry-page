@@ -64,6 +64,7 @@ export function useRegisterUser() {
           e.target.reset()
         }
       })
+      .catch(() => { toast.error('Hubo un error al crear el usuario') })
       .finally(() => {
         setLoading(false)
         setImage(null)

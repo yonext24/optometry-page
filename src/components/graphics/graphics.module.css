@@ -1,35 +1,50 @@
 .aside {
-  width: 200px;
-  background-color: ;
-  padding: 15px 0;
+  padding: 15px 1rem;
   border-radius: 5px;
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-low);
+  display: flex;
+  max-height: 90px;
+  overflow: hidden;
+  align-items: flex-start;
+  transition: max-height .4s ease;
 }
 .navTitle {
   font-size: 20px;
   text-align: center;
   font-weight: 600;
+  width: 150px;
+  display: flex;
+  align-items: center;
 }
 .buttonsContainer {
   display: flex;
-  flex-direction: column;
-  max-width: 130px;
-  margin: 0 auto;
-  row-gap: .25rem;
-  margin-top: 1rem;
+  row-gap: 25px;
+  flex: 1;
+  padding: 0 .5rem;
+  flex-wrap: wrap;
+  column-gap: 1px;
+  max-height: 400px;
+  overflow: auto;
 }
-.buttonsContainer button {
+.buttonsContainer button, .more {
   aspect-ratio: 1;
   background-color: transparent;
   border: none;
-  font-size: 30px;
+  font-size: 20px;
+  height: 55px;
+  width: 55px;
   font-weight: bold;
-  border-radius: 8px;
   position: relative;
   transition: .15s ease-in-out;
   cursor: pointer;
 }
-.buttonsContainer button:hover {
+button.more {
+  font-size: 15px!important;
+  font-weight: 600!important;
+  background-color: rgba(0, 0, 0, .1);
+  padding: 1px;
+}
+.buttonsContainer button:hover, .more:hover {
   background-color: var(--azul-claro);
 }
 .buttonsContainer button[data-selected=true] {

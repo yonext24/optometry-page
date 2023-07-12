@@ -92,7 +92,8 @@
   font-weight: bold;
   font-size: 12px;
 }
-.entry button {
+.entry button, .edit, .cancel {
+  font-weight: 600;
   grid-row: 1/3;
   grid-column: 2;
   display: grid;
@@ -106,14 +107,14 @@
   border: none;
   padding: 5px;
 }
-.entry button.edit {
+.edit {
   aspect-ratio: 1/1;
 }
-.entry button.cancel {
-  padding: 6px 12px;
-  grid-row: 2;
+.cancel {
+  padding: 6px 12px!important;
+  grid-row: 2!important;
 }
-.entry input, .entry select {
+.entry input, .entry select, .nameInput {
   padding: 5px 10px;
   width: 280px;
   border-radius: 5px;
@@ -164,4 +165,36 @@
 }
 .buttonsContainer button {
   background-color: var(--azul-profundo);
+}
+.nameEditing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 5px;
+}
+.changePassword {
+  align-self: flex-start;
+  border: none;
+  background-color: transparent;
+  color: rgb(43, 25, 161);
+  font-size: 15px;
+  cursor: pointer;
+}
+.changePassword:hover {
+  text-decoration: underline;
+}
+.delete {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 4px;
+  border: 1px solid rgb(176, 48, 53);
+  background-color: rgb(226, 63, 63);
+  border-radius: 2px;
+  color: rgb(237, 220, 220);
+  cursor: pointer;
+  transition: .2s ease
+}
+.delete:hover {
+  background-color: red;
 }
