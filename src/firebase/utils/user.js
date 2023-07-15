@@ -106,7 +106,7 @@ export const cerrarSesion = async () => {
 
 export const deleteUser = async (user) => {
   if (!user) return
-
+  
   if (user.role === 'patient') {
     await deletePatientTests(user.documento)
     if (user.medico_asignado !== null) {

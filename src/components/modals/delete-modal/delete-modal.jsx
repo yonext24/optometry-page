@@ -33,7 +33,8 @@ export function DeleteModal({
           : navigate('/pacientes', { replace: true })
         loggedUser.id === user.id && cerrarSesion()
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         setStatus('error')
         toast.error('Hubo un error al borrar el usuario')
       })

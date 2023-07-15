@@ -73,6 +73,7 @@ export const getPatientTests = async (dni, test) => {
 }
 
 export const deletePatientTests = async (dni) => {
+  if (!dni) return
   const tests = ['Terapia1', 'Terapia2']
 
   const mainPromises = tests.map(async test => {
