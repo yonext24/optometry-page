@@ -61,7 +61,6 @@ export function OpacidadGraphic({ user }) {
     const minX = Math.min(...chartData.map((data) => data.Filtro))
     setMaxx(maxX)
     setMinx(minX)
-    console.log(chartData)
   }, [chartData])
 
   return (

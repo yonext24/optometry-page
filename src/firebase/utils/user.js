@@ -14,6 +14,7 @@ import {
 import { deletePatientTests } from './paciente'
 import { API_ADMIN_URL } from '../../utils/prod-dev-variables'
 import { deassignAllPatientsToDoctor, deassignPatient } from './medicos'
+import Compressor from 'compressorjs'
 
 export const getUser = async (id, claim) => {
   const collection =
@@ -45,14 +46,42 @@ export const updateUser = async (id, claim, update) => {
   return updateDoc(docRef, update)
 }
 
-export const uploadImage = async (file) => {
+const compressImage = ({ file, width, height, quality = 0.8}) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: quality,
+      height,
+      width,
+      resize: 'contain',
+
+      beforeDraw (context, canvas) {
+        context.fillStyle = '#000'
+        context.fillRect(0, 0, canvas.width, canvas.height)
+      },
+
+      success (result) {
+        resolve(result)
+      },
+
+      error (err) {
+        reject(err)
+      }
+
+    })
+  })
+}
+
+export const uploadImage = async ({ username, file }) => {
   const fileName = String(Date.now()) + '.' + file.name.split('.')[1]
   const path = '/profilePics'
 
-  const imageRef = ref(storage, `/${path}/${fileName}`)
+  const imageRef = ref(storage, `/${path}/${username}/${fileName}`)
+  
+  const mainImage = await compressImage({ file, height: 300, width: 300 })
 
   try {
-    await uploadBytesResumable(imageRef, file)
+    await uploadBytesResumable(imageRef, mainImage)
+
     const imageUrl = await getDownloadURL(imageRef)
 
     return { src: imageUrl, path: imageRef.fullPath }
@@ -77,15 +106,11 @@ export const cerrarSesion = async () => {
 
 export const deleteUser = async (user) => {
   if (!user) return
-  console.log({ user })
 
   if (user.role === 'patient') {
     await deletePatientTests(user.documento)
     if (user.medico_asignado !== null) {
       await deassignPatient(user.medico_asignado, user)
-      .catch(err => {
-        console.log(err)
-      })
     } 
   } else if (user.role === 'doctor') {
     if (user.pacientes_asignados.length > 0) {

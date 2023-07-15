@@ -6,7 +6,7 @@ import { auth } from '../../../firebase/config'
 import { toast } from 'react-toastify'
 import { useModalLogic } from '../../../hooks/useModalLogic'
 
-export function PasswordModal({ closeModal, id }) {
+export function PasswordModal({ closeModal, id, closeAtEnd }) {
   const [password, setPassword] = useState('')
   const [confirmation, setConfirmation] = useState('')
   const [validationError, setValidationError] = useState({
@@ -75,6 +75,10 @@ export function PasswordModal({ closeModal, id }) {
         if (!res.ok) throw new Error('')
         setStatus('success')
         toast('La contraseña se cambió correctamente')
+        closeAtEnd &&
+          setTimeout(() => {
+            closeModal()
+          }, 2500)
       })
       .catch(() => {
         setStatus('error')
@@ -90,33 +94,40 @@ export function PasswordModal({ closeModal, id }) {
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}>
-        <h4>Cambiar contraseña</h4>
+        <img className={styles.logo} src='/logo.webp' height={35} />
+        <span>Cambia la contraseña.</span>
         <div className={styles.inputContainer}>
           <label htmlFor='password'>Contraseña</label>
-          <input
-            id='password'
-            autoFocus
-            style={{
-              borderColor:
-                validationError.text !== '' && validationError.error
-                  ? 'rgb(235 52 52)'
-                  : 'transparent',
-            }}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className={styles.inputParent}>
+            <input
+              id='password'
+              autoFocus
+              style={{
+                borderColor:
+                  validationError.text !== '' && validationError.error
+                    ? 'rgb(235 52 52)'
+                    : 'transparent',
+              }}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div className={styles.inputBrother} />
+          </div>
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor='confirm'>Confirmar Contraseña</label>
-          <input
-            style={{
-              borderColor:
-                validationError.text !== '' && validationError.error
-                  ? 'rgb(235 52 52)'
-                  : 'transparent',
-            }}
-            id='confirm'
-            onChange={(e) => setConfirmation(e.target.value)}
-          />
+          <div className={styles.inputParent}>
+            <input
+              style={{
+                borderColor:
+                  validationError.text !== '' && validationError.error
+                    ? 'rgb(235 52 52)'
+                    : 'transparent',
+              }}
+              id='confirm'
+              onChange={(e) => setConfirmation(e.target.value)}
+            />
+            <div className={styles.inputBrother} />
+          </div>
         </div>
 
         <div className={styles.validationContainer}>

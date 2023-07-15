@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Footer } from './components/footer/footer'
 import { Navbar } from './components/navbar/navbar'
@@ -17,11 +17,22 @@ import { Usuario } from './pages/Usuario/Usuario'
 import { UserLayout } from './components/layouts/user-layout/user-layout'
 import { Deberes } from './pages/Deberes/Deberes'
 import { Resultados } from './pages/Resultados/resultados'
+import { PasswordChange } from './components/modals/password-change/password-change'
 
 function App() {
+  const [passwordShowing, setPasswordShowing] = useState(false)
   const user = useUser()
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
 
+  useEffect(() => {
+    if (!user) return
+    if (!user?.passwordSetted && !localStorage.getItem('pass-setted')) {
+      setPasswordShowing(true)
+    }
+  }, [user])
+
+  const closeModal = () => setPasswordShowing(false)
+  
   return (
     <div className='App'>
       <Navbar />
@@ -115,6 +126,10 @@ function App() {
         <Route path='/Login' element={<Login />} />
       </Routes>
       <Footer />
+
+      {
+        passwordShowing && <PasswordChange closeModal={closeModal} id={user.id}/>
+      }
 
       <ToastContainer
         position='top-right'

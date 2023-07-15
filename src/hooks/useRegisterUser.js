@@ -5,7 +5,6 @@ import { API_ADMIN_URL } from '../utils/prod-dev-variables'
 import { toast } from 'react-toastify'
 
 export function useRegisterUser() {
-  console.log(API_ADMIN_URL)
   const [image, setImage] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)

@@ -17,7 +17,7 @@ export function NavbarUserEntry() {
           setOpen((prev) => !prev)
         }}
         className={styles.userEntry}>
-        {user.image ? (
+        {user?.image?.src ? (
           <img
             className={styles.userImage}
             src={user.image.src}

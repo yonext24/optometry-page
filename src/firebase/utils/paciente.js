@@ -75,8 +75,6 @@ export const getPatientTests = async (dni, test) => {
 export const deletePatientTests = async (dni) => {
   const tests = ['Terapia1', 'Terapia2']
 
-  console.log({dni})
-
   const mainPromises = tests.map(async test => {
     const docRef = doc(db, test, dni)
     const docSnapshot = await getDoc(docRef)

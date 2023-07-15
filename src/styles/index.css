@@ -38,8 +38,8 @@
 
   --shadow-color: 0deg 0% 0%;
   --shadow-low:
-    -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.15),
-    -1px 1.1px 1.7px -2.5px hsl(var(--shadow-color) / 0.15);
+    -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.19),
+    -5px 6.2px 2.7px -4.5px hsl(var(--shadow-color) / 0.19);
   --shadow-medium:
     -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.22),
     -5px 5.5px 8.4px -2.5px hsl(var(--shadow-color) / 0.22);

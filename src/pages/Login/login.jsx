@@ -4,6 +4,7 @@ import styles from './login.module.css'
 import { Spinner } from '../../components/spinner/spinner'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../hooks/useUser'
+import { cerrarSesion } from '../../firebase/utils/user'
 
 export function Login() {
   const [loading, setLoading] = useState(false)
@@ -32,7 +33,14 @@ export function Login() {
   }
 
   useEffect(() => {
-    if (user) navigate('/')
+    if (user) {
+      if (!user.active) {
+        cerrarSesion()
+        setError('Tu cuenta está desactivada, no puedes iniciar sesión.')
+      } else {
+        navigate('/')
+      }
+    }
   }, [user])
 
   return (

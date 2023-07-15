@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { auth } from './config'
-import { getUser } from './utils/user'
+import { cerrarSesion, getUser } from './utils/user'
+import { toast } from 'react-toastify'
 
 export async function getUserRole() {
   return await new Promise((resolve, reject) => {
@@ -15,7 +16,7 @@ export async function getUserRole() {
   })
 }
 
-export const onAuthStateChanged = (setState) => {
+export const onAuthStateChanged = async (setState) => {
   return auth.onAuthStateChanged(async (user) => {
     if (user === null) {
       setState(USER_POSSIBLE_STATES.NOT_LOGGED)
@@ -26,6 +27,13 @@ export const onAuthStateChanged = (setState) => {
 
       if (!role) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
       const userFromFirestore = await getUser(user.uid, role)
+
+      if (!userFromFirestore.active) {
+        await cerrarSesion()
+        setState(USER_POSSIBLE_STATES.NOT_LOGGED)
+        toast.error('Tu cuenta esta desactivada, no puedes iniciar sesión.')
+        return
+      }
 
       setState({ ...userFromFirestore, role })
     } catch (err) {

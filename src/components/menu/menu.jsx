@@ -59,7 +59,7 @@ export function Menu({ patient, setIsEditing }) {
       {!patient ? null : (
         <>
           <Link to={`/paciente/${patient.id}`}>
-            {patient.image ? (
+            {patient.image.src ? (
               <UserImage src={patient.image.src} />
             ) : (
               <div id={'userImage'} />

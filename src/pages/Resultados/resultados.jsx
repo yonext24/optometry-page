@@ -72,7 +72,6 @@ export function Resultados() {
       </div>
     )
   }
-  console.log({ pageUser })
 
   return (
     <main className={styles.main}>

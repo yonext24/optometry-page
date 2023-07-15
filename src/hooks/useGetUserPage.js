@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  deleteImage,
   getUser,
   updateUser,
   uploadImage,
@@ -144,7 +143,6 @@ export function useGetUserPage({ id, type }) {
 
   const handleSubmit = useCallback(async () => {
     if (Object.entries(editedFields).length <= 0 && image === null) return
-    console.log(loggedUser.role !== 'admin' || loggedUser.id !== id)
     if (loggedUser.role !== 'admin' && loggedUser.id !== id) {
       toast.error('No tienes permisos para hacer esto.')
       return
@@ -153,37 +151,32 @@ export function useGetUserPage({ id, type }) {
     setUpdateLoading(true)
 
     let imageData
-    console.log(pageUser.image)
     if (image !== null) {
-      if (pageUser.image !== null) {
-        console.log(pageUser.image)
-        await deleteImage(pageUser.image.path).catch(() =>
-          toast.error('Hubo un error al borrar la imágen antigua del usuario.'),
-        )
-      }
-      imageData = await uploadImage(image.file)
+      imageData = await uploadImage({ file: image.file, username: pageUser.nombre })
     }
 
     const token = await auth.currentUser.getIdToken(true)
 
-    fetch(API_ADMIN_URL, {
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      },
-      method: 'PATCH',
-      body: JSON.stringify({ ...editedFields, userToModify: id }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('')
+    if (editedFields.email) {
+      await fetch(API_ADMIN_URL, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+        body: JSON.stringify({ email: editedFields.email, id }),
       })
-      .catch(() => {
-      })
+        .then((res) => {
+          if (!res.ok) throw new Error('')
+        })
+        .catch(() => {
+          toast.error('Hubo un error modificando el mail del usuario.')
+        })      
+    }
 
     const fieldsToUpdate = imageData
       ? { ...editedFields, image: imageData }
       : { ...editedFields }
-    console.log(fieldsToUpdate)
     updateUser(id, type, fieldsToUpdate)
       .then(() => {
         setPageUser((prev) => {
@@ -205,7 +198,7 @@ export function useGetUserPage({ id, type }) {
         toast.error(`Hubo un error al modificar el paciente: ${errMessage}`)
       })
       .finally(() => setUpdateLoading(false))
-  }, [editedFields, id, pageUser, image])
+  }, [editedFields, id, pageUser, image, type])
 
   useEffect(() => {
     if (success) setSuccess(false)

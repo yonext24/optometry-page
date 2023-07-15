@@ -133,7 +133,7 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
                 className={styles.delete}
                 onClick={() => setDeleting(true)}
                 title='Borrar usuario'>
-                <DeleteIcon width={25} height={25} />
+                <DeleteIcon width={23} height={23} strokeWidth={1} />
               </button>
             )}
           </>
