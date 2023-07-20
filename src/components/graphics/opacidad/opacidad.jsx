@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Table } from 'react-bootstrap'
 import {
   ScatterChart,
@@ -10,13 +10,10 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts'
-import { getPatientTests } from '../../../firebase/utils/paciente'
 import styles from './opacidad.module.css'
-import { Sidebar } from '../sidebar'
+import { ResultsContext } from '../../../contexts/ResultsContext'
 
 export function OpacidadGraphic({ user }) {
-  const [documents, setDocuments] = useState([])
-  const [selectedItemData, setSelectedItemData] = useState(null)
   const [chartData, setChartData] = useState([])
   const [minx, setMinx] = useState(null)
   const [maxx, setMaxx] = useState(null)
@@ -32,29 +29,25 @@ export function OpacidadGraphic({ user }) {
     '#04FF00',
   ]
 
-  useEffect(() => {
-    getPatientTests(user.documento, 'Terapia2').then(setDocuments)
-  }, [])
+  const { state } = useContext(ResultsContext)
 
   useEffect(() => {
-    if (selectedItemData && Object.keys(selectedItemData).length > 0) {
-      const max = Math.max(...selectedItemData.NEstimulosAcertados)
-      setUmbralNEstimulosAcertados(max / 2)
-      const { ...rest } = selectedItemData
+    const max = Math.max(...state.graphic_open.NEstimulosAcertados)
+    setUmbralNEstimulosAcertados(max / 2)
+    const { ...rest } = state.graphic_open
 
-      const Contraste = rest.Contraste
-      const Filtro = rest.Filtro
-      const NEstimulosAcertados = rest.NEstimulosAcertados
-      const chartData = (Contraste || []).map((_, index) => ({
-        index: index + 1,
-        Contraste: Contraste[index],
-        Filtro: Filtro[index],
-        NEstimulosAcertados: NEstimulosAcertados[index],
-      }))
+    const Contraste = rest.Contraste
+    const Filtro = rest.Filtro
+    const NEstimulosAcertados = rest.NEstimulosAcertados
+    const chartData = (Contraste || []).map((_, index) => ({
+      index: index + 1,
+      Contraste: Contraste[index],
+      Filtro: Filtro[index],
+      NEstimulosAcertados: NEstimulosAcertados[index],
+    }))
 
-      setChartData(chartData)
-    }
-  }, [selectedItemData])
+    setChartData(chartData)
+  }, [state.selected_test])
 
   useEffect(() => {
     const maxX = Math.max(...chartData.map((data) => data.Filtro))
@@ -65,11 +58,6 @@ export function OpacidadGraphic({ user }) {
 
   return (
     <div className={styles.container}>
-      <Sidebar
-        documents={documents}
-        selectedItemData={selectedItemData}
-        setSelectedItemData={setSelectedItemData}
-      />
       <div className={styles.data}>
         <div className={styles.chart + ' ' + styles.container}>
           {chartData && (
@@ -114,7 +102,7 @@ export function OpacidadGraphic({ user }) {
         </div>
         <div className={styles.table + ' ' + styles.container}>
           <div className={styles.table + ' ' + styles.container}>
-            {selectedItemData && (
+            {state.graphic_open && (
               <Table
                 className={
                   styles.table + ' ' + styles.striped + ' ' + styles.border
@@ -130,20 +118,20 @@ export function OpacidadGraphic({ user }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedItemData['Tamaño'].map((_, index) => {
+                  {state.graphic_open['Tamaño'].map((_, index) => {
                     const nEstimulosAcertados =
-                      selectedItemData.NEstimulosAcertados[index]
+                      state.graphic_open.NEstimulosAcertados[index]
                     const isHighlighted =
                       nEstimulosAcertados > umbralNEstimulosAcertados
                     const rowClassName = isHighlighted ? 'highlighted-row' : ''
                     return (
                       <tr key={index} className={styles[rowClassName]}>
                         <td>{index + 1}</td>
-                        <td>{selectedItemData['Tamaño'][index]}</td>
-                        <td>{selectedItemData.NEstimulos[index]}</td>
+                        <td>{state.graphic_open['Tamaño'][index]}</td>
+                        <td>{state.graphic_open.NEstimulos[index]}</td>
                         <td>{nEstimulosAcertados}</td>
-                        <td>{selectedItemData.Filtro[index]}</td>
-                        <td>{selectedItemData.Contraste[index]}</td>
+                        <td>{state.graphic_open.Filtro[index]}</td>
+                        <td>{state.graphic_open.Contraste[index]}</td>
                       </tr>
                     )
                   })}

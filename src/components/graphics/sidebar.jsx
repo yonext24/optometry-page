@@ -22,7 +22,7 @@ export function Sidebar({ documents, setSelectedItemData, selectedItemData }) {
           const i = index + 1
           return (
             <button
-              data-selected={selectedItemData?.id === el.id}
+              data-selected={selectedItemData?.id === el?.id}
               key={i}
               onClick={() => setSelectedItemData(el)}>
               {i}

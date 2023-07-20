@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useContext } from 'react'
 import { Table } from 'react-bootstrap'
 import styles from './preferencial.module.css'
 import {
@@ -11,44 +11,39 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import { getPatientTests } from '../../../firebase/utils/paciente'
-import { Sidebar } from '../sidebar'
+import { ResultsContext } from '../../../contexts/ResultsContext'
 
-export function PreferencialGraphic({ user }) {
-  const [documents, setDocuments] = useState([])
-  const [selectedItemData, setSelectedItemData] = useState(null)
+export function PreferencialGraphic() {
   const [processedData, setProcessedData] = useState([])
   const [chartData, setChartData] = useState([])
   const [vAndR, setVAndR] = useState({})
 
-  useEffect(() => {
-    getPatientTests(user.documento, 'Terapia1').then((arrayOfTests) => {
-      const testsData = arrayOfTests.map((data) => {
-        const keys = Object.keys(data).sort()
-        const vKeys = keys.filter((key) => key.startsWith('v'))
-        const rKeys = keys.filter((key) => key.startsWith('R'))
+  const { state } = useContext(ResultsContext)
 
-        const newData = {
-          id: data.id,
-          CPCM: data.CPCM,
-          CPD: data.CPD,
-        }
-        vKeys.forEach((vKey) => {
-          newData[vKey] = data[vKey]
-        })
-        rKeys.forEach((rKey) => {
-          newData[rKey] = data[rKey]
-        })
+  const document = useMemo(() => {
+    const data = state.graphic_open
+    const keys = Object.keys(data).sort()
+    const vKeys = keys.filter((key) => key.startsWith('v'))
+    const rKeys = keys.filter((key) => key.startsWith('R'))
 
-        return newData
-      })
-      setDocuments(testsData)
+    const newData = {
+      id: data.id,
+      CPCM: data.CPCM,
+      CPD: data.CPD,
+    }
+    vKeys.forEach((vKey) => {
+      newData[vKey] = data[vKey]
     })
-  }, [])
+    rKeys.forEach((rKey) => {
+      newData[rKey] = data[rKey]
+    })
+
+    return newData
+  }, [state.graphic_open])
 
   useEffect(() => {
-    if (selectedItemData && Object.keys(selectedItemData).length > 0) {
-      const { CPCM, CPD, ...rest } = selectedItemData
+    if (document && Object.keys(document).length > 0) {
+      const { CPCM, CPD, ...rest } = document
 
       const vKeys = Object.keys(rest).filter((key) => key.startsWith('v'))
       const v1 = Object.values(rest).find((value) => Array.isArray(value))
@@ -82,7 +77,7 @@ export function PreferencialGraphic({ user }) {
       setProcessedData(processedRows)
       setChartData(chartData)
     }
-  }, [selectedItemData])
+  }, [document])
 
   const CustomizedDot = (props) => {
     const { cx, cy, payload } = props
@@ -112,11 +107,6 @@ export function PreferencialGraphic({ user }) {
   }
   return (
     <div className={styles.App}>
-      <Sidebar
-        setSelectedItemData={setSelectedItemData}
-        selectedItemData={selectedItemData}
-        documents={documents}
-      />
       <div className={styles.content}>
         {chartData && (
           <div className={styles.chartContainer}>
@@ -151,7 +141,7 @@ export function PreferencialGraphic({ user }) {
           </div>
         )}
         <div className={styles.tableContainer}>
-          {selectedItemData && (
+          {document && (
             <Table
               className={
                 styles.table + ' ' + styles.striped + ' ' + styles.bordere
@@ -159,7 +149,7 @@ export function PreferencialGraphic({ user }) {
               <thead>
                 <tr>
                   <th>Índice</th>
-                  {(Object.keys(selectedItemData) || []).map((column) => {
+                  {(Object.keys(document) || []).map((column) => {
                     if (column !== 'id' && column !== 'idd') {
                       return <th key={column}>{column}</th>
                     } else {
@@ -170,11 +160,11 @@ export function PreferencialGraphic({ user }) {
               </thead>
               <tbody>
                 {Array.from(
-                  { length: (selectedItemData?.v1 || []).length },
+                  { length: (document?.v1 || []).length },
                   (_, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      {(Object.entries(selectedItemData) || []).map(
+                      {(Object.entries(document) || []).map(
                         ([column, data]) => {
                           if (column !== 'id' && column !== 'idd') {
                             const value = Array.isArray(data) ? data[index] : ''
@@ -198,7 +188,7 @@ export function PreferencialGraphic({ user }) {
         </div>
 
         <div className={styles.tableContainer}>
-          {selectedItemData && (
+          {document && (
             <div>
               <Table className={styles.table} striped bordered>
                 <thead>

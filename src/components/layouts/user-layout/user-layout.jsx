@@ -10,7 +10,8 @@ export function UserLayout({ children, isRelative = false }) {
     return isRelative
       ? {
           resultados: location.pathname === `/paciente/${params.id}/resultados`,
-          deberes: location.pathname === `/paciente/${params.id}/deberes`,
+          pruebas:
+            location.pathname === `/paciente/${params.id}/pruebas-clinicas`,
           perfil: location.pathname === `/paciente/${params.id}`,
         }
       : {}
@@ -23,24 +24,21 @@ export function UserLayout({ children, isRelative = false }) {
           className={`${styles.menuEntry} ${
             routesMatches.resultados ? styles.selected : ''
           }`}
-          to={`/paciente/${isRelative ? `${params.id}/` : ''}resultados`}
-        >
+          to={`/paciente/${isRelative ? `${params.id}/` : ''}resultados`}>
           Resultados
         </Link>
         <Link
           className={`${styles.menuEntry} ${
-            routesMatches.deberes ? styles.selected : ''
+            routesMatches.pruebas ? styles.selected : ''
           }`}
-          to={`/paciente/${isRelative ? `${params.id}/` : ''}deberes`}
-        >
-          Deberes
+          to={`/paciente/${isRelative ? `${params.id}/` : ''}pruebas-clinicas`}>
+          Pruebas Clínicas
         </Link>
         <Link
           className={`${styles.menuEntry} ${
             routesMatches.perfil ? styles.selected : ''
           }`}
-          to={`/paciente${isRelative ? `/${params.id}` : ''}`}
-        >
+          to={`/paciente${isRelative ? `/${params.id}` : ''}`}>
           Perfil
         </Link>
       </header>

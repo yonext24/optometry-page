@@ -46,7 +46,7 @@ export function Menu({ patient, setIsEditing }) {
           },
           {
             type: 'a',
-            to: `/paciente/${patient.id}/deberes`,
+            to: `/paciente/${patient.id}/pruebas-clinicas`,
             icon: BookIcon,
             text: 'Deberes',
             key: 2,

@@ -18,6 +18,7 @@ import { UserLayout } from './components/layouts/user-layout/user-layout'
 import { Deberes } from './pages/Deberes/Deberes'
 import { Resultados } from './pages/Resultados/resultados'
 import { PasswordChange } from './components/modals/password-change/password-change'
+import { ResultsContextProvider } from './contexts/ResultsContext'
 
 function App() {
   const [passwordShowing, setPasswordShowing] = useState(false)
@@ -88,7 +89,7 @@ function App() {
           }
         />
         <Route
-          path={'/paciente/:id/deberes'}
+          path={'/paciente/:id/pruebas-clinicas'}
           element={
             <ProtectedRoute condition={true}>
               <UserLayout isRelative={true}>
@@ -102,7 +103,9 @@ function App() {
           element={
             <ProtectedRoute condition={true}>
               <UserLayout isRelative={true}>
-                <Resultados />
+                <ResultsContextProvider>
+                  <Resultados />
+                </ResultsContextProvider>
               </UserLayout>
             </ProtectedRoute>
           }

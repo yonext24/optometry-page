@@ -1,10 +1,13 @@
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore'
 import { patientsCollection } from '../collections'
@@ -50,7 +53,7 @@ export const updateTest = async (id, slug, deberes, assign = true) => {
 }
 
 export const getPatientTests = async (dni, test) => {
-  const docRef = doc(db, test, dni)
+  const docRef = doc(collection(db, test), dni)
   const testDoc = await getDoc(docRef).then((doc) => {
     const data = doc.data()
     return data
@@ -58,12 +61,11 @@ export const getPatientTests = async (dni, test) => {
 
   // eslint-disable-next-line no-unused-vars
   const promises = Object.entries(testDoc).map(async ([_, value]) => {
-    const [doc] = await getDocs(collection(docRef, value))
-    .then((docs) =>
+    const [doc] = await getDocs(collection(docRef, value)).then((docs) =>
       docs.docs.flatMap((doc) => {
         const id = doc.id
         const data = doc.data()
-        return {...data, id}
+        return { ...data, id, test, ref: doc.ref }
       }),
     )
     return doc
@@ -76,14 +78,15 @@ export const deletePatientTests = async (dni) => {
   if (!dni) return
   const tests = ['Terapia1', 'Terapia2']
 
-  const mainPromises = tests.map(async test => {
+  const mainPromises = tests.map(async (test) => {
     const docRef = doc(db, test, dni)
     const docSnapshot = await getDoc(docRef)
     const testDoc = docSnapshot.data()
 
     if (!testDoc) return null
 
-    const promises = Object.entries(testDoc).map(async ([_, value]) => { // eslint-disable-line no-unused-vars
+    const promises = Object.entries(testDoc).map(async ([_, value]) => {
+      // eslint-disable-line no-unused-vars
       const docs = await getDocs(collection(docRef, value))
       const deletePromises = docs.docs.map(async (doc) => {
         await deleteDoc(doc.ref)
@@ -95,4 +98,15 @@ export const deletePatientTests = async (dni) => {
   })
 
   return Promise.all(mainPromises)
+}
+
+export const addNoteToTest = (testRef, note, user) => {
+  return updateDoc(testRef, {
+    notes: arrayUnion({ note, user, date: Date.now() }),
+  })
+}
+export const deleteNoteToTest = (testRef, note) => {
+  return updateDoc(testRef, {
+    notes: arrayRemove(note),
+  })
 }
