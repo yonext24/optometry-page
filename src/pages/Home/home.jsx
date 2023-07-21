@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
 import styles from './home.module.css'
 import { DataEntry } from './data-entry'
 import { ImageEntry } from './image-entry'
+import { HowItWorksSection } from './how-it-works-section'
+import { useState } from 'react'
+import { TestHomeModal } from '../../components/modals/test-home-modal/test-home-modal'
 
 const entrys = [
   {
@@ -14,43 +16,50 @@ const entrys = [
   },
   {
     num: 2,
-    title: 'Potencia tu visión con la prueba de agudeza visual.',
-    image: '/home/eye.webp',
-    aspectRatio: '800/1067',
-    desc: 'Descubre una forma innovadora de evaluar tu visión. Esta prueba utiliza tu habilidad para mirar y distinguir patrones específicos, siendo especialmente útil para aquellos que tienen dificultades para comunicarse verbalmente, como los niños pequeños o personas con discapacidades cognitivas o del lenguaje.',
+    title: 'La herramienta más completa en terapia visual',
+    image: '/home/face.jpg',
+    aspectRatio: '1000/800',
+    desc: '15470 pacientes ya la han utilizado.',
   },
 ]
 
 export const Home = () => {
-  const [currentData, setCurrentData] = useState(2)
+  const [modalOpen, setModalOpen] = useState(null)
+  const [modalAnimating, setModalAnimating] = useState(false)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentData((prev) => (prev === 1 ? 2 : 1))
-    }, 7000)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  const closeModal = () => {
+    if (modalAnimating) return
+    setModalAnimating(true)
+    setTimeout(() => {
+      setModalOpen(null)
+      setModalAnimating(false)
+    }, 250)
+  }
 
   return (
-    <main className={styles.header}>
-      {entrys.map((el) => (
+    <>
+      <main className={styles.header}>
         <div
-          className={`${styles.viewContainer} ${
-            el.num !== currentData ? styles.hidden : ''
-          }`}
-          style={{ gridTemplateColumns: el.template }}
-          key={el.num}>
+          className={`${styles.viewContainer}`}
+          style={{ gridTemplateColumns: entrys[1].template }}
+          key={entrys[1].num}>
           <section className={styles.dataSection}>
-            <DataEntry {...el} />
+            <DataEntry {...entrys[1]} />
           </section>
-          <section className={styles.imageSection}>
-            <ImageEntry {...el} />
-          </section>
+          <ImageEntry {...entrys[1]} />
         </div>
-      ))}
-    </main>
+        <HowItWorksSection
+          setModalOpen={setModalOpen}
+          closeModal={closeModal}
+        />
+      </main>
+      {modalOpen && (
+        <TestHomeModal
+          modalOpen={modalOpen}
+          animating={modalAnimating}
+          closeModal={closeModal}
+        />
+      )}
+    </>
   )
 }

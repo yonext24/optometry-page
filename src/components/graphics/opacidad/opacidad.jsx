@@ -13,7 +13,7 @@ import {
 import styles from './opacidad.module.css'
 import { ResultsContext } from '../../../contexts/ResultsContext'
 
-export function OpacidadGraphic({ user }) {
+export function OpacidadGraphic() {
   const [chartData, setChartData] = useState([])
   const [minx, setMinx] = useState(null)
   const [maxx, setMaxx] = useState(null)

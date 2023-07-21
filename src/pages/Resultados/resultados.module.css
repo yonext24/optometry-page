@@ -1,7 +1,7 @@
 .main, .loadingUser {
   min-height: calc(100vh - var(--navbar-height));
   width: 100%;
-  max-width: 1000px;
+  max-width: 1150px;
   margin: 0 auto; 
   padding: 2rem 0;
   position: relative;
