@@ -47,6 +47,8 @@ export const Home = () => {
             <DataEntry {...entrys[1]} />
           </section>
           <ImageEntry {...entrys[1]} />
+          <div className={styles.outterCircle} />
+          <div className={styles.innerCircle} />
         </div>
         <HowItWorksSection
           setModalOpen={setModalOpen}

@@ -1,9 +1,9 @@
 import styles from './test-home-modal.module.css'
 import { useModalLogic } from '../../../hooks/useModalLogic'
+import { CloseIcon } from '../../icons/close'
 
 const PreferencialRender = () => (
   <>
-    <img src='/logo.webp' height={45} />
     <img src='/preferencial.png' height={200} width={200} />
     <h4>Test de Mirada Preferencial</h4>
     <p>
@@ -22,7 +22,6 @@ const PreferencialRender = () => (
 )
 const ContrasteRender = () => (
   <>
-    <img src='/logo.webp' height={45} />
     <img src='/contraste.png' height={200} width={200} />
     <h4>Test de Sensibilidad al Contraste</h4>
     <p>
@@ -40,12 +39,22 @@ export function TestHomeModal({ closeModal, animating, modalOpen }) {
 
   return (
     <div className={`${styles.modalBackground}`} onClick={closeModal}>
-      <div className={`${styles.modal} ${animating ? styles.closing : ''}`}>
-        {modalOpen === 'preferencial' ? (
-          <PreferencialRender />
-        ) : (
-          <ContrasteRender />
-        )}
+      <div
+        className={`${styles.modal} ${animating ? styles.closing : ''}`}
+        onClick={(e) => e.stopPropagation()}>
+        <header className={styles.header}>
+          <button onClick={closeModal} className={styles.close}>
+            <CloseIcon height={35} width={35} />
+          </button>
+          <img src='/logo.webp' height={45} />
+        </header>
+        <div className={styles.body}>
+          {modalOpen === 'preferencial' ? (
+            <PreferencialRender />
+          ) : (
+            <ContrasteRender />
+          )}
+        </div>
       </div>
     </div>
   )

@@ -20,7 +20,6 @@
   row-gap: 1rem;
   background-color: white;
   color: black;
-  padding: 2rem;
   width: 100%;
   min-height: 100vh;
   max-width: 450px;
@@ -55,4 +54,24 @@
   font-size: 40px;
   text-align: center;
   text-wrap: balance
+}
+.header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem;
+  margin-bottom: 1rem;
+}
+.body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1rem;
+}
+.close {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
