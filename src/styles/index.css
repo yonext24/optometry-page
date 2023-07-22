@@ -46,6 +46,9 @@
   --shadow-medium:
     -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.22),
     -5px 5.5px 8.4px -2.5px hsl(var(--shadow-color) / 0.22);
+  --shadow-medium-right: 
+    -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.22),
+    5px 5.5px 8.4px -2.5px hsl(var(--shadow-color) / 0.22);
   --shadow-high:
     -0.3px 0.3px 0.5px hsl(var(--shadow-color) / 0.27),
     -5.7px 6.2px 9.5px -1.2px hsl(var(--shadow-color) / 0.27),

@@ -84,7 +84,7 @@
 .how {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 130vh;
   text-align: center;
   align-items: center;
   row-gap: 1rem;
@@ -94,6 +94,97 @@
   position: relative;
   z-index: 10;
 }
+
+.how h2 {
+  font-size: 40px;
+  font-weight: 600;
+}
+.how > p {
+  font-size: 22px;
+}
+.tests {
+  width: 100%;
+  margin: 1rem 0;
+  margin-top: 3rem;
+  display: flex;
+  column-gap: 4rem;
+  justify-content: center;
+  flex: 1;
+}
+.test {
+  flex: 1;
+  padding: 1rem 4rem;
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: .5rem;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color .12s ease
+}
+.test:nth-of-type(2) {
+  box-shadow: var(--shadow-medium-right);
+}
+.test::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(149, 146, 226, 0.6) 0%, rgba(176, 242, 217, 0.2) 100%);
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+.test:hover::after {
+  opacity: 1;
+}
+.test:hover {
+  color: var(--azul-oscuro);
+}
+
+.test img {
+  height: 204px;
+  margin: auto;
+  transition: transform .2s ease-in-out;
+  position: relative;
+  z-index: 1;
+}
+.test h5 {
+  font-size: 35px;
+  font-weight: 600;
+}
+.test p {
+  font-size: 22px;
+}
+.testData {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  justify-content: space-evenly;
+}
+.test:hover > .testData p {
+  text-decoration: underline;
+}
+.test:hover > img {
+  transform: scale(1.15);
+}
+.outterCircle {
+  position: absolute;
+  top: 0;
+  right: 10%;
+  width: 50%;
+  height: 105vh;
+  background-color: white;
+  z-index: 1;
+  border-radius: 0 0 0 100%;
+}
+
 .circleContainer {
   position: absolute;
   z-index: -1;
@@ -135,80 +226,4 @@
 }
 .circle.yellow::before {
   background-image: radial-gradient(yellow 50%, rgb(166, 255, 22));
-}
-
-
-.how h2 {
-  font-size: 40px;
-  font-weight: 600;
-}
-.how > p {
-  font-size: 22px;
-}
-.tests {
-  width: 100%;
-  margin: 1rem 0;
-  display: flex;
-  column-gap: 1rem;
-  justify-content: center;
-}
-.test {
-  padding: 1rem 4rem;
-  box-shadow: var(--shadow);
-  display: grid;
-  grid-template-rows: auto 1fr;
-  row-gap: .5rem;
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  transition: color .12s ease
-}
-.test::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(0deg, rgba(149, 146, 226, 0.6) 0%, rgba(176, 242, 217, 0.2) 100%);
-  opacity: 0;
-  transition: opacity .12s ease;
-}
-.test:hover::after {
-  opacity: 1;
-}
-.test:hover {
-  color: var(--azul-oscuro);
-}
-
-.test img {
-  height: 204px;
-  margin: auto;
-}
-.test h5 {
-  font-size: 28px;
-  font-weight: 600;
-}
-.testData {
-  width: 275px;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  justify-content: space-evenly;
-}
-.test:hover > .testData p {
-  text-decoration: underline;
-}
-.outterCircle {
-  position: absolute;
-  top: 0;
-  right: 10%;
-  width: 50%;
-  height: 105vh;
-  background-color: white;
-  z-index: 1;
-  border-radius: 0 0 0 100%;
 }
