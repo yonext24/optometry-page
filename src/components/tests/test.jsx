@@ -1,7 +1,7 @@
 import { useUser } from '../../hooks/useUser'
 import styles from './test.module.css'
 
-export function Test({ name, desc, download, onClick, slug, deassign }) {
+export function Test({ name, desc, download, onClick, slug, deassign, src }) {
   const user = useUser()
 
   return (
@@ -11,7 +11,9 @@ export function Test({ name, desc, download, onClick, slug, deassign }) {
       <div className={styles.buttonsContainer}>
         {download ? (
           <>
-            <button>Descargar</button>
+            <a target='_blank' rel='noreferrer' href={src}>
+              Descargar
+            </a>
             {(user.role === 'admin' || user.role === 'doctor') && (
               <button onClick={() => deassign(slug)}>Quitar</button>
             )}

@@ -33,3 +33,7 @@
 .main header h1 {
   font-size: 35px;
 }
+.errorMessage {
+  max-width: 700px;
+  color: red
+}

@@ -38,14 +38,24 @@ export function Resultados() {
 
   useEffect(() => {
     if (!state.selected_test.name || !pageUser) return
+    if (!pageUser.documento) {
+      setError(
+        'Para acceder a tus resultados tienes que tener un dni asignado a tu cuenta',
+      )
+      return
+    }
     getPatientTests(pageUser.documento, state.selected_test.key)
       .then((data) => {
         dispatch({ type: 'setData', payload: data })
       })
-      .catch(() => {
+      .catch((e) => {
+        const errMessage =
+          e instanceof Error
+            ? e.message
+            : 'Hubo un error al recuperar los tests.'
         dispatch({
           type: 'setDataError',
-          payload: 'Hubo un error al recuperar los tests.',
+          payload: errMessage,
         })
       })
   }, [state.selected_test.name])
@@ -99,9 +109,9 @@ export function Resultados() {
 
   if (error) {
     return (
-      <div className={styles.loadingUser}>
-        <span style={{ color: 'red' }}>{error}</span>
-      </div>
+      <main className={styles.loadingUser}>
+        <span className={styles.errorMessage}>{error}</span>
+      </main>
     )
   }
 

@@ -19,7 +19,7 @@ export function Note({ note, date, user }) {
             {user.nombre} {user.apellido}
           </p>
           <p className={styles.date}>{formatDate(date) || null}</p>
-          {loggedUser.role === ('admin' || 'doctor') && (
+          {(loggedUser.role === 'doctor' || loggedUser.role === 'admin') && (
             <button
               className={styles.delete}
               onClick={() =>

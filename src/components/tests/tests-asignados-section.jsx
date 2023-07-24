@@ -42,6 +42,7 @@ export function TestsAsignadosSection({ pageUser, setPageUser, openModal }) {
             deassign={deassign}
             name={tests.contraste.name}
             desc={tests.contraste.desc}
+            src={tests.contraste.src}
           />
         )}
         {pageUser?.deberes?.preferencial && (
@@ -51,6 +52,7 @@ export function TestsAsignadosSection({ pageUser, setPageUser, openModal }) {
             deassign={deassign}
             name={tests.preferencial.name}
             desc={tests.preferencial.desc}
+            src={tests.preferencial.src}
           />
         )}
       </div>

@@ -17,7 +17,7 @@ export function Menu({ patient, setIsEditing }) {
       ? [
           {
             type: 'a',
-            to: `/paciente/${patient.id}/deberes`,
+            to: `/paciente/${patient.id}/pruebas-clinicas`,
             icon: BookIcon,
             text: 'Deberes',
             key: 1,
@@ -60,7 +60,7 @@ export function Menu({ patient, setIsEditing }) {
       {!patient ? null : (
         <>
           <Link to={`/paciente/${patient.id}`}>
-            {patient.image?.src && <UserImage src={patient.image.src} />}
+            <UserImage src={patient.image?.src} />
             <h4>{patient?.nombre}</h4>
           </Link>
           {entrys.map((el) => {

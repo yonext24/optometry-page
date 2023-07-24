@@ -3,6 +3,7 @@ import { ResultsRow } from './results-row'
 import styles from './results-table.module.css'
 import { ResultsContext } from '../../../contexts/ResultsContext'
 import { Spinner } from '../../spinner/spinner'
+import { Circle } from '../../../pages/Home/circle'
 
 export function ResultsTable() {
   const { state } = useContext(ResultsContext)
@@ -17,7 +18,17 @@ export function ResultsTable() {
   if (state.data.error)
     return (
       <div className={styles.tableSkeleton} style={{ color: 'red' }}>
-        {state.data.error}
+        <span className={styles.errorMessage}>{state.data.error}</span>
+        <Circle
+          color='red'
+          style={{
+            top: '50%',
+            right: '50%',
+            transform: 'translateY(-43%) translateX(50%)',
+          }}
+          height={200}
+          width={200}
+        />
       </div>
     )
 

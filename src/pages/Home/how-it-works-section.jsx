@@ -37,6 +37,12 @@ export function HowItWorksSection({ setModalOpen }) {
         height={300}
         width={300}
       />
+      <Circle
+        color='blue'
+        style={{ bottom: '-15%', right: '-25%' }}
+        height={300}
+        width={300}
+      />
     </section>
   )
 }

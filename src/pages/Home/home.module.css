@@ -218,7 +218,7 @@
   background-repeat: repeat;
   opacity: .3;
 }
-.circle.blue::after {
+.circle.blue {
   background-image: linear-gradient(180deg, rgb(44, 44, 255) 1px, rgb(90, 197, 168) 2px, rgb(44, 44, 255) 3px, rgb(90, 197, 168) 4px, rgb(44, 44, 255) 5px, rgb(90, 197, 168) 6px, rgb(44, 44, 255) 7px, rgb(90, 197, 168) 8px, transparent 9px);
 }
 .circle.blue::before {
@@ -226,4 +226,11 @@
 }
 .circle.yellow::before {
   background-image: radial-gradient(yellow 50%, rgb(166, 255, 22));
+}
+.circle.red::after {
+  background-image: linear-gradient(180deg, red 1px, orangered 2px, red 3px, orangered 4px, red 5px, orangered 6px, red 7px, orangered 8px, transparent 9px);
+  opacity: .4
+}
+.circle.red::before {
+  background-image: radial-gradient(red 50%, orange(166, 255, 22));
 }

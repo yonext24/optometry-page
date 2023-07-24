@@ -16,7 +16,7 @@ export function ResultsHeaderButtons({ pageUser }) {
               state.selected_test.name !== 'preferencial' &&
               dispatch({ type: 'setPreferencial' })
             }>
-            Test Mirada Preferencial
+            Mirada Preferencial
           </button>
           <div className={styles.line} />
         </div>
@@ -30,7 +30,7 @@ export function ResultsHeaderButtons({ pageUser }) {
               state.selected_test.name !== 'contraste' &&
               dispatch({ type: 'setContraste' })
             }>
-            Test Contraste
+            Contraste
           </button>
           <div className={styles.line} />
         </div>

@@ -4,7 +4,7 @@ export const RESULTS_INITIAL_STATE = {
     key: null,
   },
   data: {
-    loading: true,
+    loading: null,
     error: null,
     data: null,
   },
