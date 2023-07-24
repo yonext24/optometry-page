@@ -50,8 +50,10 @@ export function Resultados() {
       })
       .catch((e) => {
         const errMessage =
-          e instanceof Error
-            ? e.message
+          e instanceof Error && e.message === 'notfound'
+            ? params.id === loggedUser.id
+              ? 'No se encontró ningún resultado asignado a tu dni. Descarga los tests en la pestaña de Pruebas Clínicas y realiza las pruebas.'
+              : 'No se encontró ningún resultado asignado al dni del paciente.'
             : 'Hubo un error al recuperar los tests.'
         dispatch({
           type: 'setDataError',
@@ -123,7 +125,7 @@ export function Resultados() {
           <ResultsHeaderButtons pageUser={pageUser} />
         </header>
         <section className={styles.dataSection}>
-          <ResultsTable />
+          <ResultsTable pageUser={pageUser} />
         </section>
       </main>
       {state.graphic_open && (

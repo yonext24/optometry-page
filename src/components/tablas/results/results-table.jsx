@@ -4,9 +4,11 @@ import styles from './results-table.module.css'
 import { ResultsContext } from '../../../contexts/ResultsContext'
 import { Spinner } from '../../spinner/spinner'
 import { Circle } from '../../../pages/Home/circle'
+import { useUser } from '../../../hooks/useUser'
 
-export function ResultsTable() {
+export function ResultsTable({ pageUser }) {
   const { state } = useContext(ResultsContext)
+  const loggedUser = useUser()
 
   if (state.data.loading) {
     return (
@@ -31,6 +33,27 @@ export function ResultsTable() {
         />
       </div>
     )
+  if (!pageUser.deberes.contraste && !pageUser.deberes.preferencial) {
+    return (
+      <div className={styles.tableSkeleton} style={{ color: 'red' }}>
+        <span className={styles.warnMessage}>
+          {pageUser.id === loggedUser.id
+            ? 'No tienes ninguna prueba asignada, deberás esperar que tu médico te asigne una.'
+            : 'El paciente no tiene ninguna prueba asignada, deberás esperar que el médico le asigne una.'}
+        </span>
+        <Circle
+          color='yellow'
+          style={{
+            top: '50%',
+            right: '50%',
+            transform: 'translateY(-43%) translateX(50%)',
+          }}
+          height={200}
+          width={200}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={styles.tableContainer}>

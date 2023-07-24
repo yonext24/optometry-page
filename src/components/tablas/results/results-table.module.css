@@ -12,6 +12,12 @@
   max-width: 700px;
   text-align: center;
 }
+.warnMessage {
+  color: black;
+  max-width: 700px;
+  text-align: center;
+  
+}
 .tableContainer {
   --border-color: #E2E8F0;
 

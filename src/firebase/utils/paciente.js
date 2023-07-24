@@ -59,10 +59,7 @@ export const updateTest = async (id, slug, deberes, assign = true) => {
 export const getPatientTests = async (dni, test) => {
   const docRef = doc(collection(db, test), dni)
   const testDoc = await getDoc(docRef).then((doc) => {
-    if (!doc.exists())
-      throw new Error(
-        'No se encontró ningún resultado asignado a tu dni. Descarga los tests en la pestaña de Pruebas Clínicas y realiza las pruebas. Si no tienes ninguna prueba asignada, deberás esperar que tu médico te asigne una.',
-      )
+    if (!doc.exists()) throw new Error('notfound')
     const data = doc.data()
     return data
   })
@@ -71,10 +68,7 @@ export const getPatientTests = async (dni, test) => {
   const promises = Object.entries(testDoc).map(async ([_, value]) => {
     const [doc] = await getDocs(collection(docRef, value)).then((docs) => {
       if (docs.empty) {
-        if (!doc.exists())
-          throw new Error(
-            'No se encontró ningún resultado asignado a tu dni. Descarga los tests en la pestaña de Pruebas Clínicas y realiza las pruebas.',
-          )
+        if (!doc.exists()) throw new Error('notfound')
       }
       return docs.docs.flatMap((doc) => {
         const id = doc.id
