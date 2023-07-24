@@ -49,7 +49,11 @@ export const updateTest = async (id, slug, deberes, assign = true) => {
   if (role !== 'admin' && role !== 'doctor')
     throw new Error('No estás autorizado')
 
-  await updateUser(id, 'patient', { deberes: { ...deberes, [slug]: assign } })
+  await updateUser({
+    id,
+    claim: 'patient',
+    update: { deberes: { ...deberes, [slug]: assign } },
+  })
 }
 
 export const getPatientTests = async (dni, test) => {
@@ -85,7 +89,7 @@ export const deletePatientTests = async (dni) => {
 
     if (!testDoc) return null
 
-    const promises = Object.entries(testDoc).map(async ([_, value]) => {
+    const promises = Object.values(testDoc).map(async (value) => {
       // eslint-disable-line no-unused-vars
       const docs = await getDocs(collection(docRef, value))
       const deletePromises = docs.docs.map(async (doc) => {

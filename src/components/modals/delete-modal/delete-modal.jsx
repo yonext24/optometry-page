@@ -41,7 +41,9 @@ export function DeleteModal({
   }
 
   return (
-    <div className={styles.modalBackground} onClick={closeModal}>
+    <div
+      className={styles.modalBackground}
+      onClick={() => status !== 'loading' && closeModal()}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h4>
           Desea borrar el usuario {user.nombre} {user.apellido}?

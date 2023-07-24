@@ -38,7 +38,7 @@ export function NavbarUserEntry() {
           }}
         />
       </button>
-      {open && <NavbarUserModal />}
+      {open && <NavbarUserModal closeModal={() => setOpen(false)} />}
     </div>
   )
 }

@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-  getUser,
-  updateUser,
-  uploadImage,
-} from '../firebase/utils/user'
+import { getUser, updateUser, uploadImage } from '../firebase/utils/user'
 import { useUser } from './useUser'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { Link, useNavigate } from 'react-router-dom'
@@ -108,7 +104,8 @@ export function useGetUserPage({ id, type }) {
             <>
               {pageUser.medico_asignado?.nombre ? (
                 <Link to={`/doctor/${pageUser.medico_asignado.id}`}>
-                  Dr. {pageUser.medico_asignado.nombre}{' '}{pageUser.medico_asignado.apellido}
+                  Dr. {pageUser.medico_asignado.nombre}{' '}
+                  {pageUser.medico_asignado.apellido}
                 </Link>
               ) : (
                 <p>Ninguno</p>
@@ -137,7 +134,6 @@ export function useGetUserPage({ id, type }) {
           visibleOnlyToOwn: true,
         },
       ]
-
     }
   }, [pageUser])
 
@@ -147,57 +143,64 @@ export function useGetUserPage({ id, type }) {
       toast.error('No tienes permisos para hacer esto.')
       return
     }
-
     setUpdateLoading(true)
 
-    let imageData
-    if (image !== null) {
-      imageData = await uploadImage({ file: image.file, username: pageUser.nombre })
-    }
+    try {
+      let imageData
+      if (image !== null) {
+        imageData = await uploadImage({
+          file: image.file,
+          id: pageUser.id,
+        })
+      }
 
-    const token = await auth.currentUser.getIdToken(true)
+      const token = await auth.currentUser.getIdToken(true)
 
-    if (editedFields.email) {
-      await fetch(API_ADMIN_URL, {
-        headers: {
-          Authorization: 'Bearer ' + token,
-          'Content-Type': 'application/json',
-        },
-        method: 'PATCH',
-        body: JSON.stringify({ email: editedFields.email, id }),
-      })
-        .then((res) => {
+      if (editedFields.email) {
+        await fetch(API_ADMIN_URL, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          },
+          method: 'PATCH',
+          body: JSON.stringify({ email: editedFields.email, id }),
+        }).then((res) => {
           if (!res.ok) throw new Error('')
         })
-        .catch(() => {
-          toast.error('Hubo un error modificando el mail del usuario.')
-        })      
-    }
+      }
 
-    const fieldsToUpdate = imageData
-      ? { ...editedFields, image: imageData }
-      : { ...editedFields }
-    updateUser(id, type, fieldsToUpdate)
-      .then(() => {
-        setPageUser((prev) => {
-          const newUser = { ...prev }
-          for (const [key, value] of Object.entries(fieldsToUpdate)) {
-            newUser[key] = value
-          }
-          return newUser
+      const fieldsToUpdate = imageData
+        ? { ...editedFields, image: imageData }
+        : { ...editedFields }
+      updateUser({ id, claim: type, update: fieldsToUpdate })
+        .then(() => {
+          setPageUser((prev) => {
+            const newUser = { ...prev }
+            for (const [key, value] of Object.entries(fieldsToUpdate)) {
+              newUser[key] = value
+            }
+            return newUser
+          })
+          setSuccess(true)
+          handleImageClear()
+          setEditedFields({})
+          toast(
+            `Se modificó correctamente el ${
+              type === 'patient' ? 'paciente' : 'doctor'
+            } ${pageUser.nombre} ${pageUser.apellido}`,
+          )
         })
-        setSuccess(true)
-        handleImageClear()
-        setEditedFields({})
-        toast(
-          `Se modificó correctamente el ${type === 'patient' ? 'paciente' : 'doctor'} ${pageUser.nombre} ${pageUser.apellido}`,
-        )
-      })
-      .catch((err) => {
-        const errMessage = err instanceof Error ? err.message : err
-        toast.error(`Hubo un error al modificar el paciente: ${errMessage}`)
-      })
-      .finally(() => setUpdateLoading(false))
+        .catch((err) => {
+          const errMessage = err instanceof Error ? err.message : err
+          toast.error(`Hubo un error al modificar el paciente: ${errMessage}`)
+        })
+    } catch (err) {
+      const errMessage = err instanceof Error ? err.message : err
+      toast.error(errMessage)
+      setError(errMessage)
+    } finally {
+      setUpdateLoading(false)
+    }
   }, [editedFields, id, pageUser, image, type])
 
   useEffect(() => {

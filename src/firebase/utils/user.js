@@ -34,19 +34,19 @@ export const getUser = async (id, claim) => {
     return { ...data, id }
   })
 }
-export const updateUser = async (id, claim, update) => {
+export const updateUser = async ({ id, claim, update }) => {
   const collection =
     claim === 'admin'
       ? adminCollection
       : claim === 'doctor'
       ? doctorsCollection
       : patientsCollection
-  const docRef = doc(collection, id)
 
+  const docRef = doc(collection, id)
   return updateDoc(docRef, update)
 }
 
-const compressImage = ({ file, width, height, quality = 0.8}) => {
+const compressImage = ({ file, width, height, quality = 0.8 }) => {
   return new Promise((resolve, reject) => {
     new Compressor(file, {
       quality: quality,
@@ -54,29 +54,27 @@ const compressImage = ({ file, width, height, quality = 0.8}) => {
       width,
       resize: 'contain',
 
-      beforeDraw (context, canvas) {
+      beforeDraw(context, canvas) {
         context.fillStyle = '#000'
         context.fillRect(0, 0, canvas.width, canvas.height)
       },
 
-      success (result) {
+      success(result) {
         resolve(result)
       },
 
-      error (err) {
+      error(err) {
         reject(err)
-      }
-
+      },
     })
   })
 }
 
-export const uploadImage = async ({ username, file }) => {
+export const uploadImage = async ({ id, file }) => {
   const fileName = String(Date.now()) + '.' + file.name.split('.')[1]
   const path = '/profilePics'
+  const imageRef = ref(storage, `/${path}/${id}/${fileName}`)
 
-  const imageRef = ref(storage, `/${path}/${username}/${fileName}`)
-  
   const mainImage = await compressImage({ file, height: 300, width: 300 })
 
   try {
@@ -106,26 +104,25 @@ export const cerrarSesion = async () => {
 
 export const deleteUser = async (user) => {
   if (!user) return
-  
+
   if (user.role === 'patient') {
     await deletePatientTests(user.documento)
     if (user.medico_asignado !== null) {
       await deassignPatient(user.medico_asignado, user)
-    } 
+    }
   } else if (user.role === 'doctor') {
     if (user.pacientes_asignados.length > 0) {
       await deassignAllPatientsToDoctor(user)
     }
-  } 
+  }
   const token = await auth.currentUser.getIdToken(true)
-    
+
   return fetch(API_ADMIN_URL, {
     method: 'DELETE',
     body: JSON.stringify({ userToModify: user }),
     headers: {
       Authorization: 'Bearer ' + token,
       'Content-Type': 'application/json',
-    }
+    },
   })
 }
-

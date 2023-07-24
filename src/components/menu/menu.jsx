@@ -9,6 +9,7 @@ import { ResultsIcon } from '../icons/results'
 
 export function Menu({ patient, setIsEditing }) {
   const user = useUser()
+  console.log(patient)
 
   const entrys = useMemo(() => {
     if (!patient) return []
@@ -59,11 +60,7 @@ export function Menu({ patient, setIsEditing }) {
       {!patient ? null : (
         <>
           <Link to={`/paciente/${patient.id}`}>
-            {patient.image?.src ? (
-              <UserImage src={patient.image.src} />
-            ) : (
-              <div id={'userImage'} />
-            )}
+            {patient.image?.src && <UserImage src={patient.image.src} />}
             <h4>{patient?.nombre}</h4>
           </Link>
           {entrys.map((el) => {
