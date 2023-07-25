@@ -63,3 +63,13 @@
   background-color: rgb(var(--amarillo)/.8);
   color: black
 }
+.recover {
+  color: darkblue;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  width: max-content;
+}
+.recover:hover {
+  text-decoration: underline;
+}

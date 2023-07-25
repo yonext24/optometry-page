@@ -156,6 +156,8 @@ export function useGetUserPage({ id, type }) {
 
       const token = await auth.currentUser.getIdToken(true)
 
+      let errorInEmail = false
+
       if (editedFields.email) {
         await fetch(API_ADMIN_URL, {
           headers: {
@@ -164,14 +166,36 @@ export function useGetUserPage({ id, type }) {
           },
           method: 'PATCH',
           body: JSON.stringify({ email: editedFields.email, id }),
-        }).then((res) => {
-          if (!res.ok) throw new Error('')
         })
+          .then((res) => {
+            if (!res.ok) {
+              errorInEmail = true
+              throw new Error('Hubo un error al cambiar el email')
+            }
+          })
+          .catch((err) => {
+            if (err?.message === 'Failed to fetch') {
+              const adminInfo =
+                loggedUser.role === 'admin'
+                  ? ', Es posible que el servidor que se encarga de esta acción esté apagado, consultar en vercel.'
+                  : ''
+              toast.error(`Hubo un error al cambiar el email${adminInfo}`, {
+                autoClose: 7000,
+              })
+              errorInEmail = true
+            }
+          })
       }
+
+      errorInEmail && delete editedFields['email']
 
       const fieldsToUpdate = imageData
         ? { ...editedFields, image: imageData }
         : { ...editedFields }
+      if (Object.keys(editedFields).length <= 0) {
+        setEditedFields({})
+        return
+      }
       updateUser({ id, claim: type, update: fieldsToUpdate })
         .then(() => {
           setPageUser((prev) => {

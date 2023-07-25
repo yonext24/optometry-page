@@ -15,6 +15,10 @@ import { deletePatientTests } from './paciente'
 import { API_ADMIN_URL } from '../../utils/prod-dev-variables'
 import { deassignAllPatientsToDoctor, deassignPatient } from './medicos'
 import Compressor from 'compressorjs'
+import {
+  fetchSignInMethodsForEmail,
+  sendPasswordResetEmail,
+} from 'firebase/auth'
 
 export const getUser = async (id, claim) => {
   const collection =
@@ -125,4 +129,13 @@ export const deleteUser = async (user) => {
       'Content-Type': 'application/json',
     },
   })
+}
+
+export const recoverPassword = async (email) => {
+  await fetchSignInMethodsForEmail(auth, email).then((signInMethods) => {
+    if (signInMethods.length === 0) {
+      throw new Error('El correo electronico no está registrado.')
+    }
+  })
+  return sendPasswordResetEmail(auth, email)
 }
