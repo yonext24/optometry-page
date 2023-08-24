@@ -30,11 +30,12 @@ export function OpacidadGraphic() {
   ]
 
   const { state } = useContext(ResultsContext)
+  console.log({ state })
 
   useEffect(() => {
-    const max = Math.max(...state.graphic_open.NEstimulosAcertados)
+    const max = Math.max(...state.graphic_open[1].NEstimulosAcertados)
     setUmbralNEstimulosAcertados(max / 2)
-    const { ...rest } = state.graphic_open
+    const { ...rest } = state.graphic_open[1]
 
     const Contraste = rest.Contraste
     const Filtro = rest.Filtro
@@ -55,6 +56,8 @@ export function OpacidadGraphic() {
     setMaxx(maxX)
     setMinx(minX)
   }, [chartData])
+
+  console.log({ chartData })
 
   return (
     <div className={styles.container}>
@@ -118,20 +121,20 @@ export function OpacidadGraphic() {
                   </tr>
                 </thead>
                 <tbody>
-                  {state.graphic_open['Tamaño'].map((_, index) => {
+                  {state.graphic_open[1]['Tamaño'].map((_, index) => {
                     const nEstimulosAcertados =
-                      state.graphic_open.NEstimulosAcertados[index]
+                      state.graphic_open[1].NEstimulosAcertados[index]
                     const isHighlighted =
                       nEstimulosAcertados > umbralNEstimulosAcertados
                     const rowClassName = isHighlighted ? 'highlighted-row' : ''
                     return (
                       <tr key={index} className={styles[rowClassName]}>
                         <td>{index + 1}</td>
-                        <td>{state.graphic_open['Tamaño'][index]}</td>
-                        <td>{state.graphic_open.NEstimulos[index]}</td>
+                        <td>{state.graphic_open[1]['Tamaño'][index]}</td>
+                        <td>{state.graphic_open[1].NEstimulos[index]}</td>
                         <td>{nEstimulosAcertados}</td>
-                        <td>{state.graphic_open.Filtro[index]}</td>
-                        <td>{state.graphic_open.Contraste[index]}</td>
+                        <td>{state.graphic_open[1].Filtro[index]}</td>
+                        <td>{state.graphic_open[1].Contraste[index]}</td>
                       </tr>
                     )
                   })}

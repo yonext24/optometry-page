@@ -1,4 +1,31 @@
+import { FacebookIcon } from '../icons/facebook'
+import { InstagramIcon } from '../icons/instagram'
+import { TwitterIcon } from '../icons/twitter'
+import { YoutubeIcon } from '../icons/youtube'
 import styles from './footer.module.css'
+
+const redes = [
+  {
+    Icon: FacebookIcon,
+    href: 'https://www.facebook.com/U.deLaSalle',
+    className: styles.facebook,
+  },
+  {
+    Icon: TwitterIcon,
+    href: 'https://twitter.com/unisalle',
+    className: styles.twitter,
+  },
+  {
+    Icon: YoutubeIcon,
+    href: 'https://www.youtube.com/user/Lasallistas',
+    className: styles.youtube,
+  },
+  {
+    Icon: InstagramIcon,
+    href: 'https://www.instagram.com/unisallecol/',
+    className: styles.instagram,
+  },
+]
 
 export function Footer() {
   return (
@@ -8,17 +35,28 @@ export function Footer() {
       </div>
 
       <div className={styles.info}>
-        <h6>Más información sobre la empresa</h6>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur,
-          nostrum laudantium! Velit dolorum rerum similique modi necessitatibus
-          dignissimos perferendis consequatur ea voluptates odit sed fugiat
-          officia esse
-        </p>
-        <span>© 2022 La Salle - Todos los Derechos Reservados</span>
+        <h6>Facultad Ciencias de la Salud</h6>
+        <h6>Optometría</h6>
       </div>
 
-      <div className={styles.redes}>Siguenos en</div>
+      <div className={styles.redes}>
+        <p>Contáctate con nosotros</p>
+        <div className={styles.redesMap}>
+          {redes.map(({ Icon, className, href }) => (
+            <a
+              href={href}
+              key={href}
+              target='_blank'
+              rel='noreferrer'
+              className={`${styles.icon} ${className}`}>
+              <Icon width={25} height={25} />
+            </a>
+          ))}
+        </div>
+      </div>
+      <span className={styles.copy}>
+        © 2022 La Salle - Todos los Derechos Reservados
+      </span>
     </footer>
   )
 }

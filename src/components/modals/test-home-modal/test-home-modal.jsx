@@ -7,16 +7,12 @@ const PreferencialRender = () => (
     <img src='/preferencial.png' height={200} width={200} />
     <h4>Test de Mirada Preferencial</h4>
     <p>
-      Descubre una forma innovadora de evaluar tu visión. Esta prueba utiliza tu
-      habilidad para mirar y distinguir patrones específicos, siendo
-      especialmente útil para aquellos que tienen dificultades para comunicarse
-      verbalmente, como los niños pequeños o personas con discapacidades
-      cognitivas o del lenguaje.
-    </p>
-    <p>
-      Ya sea con un ojo o con ambos, obtén resultados precisos para evaluar la
-      agudeza visual de cada ojo por separado o de ambos en conjunto. ¡No te
-      pierdas esta oportunidad de optimizar tu visión!
+      La evaluación de la agudeza visual en niños hasta los dos o tres años se
+      realiza con el fin de determinar la máxima capacidad de resolución de su
+      sistema visual bajo condiciones de poca colaboración, para esto
+      clínicamente se utiliza el test de mirada preferencial que tiene en cuenta
+      la preferencia visual para dirigir la mirada hacia un patrón especial
+      sobre otro sencillo.
     </p>
   </>
 )
@@ -25,11 +21,15 @@ const ContrasteRender = () => (
     <img src='/contraste.png' height={200} width={200} />
     <h4>Test de Sensibilidad al Contraste</h4>
     <p>
-      Descubre tu capacidad para detectar patrones y resalta tu agudeza visual.
-      Nuestra prueba de sensibilidad al contraste revela información diagnóstica
-      clave para condiciones clínicas como glaucoma, ambliopía y degeneración
-      macular. No dejes que la pérdida de contraste afecte tu visión, ¡descubre
-      cómo mejorarla hoy mismo!
+      La sensibilidad al contraste es la capacidad de una persona para detectar
+      o identificar la presencia de mínimas diferencias de luminosidad en
+      objetos o áreas.
+    </p>
+    <p>
+      La evaluación de la sensibilidad al contraste permite determinar el menor
+      contraste que el sistema visual puede detectar. La sensibilidad al
+      contraste evalúa subjetivamente la función visual a través de la
+      percepción de las frecuencias espaciales (tamaño) y contraste.
     </p>
   </>
 )

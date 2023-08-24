@@ -6,12 +6,14 @@
   margin-top: 2rem;
   flex: 1;
 }
+
 .data {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
   flex: 1;
 }
+
 .sidebar {
   width: 200px;
   background-color: var(--semi-blanco);
@@ -27,6 +29,7 @@
   overflow-x: auto;
   background-color: white;
 }
+
 .highlighted-row {
   background-color: green;
 }
@@ -38,7 +41,7 @@
   overflow: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
 
@@ -49,8 +52,13 @@
 }
 
 @keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .table th,
@@ -72,14 +80,12 @@
 }
 
 .green-row {
-  background-color: #6fcf6f !important ;
+  background-color: #6fcf6f !important;
 
   transition: background-color 0.3s, color 0.3s;
 }
 
-.navbar {
-
-}
+.navbar {}
 
 .navbar .nav-link {
   color: #000;
@@ -105,10 +111,12 @@
 .Recharts-responsiveContainer {
   animation: fadeIn 0.5s;
 }
+
 .flexColumn {
   display: flex;
   flex-direction: column;
 }
+
 .navTitle {
   font-weight: 600;
   font-size: 20px;

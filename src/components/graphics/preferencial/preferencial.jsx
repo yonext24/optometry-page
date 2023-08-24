@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { ResultsContext } from '../../../contexts/ResultsContext'
+import { Info } from '../../common/info/info'
 
 export function PreferencialGraphic() {
   const [processedData, setProcessedData] = useState([])
@@ -22,20 +23,44 @@ export function PreferencialGraphic() {
 
   const document = useMemo(() => {
     const data = state.graphic_open
-    const keys = Object.keys(data).sort()
-    const vKeys = keys.filter((key) => key.startsWith('v'))
-    const rKeys = keys.filter((key) => key.startsWith('R'))
+
+    const entries = Object.entries(data).sort()
+    let v_raw_values = entries.filter(([key]) => key.startsWith('v'))
+    let r_raw_values = entries.filter(([key]) => key.startsWith('R'))
+
+    const parsedV = v_raw_values.map(([vKey, vArray], index) => {
+      const [, rArray] = r_raw_values[index]
+
+      return [
+        vKey,
+        vArray.map((el, i) => {
+          if (el === rArray[i]) return { text: el, backgroundColor: 'green' }
+          return { text: el, style: { backgroundColor: 'red' } }
+        }),
+      ]
+    })
+    const parsedR = r_raw_values.map(([rKey, rArray], index) => {
+      const [, vArray] = v_raw_values[index]
+
+      return [
+        rKey,
+        rArray.map((el, i) => {
+          if (el === vArray[i]) return { text: el, backgroundColor: 'green' }
+          return { text: el, style: { backgroundColor: 'red' } }
+        }),
+      ]
+    })
 
     const newData = {
       id: data.id,
       CPCM: data.CPCM,
       CPD: data.CPD,
     }
-    vKeys.forEach((vKey) => {
-      newData[vKey] = data[vKey]
-    })
-    rKeys.forEach((rKey) => {
-      newData[rKey] = data[rKey]
+
+    parsedV.forEach(([vKey, vValue], index) => {
+      const [rKey, rValue] = parsedR[index]
+      newData[vKey] = vValue
+      newData[rKey] = rValue
     })
 
     return newData
@@ -105,6 +130,9 @@ export function PreferencialGraphic() {
 
     return <circle cx={cx} cy={cy} r={2} stroke={fill} strokeWidth={3} />
   }
+
+  console.log({ document })
+
   return (
     <div className={styles.App}>
       <div className={styles.content}>
@@ -140,7 +168,10 @@ export function PreferencialGraphic() {
             </ResponsiveContainer>
           </div>
         )}
-        <div className={styles.tableContainer}>
+        <Info />
+        <div
+          className={styles.tableContainer}
+          style={{ position: 'relative', overflow: 'auto' }}>
           {document && (
             <Table
               className={
@@ -159,6 +190,10 @@ export function PreferencialGraphic() {
                 </tr>
               </thead>
               <tbody>
+                {/* 
+                  Array.from crea un array del tamaño de v1, porque hay que generar la cantidad de rows que tengan los
+                  campos, y de ahí sacar las columnas
+                */}
                 {Array.from(
                   { length: (document?.v1 || []).length },
                   (_, index) => (
@@ -166,17 +201,39 @@ export function PreferencialGraphic() {
                       <td>{index + 1}</td>
                       {(Object.entries(document) || []).map(
                         ([column, data]) => {
-                          if (column !== 'id' && column !== 'idd') {
-                            const value = Array.isArray(data) ? data[index] : ''
-                            if (column === 'CPD' && typeof value === 'number') {
-                              const roundedValue = value.toFixed(3)
-                              return <td key={column}>{roundedValue}</td>
-                            } else {
-                              return <td key={column}>{value}</td>
-                            }
-                          } else {
-                            return null
+                          if (column === 'id' || column === 'idd') return null
+                          const value = Array.isArray(data) ? data[index] : ''
+
+                          if (column === 'CPD' && typeof value === 'number') {
+                            const roundedValue = value.toFixed(3)
+                            return <td key={column}>{roundedValue}</td>
+                          } else if (
+                            [
+                              'v1',
+                              'v2',
+                              'v3',
+                              'v4',
+                              'v5',
+                              'R1',
+                              'R2',
+                              'R3',
+                              'R4',
+                              'R5',
+                            ].includes(column)
+                          ) {
+                            return (
+                              <td
+                                key={column}
+                                style={{
+                                  color: 'white',
+                                  backgroundColor: 'green',
+                                  ...value.style,
+                                }}>
+                                {value.text}
+                              </td>
+                            )
                           }
+                          return <td key={column}>{value}</td>
                         },
                       )}
                     </tr>
