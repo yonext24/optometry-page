@@ -34,8 +34,9 @@ export function PreferencialGraphic() {
       return [
         vKey,
         vArray.map((el, i) => {
-          if (el === rArray[i]) return { text: el, backgroundColor: 'green' }
-          return { text: el, style: { backgroundColor: 'red' } }
+          const text = el === 1 ? 'IZQ' : el === 2 ? 'DER' : 'NN'
+          if (el === rArray[i]) return { text, backgroundColor: 'green' }
+          return { text, style: { backgroundColor: 'red' } }
         }),
       ]
     })
@@ -45,8 +46,9 @@ export function PreferencialGraphic() {
       return [
         rKey,
         rArray.map((el, i) => {
-          if (el === vArray[i]) return { text: el, backgroundColor: 'green' }
-          return { text: el, style: { backgroundColor: 'red' } }
+          const text = el === 1 ? 'IZQ' : el === 2 ? 'DER' : 'NN'
+          if (el === vArray[i]) return { text, backgroundColor: 'green' }
+          return { text, style: { backgroundColor: 'red' } }
         }),
       ]
     })
@@ -168,7 +170,6 @@ export function PreferencialGraphic() {
             </ResponsiveContainer>
           </div>
         )}
-        <Info />
         <div
           className={styles.tableContainer}
           style={{ position: 'relative', overflow: 'auto' }}>
@@ -182,7 +183,11 @@ export function PreferencialGraphic() {
                   <th>Índice</th>
                   {(Object.keys(document) || []).map((column) => {
                     if (column !== 'id' && column !== 'idd') {
-                      return <th key={column}>{column}</th>
+                      return (
+                        <th key={column} style={{ textTransform: 'uppercase' }}>
+                          {column}
+                        </th>
+                      )
                     } else {
                       return null
                     }
@@ -243,6 +248,11 @@ export function PreferencialGraphic() {
             </Table>
           )}
         </div>
+        <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
+          Los &ldquo;V&ldquo; Corresponden a los resultados del ojo izquierdo y
+          los &ldquo;R&ldquo; corresponden a los del ojo derecho, ambos deberían
+          coincidir.
+        </span>
 
         <div className={styles.tableContainer}>
           {document && (

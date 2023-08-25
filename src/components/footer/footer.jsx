@@ -55,7 +55,7 @@ export function Footer() {
         </div>
       </div>
       <span className={styles.copy}>
-        © 2022 La Salle - Todos los Derechos Reservados
+        © 2023 La Salle - Todos los Derechos Reservados
       </span>
     </footer>
   )
