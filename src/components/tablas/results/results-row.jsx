@@ -42,7 +42,11 @@ export function ResultsRow({ data }) {
 
   return (
     <tr>
-      <td className={styles.date}>{data[1]?.Fecha.substring(2)}</td>
+      {data[1]?.Fecha ? (
+        <td className={styles.date}>{data[1]?.Fecha?.substring(2)}</td>
+      ) : (
+        <td className={styles.date}>Unknown</td>
+      )}
       <td>
         {state.selected_test.name === 'contraste'
           ? 'Sensibilidad al Contraste'
