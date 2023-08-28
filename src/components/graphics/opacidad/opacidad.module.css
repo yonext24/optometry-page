@@ -122,3 +122,32 @@
   font-size: 20px;
   text-align: center;
 }
+
+.tabsContainer {
+  display: flex
+}
+
+.tab {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: 2px solid black;
+  border-left: none;
+  background-color: transparent;
+  width: 80px;
+  cursor: pointer;
+}
+
+.tab:first-of-type {
+  border-left: 2px solid black
+}
+
+.tab[data-selected=true] {
+  background-color: var(--azul-profundo);
+  color: white
+}
+
+.title {
+  margin: 0 auto 20px auto;
+  font-size: 30px;
+  font-weight: 600;
+}

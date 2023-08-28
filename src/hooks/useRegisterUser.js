@@ -41,7 +41,7 @@ export function useRegisterUser() {
       })
         .then((res) => res.json())
         .then((json) => {
-          if (json.error) throw new Error('Hubo un error al crear el usuario.')
+          if (json.error) throw new Error(json.error)
           return json
         })
 

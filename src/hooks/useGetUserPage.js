@@ -192,7 +192,7 @@ export function useGetUserPage({ id, type }) {
       const fieldsToUpdate = imageData
         ? { ...editedFields, image: imageData }
         : { ...editedFields }
-      if (Object.keys(editedFields).length <= 0) {
+      if (Object.keys(fieldsToUpdate).length <= 0) {
         setEditedFields({})
         return
       }

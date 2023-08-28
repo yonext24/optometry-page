@@ -14,6 +14,7 @@ import styles from './opacidad.module.css'
 import { ResultsContext } from '../../../contexts/ResultsContext'
 
 export function OpacidadGraphic() {
+  const [selectedTab, setSelectedTab] = useState(1)
   const [chartData, setChartData] = useState([])
   const [minx, setMinx] = useState(null)
   const [maxx, setMaxx] = useState(null)
@@ -30,12 +31,13 @@ export function OpacidadGraphic() {
   ]
 
   const { state } = useContext(ResultsContext)
-  console.log({ state })
+
+  console.log(state)
 
   useEffect(() => {
-    const max = Math.max(...state.graphic_open[1].NEstimulosAcertados)
+    const max = Math.max(...state.graphic_open[selectedTab].NEstimulosAcertados)
     setUmbralNEstimulosAcertados(max / 2)
-    const { ...rest } = state.graphic_open[1]
+    const { ...rest } = state.graphic_open[selectedTab]
 
     const Contraste = rest.Contraste
     const Filtro = rest.Filtro
@@ -57,10 +59,21 @@ export function OpacidadGraphic() {
     setMinx(minX)
   }, [chartData])
 
-  console.log({ chartData })
-
   return (
     <div className={styles.container}>
+      <h2 className={styles.title}>Resultados Sensibilidad al Contraste</h2>
+      <div className={styles.tabsContainer}>
+        {[1, 2, 3].map((el) => (
+          <button
+            data-selected={selectedTab === el}
+            key={el}
+            className={styles.tab}
+            onClick={() => setSelectedTab(el)}>
+            {el}
+          </button>
+        ))}
+      </div>
+
       <div className={styles.data}>
         <div className={styles.chart + ' ' + styles.container}>
           {chartData && (
@@ -121,20 +134,26 @@ export function OpacidadGraphic() {
                   </tr>
                 </thead>
                 <tbody>
-                  {state.graphic_open[1]['Tamaño'].map((_, index) => {
+                  {state.graphic_open[selectedTab]['Tamaño'].map((_, index) => {
                     const nEstimulosAcertados =
-                      state.graphic_open[1].NEstimulosAcertados[index]
+                      state.graphic_open[selectedTab].NEstimulosAcertados[index]
                     const isHighlighted =
                       nEstimulosAcertados > umbralNEstimulosAcertados
                     const rowClassName = isHighlighted ? 'highlighted-row' : ''
                     return (
                       <tr key={index} className={styles[rowClassName]}>
                         <td>{index + 1}</td>
-                        <td>{state.graphic_open[1]['Tamaño'][index]}</td>
-                        <td>{state.graphic_open[1].NEstimulos[index]}</td>
+                        <td>
+                          {state.graphic_open[selectedTab]['Tamaño'][index]}
+                        </td>
+                        <td>
+                          {state.graphic_open[selectedTab].NEstimulos[index]}
+                        </td>
                         <td>{nEstimulosAcertados}</td>
-                        <td>{state.graphic_open[1].Filtro[index]}</td>
-                        <td>{state.graphic_open[1].Contraste[index]}</td>
+                        <td>{state.graphic_open[selectedTab].Filtro[index]}</td>
+                        <td>
+                          {state.graphic_open[selectedTab].Contraste[index]}
+                        </td>
                       </tr>
                     )
                   })}

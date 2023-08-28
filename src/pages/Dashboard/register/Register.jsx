@@ -3,8 +3,19 @@ import { useRegisterUser } from '../../../hooks/useRegisterUser'
 import { Spinner } from '../../../components/spinner/spinner'
 import { useUser } from '../../../hooks/useUser'
 import { USER_POSSIBLE_STATES } from '../../../utils/user-possible-states'
+import { useState } from 'react'
+import { PatientRegisterForm } from './forms/patient'
+import { DoctorRegisterForm } from './forms/doctor'
+import { AdminRegisterForm } from './forms/admin'
+
+const forms = {
+  patient: <PatientRegisterForm />,
+  doctor: <DoctorRegisterForm />,
+  admin: <AdminRegisterForm />,
+}
 
 export function Register() {
+  const [role, setRole] = useState('patient')
   const user = useUser()
   const { handleSubmit, handleImage, setImage, image, error, loading } =
     useRegisterUser()
@@ -48,135 +59,17 @@ export function Register() {
         <h1>Perfil</h1>
         <form onSubmit={handleSubmit}>
           <div className={styles.inputContainer}>
-            <label htmlFor='nombre'>Nombre*</label>
-            <input
-              type='text'
-              required
-              id='nombre'
-              name='nombre'
-              placeholder='Pepito'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='apellido'>Apellido*</label>
-            <input
-              type='text'
-              required
-              id='apellido'
-              name='apellido'
-              placeholder='Perez'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='documento'>Documento</label>
-            <input
-              type='number'
-              required
-              id='documento'
-              name='documento'
-              placeholder='12345678'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='edad'>Edad*</label>
-            <input
-              type='number'
-              id='edad'
-              required
-              name='edad'
-              placeholder='18'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='ocupacion'>Ocupación</label>
-            <input
-              type='text'
-              required
-              id='ocupacion'
-              name='ocupacion'
-              placeholder='Carpintero'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='direccion'>Dirección*</label>
-            <input
-              type='text'
-              required
-              id='direccion'
-              name='direccion'
-              placeholder='Av. Libertador al 5000'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='telefono'>Teléfono*</label>
-            <input
-              type='text'
-              required
-              id='telefono'
-              name='telefono'
-              placeholder='12345678'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='nombre_acudiente'>
-              Nombre de acudiente (para niños)
-            </label>
-            <input
-              type='text'
-              id='nombre_acudiente'
-              name='nombre_acudiente'
-              placeholder='Juan Perez'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='telefono_acudiente'>
-              Teléfono de acudiente (para niños)
-            </label>
-            <input
-              type='number'
-              id='telefono_acudiente'
-              name='telefono_acudiente'
-              placeholder='123456789'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='ultimo_control'>Fecha de último control</label>
-            <input
-              type='date'
-              id='ultimo_control'
-              name='ultimo_control'
-              defaultValue={new Date().toISOString().split('T')[0]}
-            />
-          </div>
-          <div className={styles.inputContainer}>
             <label htmlFor='role'>Rol*</label>
-            <select name='role' id='role'>
+            <select
+              name='role'
+              id='role'
+              onChange={(e) => setRole(e.target.value)}>
               <option value='patient'>Paciente</option>
               <option value='doctor'>Medico</option>
               <option value='admin'>Administrador</option>
             </select>
           </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='email'>Email*</label>
-            <input
-              type='email'
-              required
-              id='email'
-              name='email'
-              placeholder='pepito@gmail.com'
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <label htmlFor='password'>Contraseña*</label>
-            <input
-              type='password'
-              min={7}
-              required
-              id='password'
-              name='password'
-              placeholder=''
-            />
-          </div>
+          {forms[role]}
           {error && <span style={{ color: 'red' }}>{error}</span>}
           <button type='submit' disabled={loading}>
             {loading ? (

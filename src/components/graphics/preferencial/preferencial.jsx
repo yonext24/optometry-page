@@ -12,17 +12,18 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { ResultsContext } from '../../../contexts/ResultsContext'
-import { Info } from '../../common/info/info'
 
 export function PreferencialGraphic() {
+  const [selectedTab, setSelectedTab] = useState(1)
   const [processedData, setProcessedData] = useState([])
   const [chartData, setChartData] = useState([])
   const [vAndR, setVAndR] = useState({})
+  const [highest, setHighest] = useState(null)
 
   const { state } = useContext(ResultsContext)
 
   const document = useMemo(() => {
-    const data = state.graphic_open
+    const data = state.graphic_open[selectedTab]
 
     const entries = Object.entries(data).sort()
     let v_raw_values = entries.filter(([key]) => key.startsWith('v'))
@@ -35,8 +36,9 @@ export function PreferencialGraphic() {
         vKey,
         vArray.map((el, i) => {
           const text = el === 1 ? 'IZQ' : el === 2 ? 'DER' : 'NN'
-          if (el === rArray[i]) return { text, backgroundColor: 'green' }
-          return { text, style: { backgroundColor: 'red' } }
+          if (el === rArray[i])
+            return { text, backgroundColor: 'green', number: el }
+          return { text, style: { backgroundColor: 'red' }, number: el }
         }),
       ]
     })
@@ -47,8 +49,9 @@ export function PreferencialGraphic() {
         rKey,
         rArray.map((el, i) => {
           const text = el === 1 ? 'IZQ' : el === 2 ? 'DER' : 'NN'
-          if (el === vArray[i]) return { text, backgroundColor: 'green' }
-          return { text, style: { backgroundColor: 'red' } }
+          if (el === vArray[i])
+            return { text, backgroundColor: 'green', number: el }
+          return { text, style: { backgroundColor: 'red' }, number: el }
         }),
       ]
     })
@@ -66,7 +69,7 @@ export function PreferencialGraphic() {
     })
 
     return newData
-  }, [state.graphic_open])
+  }, [selectedTab])
 
   useEffect(() => {
     if (document && Object.keys(document).length > 0) {
@@ -81,7 +84,10 @@ export function PreferencialGraphic() {
           let coincidenceCount = 0
 
           vKeys.forEach((vKey) => {
-            if (rest[vKey][index] === rest[`R${vKey.substring(1)}`][index]) {
+            if (
+              rest[vKey][index]?.number ===
+              rest[`R${vKey.substring(1)}`][index]?.number
+            ) {
               coincidenceCount++
             }
           })
@@ -93,6 +99,14 @@ export function PreferencialGraphic() {
             CPD: CPD[index],
           }
         })
+
+        for (let i = processedRows.length - 1; i >= 0; i--) {
+          const halfCount = (Object.keys(rest).length - 2) / 2 / 2
+          if (halfCount <= processedRows[i].coincidenceCount) {
+            setHighest(processedRows[i])
+            break
+          }
+        }
       }
       const chartData = (processedRows || []).map((_, index) => ({
         index: index + 1,
@@ -105,6 +119,7 @@ export function PreferencialGraphic() {
       setChartData(chartData)
     }
   }, [document])
+  console.log({ highest })
 
   const CustomizedDot = (props) => {
     const { cx, cy, payload } = props
@@ -133,10 +148,21 @@ export function PreferencialGraphic() {
     return <circle cx={cx} cy={cy} r={2} stroke={fill} strokeWidth={3} />
   }
 
-  console.log({ document })
-
   return (
     <div className={styles.App}>
+      <h2 className={styles.title}>Resultados Mirada Preferencial</h2>
+      <div className={styles.tabsContainer}>
+        {[1, 2, 3].map((el) => (
+          <button
+            data-selected={selectedTab === el}
+            key={el}
+            className={styles.tab}
+            onClick={() => setSelectedTab(el)}>
+            {el}
+          </button>
+        ))}
+      </div>
+
       <div className={styles.content}>
         {chartData && (
           <div className={styles.chartContainer}>
@@ -171,87 +197,140 @@ export function PreferencialGraphic() {
           </div>
         )}
         <div
-          className={styles.tableContainer}
-          style={{ position: 'relative', overflow: 'auto' }}>
-          {document && (
-            <Table
-              className={
-                styles.table + ' ' + styles.striped + ' ' + styles.bordere
-              }>
-              <thead>
-                <tr>
-                  <th>Índice</th>
-                  {(Object.keys(document) || []).map((column) => {
-                    if (column !== 'id' && column !== 'idd') {
-                      return (
-                        <th key={column} style={{ textTransform: 'uppercase' }}>
-                          {column}
-                        </th>
-                      )
-                    } else {
-                      return null
-                    }
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {/* 
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row-reverse',
+          }}>
+          {highest && (
+            <div
+              style={{
+                margin: '15px 10px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
+              <h4>Indice de agudeza visual</h4>
+              <Table
+                className={
+                  styles.table + ' ' + styles.striped + ' ' + styles.bordere
+                }>
+                <thead>
+                  <tr>
+                    <td>CPD</td>
+                    <td>CPCM</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td
+                      style={{
+                        padding: '15px 20px',
+                        color: 'white',
+                        backgroundColor: 'green',
+                      }}>
+                      {highest.CPD.toFixed(3)}
+                    </td>
+                    <td
+                      style={{
+                        padding: '15px 20px',
+                        color: 'white',
+                        backgroundColor: 'green',
+                      }}>
+                      {highest.CPCM}
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </div>
+          )}
+          <div
+            className={styles.tableContainer}
+            style={{ position: 'relative', overflow: 'auto', width: '100%' }}>
+            {document && (
+              <Table
+                className={
+                  styles.table + ' ' + styles.striped + ' ' + styles.bordere
+                }>
+                <thead>
+                  <tr>
+                    <th>Índice</th>
+                    {(Object.keys(document) || []).map((column) => {
+                      if (column !== 'id' && column !== 'idd') {
+                        return (
+                          <th
+                            key={column}
+                            style={{ textTransform: 'uppercase' }}>
+                            {column}
+                          </th>
+                        )
+                      } else {
+                        return null
+                      }
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* 
                   Array.from crea un array del tamaño de v1, porque hay que generar la cantidad de rows que tengan los
                   campos, y de ahí sacar las columnas
                 */}
-                {Array.from(
-                  { length: (document?.v1 || []).length },
-                  (_, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      {(Object.entries(document) || []).map(
-                        ([column, data]) => {
-                          if (column === 'id' || column === 'idd') return null
-                          const value = Array.isArray(data) ? data[index] : ''
+                  {Array.from(
+                    { length: (document?.v1 || []).length },
+                    (_, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        {(Object.entries(document) || []).map(
+                          ([column, data]) => {
+                            if (column === 'id' || column === 'idd') return null
+                            const value = Array.isArray(data) ? data[index] : ''
 
-                          if (column === 'CPD' && typeof value === 'number') {
-                            const roundedValue = value.toFixed(3)
-                            return <td key={column}>{roundedValue}</td>
-                          } else if (
-                            [
-                              'v1',
-                              'v2',
-                              'v3',
-                              'v4',
-                              'v5',
-                              'R1',
-                              'R2',
-                              'R3',
-                              'R4',
-                              'R5',
-                            ].includes(column)
-                          ) {
-                            return (
-                              <td
-                                key={column}
-                                style={{
-                                  color: 'white',
-                                  backgroundColor: 'green',
-                                  ...value.style,
-                                }}>
-                                {value.text}
-                              </td>
-                            )
-                          }
-                          return <td key={column}>{value}</td>
-                        },
-                      )}
-                    </tr>
-                  ),
-                )}
-              </tbody>
-            </Table>
-          )}
+                            if (column === 'CPD' && typeof value === 'number') {
+                              const roundedValue = value.toFixed(3)
+                              return <td key={column}>{roundedValue}</td>
+                            } else if (
+                              [
+                                'v1',
+                                'v2',
+                                'v3',
+                                'v4',
+                                'v5',
+                                'R1',
+                                'R2',
+                                'R3',
+                                'R4',
+                                'R5',
+                              ].includes(column)
+                            ) {
+                              return (
+                                <td
+                                  key={column}
+                                  style={{
+                                    color: 'white',
+                                    backgroundColor: 'green',
+                                    ...value.style,
+                                  }}>
+                                  {value.text}
+                                </td>
+                              )
+                            }
+                            return <td key={column}>{value}</td>
+                          },
+                        )}
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </Table>
+            )}
+          </div>
         </div>
         <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
-          Los &ldquo;V&ldquo; Corresponden a los resultados del ojo izquierdo y
-          los &ldquo;R&ldquo; corresponden a los del ojo derecho, ambos deberían
-          coincidir.
+          &ldquo;DER&ldquo; Corresponden a los resultados del ojo derecho,
+          &ldquo;IZQ&ldquo; corresponden a los del ojo izquierdo y
+          &ldquo;NN&ldquo; no se pudo identificar
+          <br></br>
+          Color verde corresponde que hay coincidencia y color rojo corresponde
+          que no hay.
         </span>
 
         <div className={styles.tableContainer}>

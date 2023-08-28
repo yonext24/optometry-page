@@ -1,5 +1,5 @@
 .modalBackground {
-  background-color: rgba(0,0,0,.2);
+  background-color: rgba(0, 0, 0, .2);
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -13,6 +13,7 @@
   overflow: auto;
   animation: fade .2s;
 }
+
 .modal {
   display: flex;
   flex-direction: column;
@@ -20,7 +21,7 @@
   color: black;
   padding: 2rem;
   width: 100%;
-  max-width: 1050px;
+  max-width: 1250px;
   position: relative;
 }
 
@@ -29,6 +30,7 @@
     opacity: 0;
     transform: translateY(1rem);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
