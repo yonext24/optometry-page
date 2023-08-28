@@ -112,7 +112,7 @@ export function PatientRegisterForm() {
         <label htmlFor='password'>Contraseña*</label>
         <input
           type='password'
-          min={7}
+          min={6}
           required
           id='password'
           name='password'
