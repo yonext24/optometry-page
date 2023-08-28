@@ -164,38 +164,6 @@ export function PreferencialGraphic() {
       </div>
 
       <div className={styles.content}>
-        {chartData && (
-          <div className={styles.chartContainer}>
-            <ResponsiveContainer
-              className={styles.chart}
-              width='100%'
-              height={400}>
-              <LineChart
-                key={Date.now()} // Asegúrate de que este componente se vuelva a renderizar cuando los datos cambien
-                width={500}
-                height={300}
-                data={chartData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='index' />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type='monotone'
-                  dataKey='CPCM'
-                  stroke='#8884d8'
-                  dot={<CustomizedDot />}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
         <div
           style={{
             width: '100%',
@@ -243,134 +211,163 @@ export function PreferencialGraphic() {
               </Table>
             </div>
           )}
-          <div
-            className={styles.tableContainer}
-            style={{ position: 'relative', overflow: 'auto', width: '100%' }}>
-            {document && (
-              <Table
-                className={
-                  styles.table + ' ' + styles.striped + ' ' + styles.bordere
-                }>
-                <thead>
-                  <tr>
-                    <th>Índice</th>
-                    {(Object.keys(document) || []).map((column) => {
-                      if (column !== 'id' && column !== 'idd') {
-                        return (
-                          <th
-                            key={column}
-                            style={{ textTransform: 'uppercase' }}>
-                            {column}
-                          </th>
-                        )
-                      } else {
-                        return null
-                      }
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* 
-                  Array.from crea un array del tamaño de v1, porque hay que generar la cantidad de rows que tengan los
-                  campos, y de ahí sacar las columnas
-                */}
-                  {Array.from(
-                    { length: (document?.v1 || []).length },
-                    (_, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        {(Object.entries(document) || []).map(
-                          ([column, data]) => {
-                            if (column === 'id' || column === 'idd') return null
-                            const value = Array.isArray(data) ? data[index] : ''
-
-                            if (column === 'CPD' && typeof value === 'number') {
-                              const roundedValue = value.toFixed(3)
-                              return <td key={column}>{roundedValue}</td>
-                            } else if (
-                              [
-                                'v1',
-                                'v2',
-                                'v3',
-                                'v4',
-                                'v5',
-                                'R1',
-                                'R2',
-                                'R3',
-                                'R4',
-                                'R5',
-                              ].includes(column)
-                            ) {
-                              return (
-                                <td
-                                  key={column}
-                                  style={{
-                                    color: 'white',
-                                    backgroundColor: 'green',
-                                    ...value.style,
-                                  }}>
-                                  {value.text}
-                                </td>
-                              )
-                            }
-                            return <td key={column}>{value}</td>
-                          },
-                        )}
-                      </tr>
-                    ),
-                  )}
-                </tbody>
-              </Table>
-            )}
-          </div>
-        </div>
-        <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
-          &ldquo;DER&ldquo; Corresponden a los resultados del ojo derecho,
-          &ldquo;IZQ&ldquo; corresponden a los del ojo izquierdo y
-          &ldquo;NN&ldquo; no se pudo identificar
-          <br></br>
-          Color verde corresponde que hay coincidencia y color rojo corresponde
-          que no hay.
-        </span>
-
-        <div className={styles.tableContainer}>
-          {document && (
-            <div>
-              <Table className={styles.table} striped bordered>
-                <thead>
-                  <tr>
-                    <th>Índice</th>
-                    <th>Coincidencias</th>
-                    <th>CPCM</th>
-                    <th>CPD</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(
-                    (Array.isArray(processedData) ? processedData : []) || []
-                  ).map((row) => {
-                    const halfCount = (Object.keys(vAndR).length - 2) / 2 / 2
-
-                    return (
-                      <tr
-                        key={row.index}
-                        className={
-                          row.coincidenceCount >= halfCount
-                            ? styles.greenRow
-                            : ''
-                        }>
-                        <td>{row.index}</td>
-                        <td>{row.coincidenceCount}</td>
-                        <td>{row.CPCM}</td>
-                        <td>{row.CPD.toFixed(3)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
+          {chartData && (
+            <div className={styles.chartContainer}>
+              <ResponsiveContainer
+                className={styles.chart}
+                width='100%'
+                height={400}>
+                <LineChart
+                  key={Date.now()} // Asegúrate de que este componente se vuelva a renderizar cuando los datos cambien
+                  width={500}
+                  height={300}
+                  data={chartData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}>
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='index' />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type='monotone'
+                    dataKey='CPCM'
+                    stroke='#8884d8'
+                    dot={<CustomizedDot />}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           )}
         </div>
+
+        <div
+          className={styles.tableContainer}
+          style={{ position: 'relative', overflow: 'auto', width: '100%' }}>
+          {document && (
+            <Table
+              className={
+                styles.table + ' ' + styles.striped + ' ' + styles.bordere
+              }>
+              <thead>
+                <tr>
+                  <th>Índice</th>
+                  {(Object.keys(document) || []).map((column) => {
+                    if (column !== 'id' && column !== 'idd') {
+                      return (
+                        <th key={column} style={{ textTransform: 'uppercase' }}>
+                          {column}
+                        </th>
+                      )
+                    } else {
+                      return null
+                    }
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {/* 
+                  Array.from crea un array del tamaño de v1, porque hay que generar la cantidad de rows que tengan los
+                  campos, y de ahí sacar las columnas
+                */}
+                {Array.from(
+                  { length: (document?.v1 || []).length },
+                  (_, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      {(Object.entries(document) || []).map(
+                        ([column, data]) => {
+                          if (column === 'id' || column === 'idd') return null
+                          const value = Array.isArray(data) ? data[index] : ''
+
+                          if (column === 'CPD' && typeof value === 'number') {
+                            const roundedValue = value.toFixed(3)
+                            return <td key={column}>{roundedValue}</td>
+                          } else if (
+                            [
+                              'v1',
+                              'v2',
+                              'v3',
+                              'v4',
+                              'v5',
+                              'R1',
+                              'R2',
+                              'R3',
+                              'R4',
+                              'R5',
+                            ].includes(column)
+                          ) {
+                            return (
+                              <td
+                                key={column}
+                                style={{
+                                  color: 'white',
+                                  backgroundColor: 'green',
+                                  ...value.style,
+                                }}>
+                                {value.text}
+                              </td>
+                            )
+                          }
+                          return <td key={column}>{value}</td>
+                        },
+                      )}
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </Table>
+          )}
+        </div>
+      </div>
+      <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
+        &ldquo;DER&ldquo; Corresponden a los resultados del ojo derecho,
+        &ldquo;IZQ&ldquo; corresponden a los del ojo izquierdo y
+        &ldquo;NN&ldquo; no se pudo identificar
+        <br></br>
+        Color verde corresponde que hay coincidencia y color rojo corresponde
+        que no hay.
+      </span>
+
+      <div className={styles.tableContainer}>
+        {document && (
+          <div>
+            <Table className={styles.table} striped bordered>
+              <thead>
+                <tr>
+                  <th>Índice</th>
+                  <th>Coincidencias</th>
+                  <th>CPCM</th>
+                  <th>CPD</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(
+                  (Array.isArray(processedData) ? processedData : []) || []
+                ).map((row) => {
+                  const halfCount = (Object.keys(vAndR).length - 2) / 2 / 2
+
+                  return (
+                    <tr
+                      key={row.index}
+                      className={
+                        row.coincidenceCount >= halfCount ? styles.greenRow : ''
+                      }>
+                      <td>{row.index}</td>
+                      <td>{row.coincidenceCount}</td>
+                      <td>{row.CPCM}</td>
+                      <td>{row.CPD.toFixed(3)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </Table>
+          </div>
+        )}
       </div>
     </div>
   )

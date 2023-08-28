@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { getUser, updateUser, uploadImage } from '../firebase/utils/user'
+import {
+  deleteImage,
+  getUser,
+  updateUser,
+  uploadImage,
+} from '../firebase/utils/user'
 import { useUser } from './useUser'
 import { USER_POSSIBLE_STATES } from '../utils/user-possible-states'
 import { Link, useNavigate } from 'react-router-dom'
@@ -34,6 +39,20 @@ export function useGetUserPage({ id, type }) {
   const handleImageClear = useCallback(() => {
     setImage(null)
     inputRef.current.value = null
+  })
+
+  const handleDeleteImage = useCallback(async () => {
+    setUpdateLoading(true)
+    deleteImage(pageUser.image?.path).catch(() => {})
+    await updateUser({
+      claim: pageUser.role,
+      id: pageUser.id,
+      update: { image: null },
+    }).then(() => {
+      toast('La imágen se borró correctamente')
+      setPageUser((prev) => ({ ...prev, image: null }))
+    })
+    setUpdateLoading(false)
   })
 
   useEffect(() => {
@@ -250,5 +269,6 @@ export function useGetUserPage({ id, type }) {
     handleImageClear,
     setEditedFields,
     handleSubmit,
+    handleDeleteImage,
   }
 }

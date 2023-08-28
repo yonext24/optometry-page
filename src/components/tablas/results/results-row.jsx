@@ -38,9 +38,11 @@ export function ResultsRow({ data }) {
     } else return { exists: false }
   }, [data.notes])
 
+  console.log({ data })
+
   return (
     <tr>
-      <td className={styles.date}>11/6/23</td>
+      <td className={styles.date}>{data[1]?.Fecha.substring(2)}</td>
       <td>
         {state.selected_test.name === 'contraste'
           ? 'Sensibilidad al Contraste'

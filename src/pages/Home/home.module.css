@@ -13,7 +13,7 @@
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-columns: 1fr .7fr;
+  grid-template-columns: .8fr 1fr;
   z-index: 20;
   height: 90vh;
   overflow: hidden;
@@ -40,7 +40,7 @@
 }
 
 .dataContainer h1 {
-  font-size: 30px;
+  font-size: 27px;
   font-weight: 600;
   text-align: start;
   color: black

@@ -27,6 +27,7 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
     setEditedFields,
     handleSubmit,
     setPasswordEditing,
+    handleDeleteImage,
   } = useGetUserPage({ id, type })
 
   return (
@@ -104,6 +105,9 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
                   />
                   <label htmlFor='image'>Subir Imagen</label>
                   {image && <button onClick={handleImageClear}>Quitar</button>}
+                  {user.image && (
+                    <button onClick={handleDeleteImage}>Borrar imágen</button>
+                  )}
                 </div>
               )}
             </div>
