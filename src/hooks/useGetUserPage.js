@@ -96,6 +96,38 @@ export function useGetUserPage({ id, type }) {
           visibleOnlyToOwn: false,
         },
         {
+          slug: 'telefono',
+          name: 'Teléfono',
+          element: <p>{pageUser.telefono}</p>,
+          value: pageUser.telefono,
+          inputType: 'number',
+          visibleOnlyToOwn: true,
+        },
+        {
+          slug: 'edad',
+          name: 'Edad',
+          element: <p>{pageUser.edad}</p>,
+          value: pageUser.edad,
+          inputType: 'number',
+          visibleOnlyToOwn: true,
+        },
+        {
+          slug: 'ocupacion',
+          name: 'Ocupación',
+          element: <p>{pageUser.ocupacion}</p>,
+          value: pageUser.ocupacion,
+          inputType: 'text',
+          visibleOnlyToOwn: true,
+        },
+        {
+          slug: 'ultimo_control',
+          name: 'Último control',
+          element: <p>{pageUser.ultimo_control}</p>,
+          value: pageUser.ultimo_control,
+          inputType: 'date',
+          visibleOnlyToOwn: true,
+        },
+        {
           slug: 'documento',
           name: 'DNI',
           element: <p>{pageUser.documento}</p>,
@@ -132,7 +164,28 @@ export function useGetUserPage({ id, type }) {
             </>
           ),
         },
-      ]
+      ].concat(
+        Number(pageUser.edad) <= 17
+          ? [
+              {
+                slug: 'nombre_acudiente',
+                name: 'Nombre del Acudiente',
+                element: <p>{pageUser.nombre_acudiente}</p>,
+                value: pageUser.nombre_acudiente,
+                inputType: 'text',
+                visibleOnlyToOwn: true,
+              },
+              {
+                slug: 'telefono_acudiente',
+                name: 'Teléfono del Acudiente',
+                element: <p>{pageUser.telefono_acudiente}</p>,
+                value: pageUser.telefono_acudiente,
+                inputType: 'text',
+                visibleOnlyToOwn: true,
+              },
+            ]
+          : [],
+      )
     }
     if (pageUser.role === 'doctor' || pageUser.role === 'admin') {
       return [

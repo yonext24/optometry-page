@@ -5,7 +5,7 @@ import { PacientesAdmin } from '../../components/tablas/pacientes/pacientes-admi
 import styles from './pacientes-page.module.css'
 import { getAllPatients } from '../../firebase/utils/admin'
 import { useUser } from '../../hooks/useUser'
-import { UserProfile } from '../../components/user-profile/user-profile'
+import { ProfileModal } from '../../components/modals/profile-modal/profile-modal'
 
 export function PacientesPageAdminRender() {
   const [patients, setPatients] = useState([])
@@ -52,17 +52,11 @@ export function PacientesPageAdminRender() {
         />
       </section>
       {isEditing && (
-        <div
-          className={styles.modalContainer}
-          onClick={() => setIsEditing(false)}>
-          <div onClick={(e) => e.stopPropagation()}>
-            <UserProfile
-              id={selectedRowId}
-              closeProfileModal={() => setIsEditing(false)}
-              deletePatient={deletePatient}
-            />
-          </div>
-        </div>
+        <ProfileModal
+          selectedRowId={selectedRowId}
+          deletePatient={deletePatient}
+          setIsEditing={setIsEditing}
+        />
       )}
     </>
   )

@@ -41,7 +41,6 @@ export function PatientRegisterForm() {
         <label htmlFor='ocupacion'>Ocupación</label>
         <input
           type='text'
-          required
           id='ocupacion'
           name='ocupacion'
           placeholder='Carpintero'
