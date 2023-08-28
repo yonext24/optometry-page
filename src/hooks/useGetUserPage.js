@@ -205,6 +205,14 @@ export function useGetUserPage({ id, type }) {
           inputType: 'number',
           visibleOnlyToOwn: true,
         },
+        {
+          slug: 'telefono',
+          name: 'Teléfono',
+          element: <p>{pageUser.telefono}</p>,
+          value: pageUser.telefono,
+          inputType: 'number',
+          visibleOnlyToOwn: true,
+        },
       ]
     }
   }, [pageUser])
