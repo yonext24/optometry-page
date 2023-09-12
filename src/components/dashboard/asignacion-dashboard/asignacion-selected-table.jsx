@@ -55,7 +55,7 @@ export function AsignacionSelectedTable({
   return (
     <div className={styles.assignedTable}>
       <header>
-        Pacientes asignados al Dr. {selectedDoctor.nombre}{' '}
+        Pacientes asignados al Profesional {selectedDoctor.nombre}{' '}
         {selectedDoctor.apellido}
       </header>
       {

@@ -12,7 +12,7 @@ export function NavbarUserModal({ closeModal }) {
     user.role === 'patient'
       ? 'paciente'
       : user.role === 'doctor'
-      ? 'doctor'
+      ? 'profesional'
       : 'admin'
   return (
     <div className={styles.userModal}>

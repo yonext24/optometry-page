@@ -76,7 +76,7 @@ export function NamesEntry({
               <EditIcon height={25} width={25} style={{ strokeWidth: 2 }} />
             </button>
           </div>
-          <p>{role === 'patient' ? 'Paciente' : 'Doctor'}</p>
+          <p>{role === 'patient' ? 'Paciente' : 'Profesional'}</p>
         </>
       )}
     </div>

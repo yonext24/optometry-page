@@ -63,13 +63,13 @@ export function OpacidadGraphic() {
     <div className={styles.container}>
       <h2 className={styles.title}>Resultados Sensibilidad al Contraste</h2>
       <div className={styles.tabsContainer}>
-        {[1, 2, 3].map((el) => (
+      {[{text: 'Ojo Izquierdo', val: 1}, {text: 'Ojo Derecho', val: 2}, {text: 'Ambos Ojos', val: 3}].map((el) => (
           <button
-            data-selected={selectedTab === el}
-            key={el}
+            data-selected={selectedTab === el.val}
+            key={el.val}
             className={styles.tab}
-            onClick={() => setSelectedTab(el)}>
-            {el}
+            onClick={() => setSelectedTab(el.val)}>
+            {el.text}
           </button>
         ))}
       </div>

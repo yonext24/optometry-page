@@ -29,6 +29,7 @@ export function useRegisterUser() {
     const values = Object.fromEntries(data)
 
     const token = await auth.currentUser.getIdToken(true)
+    const dict = { patient: 'paciente', doctor: 'profesional', admin: 'administrador' }
 
     try {
       const user = await fetch(API_ADMIN_URL, {
@@ -56,15 +57,15 @@ export function useRegisterUser() {
           update: { image: imageData },
         })
       }
-
-      toast(`Se creó con exito el usuario ${user.nombre} ${user.apellido}`)
+      
+      toast(`Se creó con exito el ${dict[values.role]} ${user.nombre} ${user.apellido}`)
       e.target.reset()
       setImage(null)
     } catch (err) {
       const errMessage =
         err instanceof Error
           ? err.message
-          : 'Hubo un error al crear el usuario.'
+          : 'Hubo un error al crear el ' + dict[values.role]
       setError(errMessage)
       toast.error(errMessage)
     } finally {

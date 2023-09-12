@@ -206,6 +206,18 @@ export function useGetUserPage({ id, type }) {
           visibleOnlyToOwn: true,
         },
         {
+          slug: 'active',
+          name: 'ESTADO',
+          element: <p>{pageUser.active ? 'Activo' : 'No activo'}</p>,
+          value: pageUser.active ? 'Activo' : 'No activo',
+          type: 'select',
+          options: [
+            { value: true, text: 'Activo' },
+            { value: false, text: 'No activo' },
+          ],
+          visibleToOwn: false,
+        },
+        {
           slug: 'telefono',
           name: 'Teléfono',
           element: <p>{pageUser.telefono}</p>,

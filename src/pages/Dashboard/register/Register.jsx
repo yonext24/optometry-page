@@ -65,7 +65,7 @@ export function Register() {
               id='role'
               onChange={(e) => setRole(e.target.value)}>
               <option value='patient'>Paciente</option>
-              <option value='doctor'>Medico</option>
+              <option value='doctor'>Profesional</option>
               <option value='admin'>Administrador</option>
             </select>
           </div>

@@ -111,7 +111,7 @@ function App() {
           }
         />
         <Route
-          path={'/doctor/:id'}
+          path={'/profesional/:id'}
           element={
             <ProtectedRoute condition={true}>
               <Usuario type='doctor' />

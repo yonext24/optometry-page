@@ -76,7 +76,7 @@ export function ResultsRow({ data }) {
                   ) : null}
                 </>
               ) : (
-                'Aquí verás la nota que te deje tu doctor...'
+                'Aquí verás la nota que te deje tu profesional asignado...'
               )}
             </span>
           </div>

@@ -68,10 +68,10 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
             ) : (
               <div className={styles.nameContainer}>
                 <h1>
-                  {user.role === 'doctor' ? 'Dr.' : ''} {user.nombre}{' '}
+                  {user.role === 'doctor' ? 'Profesional' : ''} {user.nombre}{' '}
                   {user.apellido}
                 </h1>
-                <p>{user.role === 'patient' ? 'Paciente' : 'Doctor'}</p>
+                <p>{user.role === 'patient' ? 'Paciente' : 'Profesional'}</p>
               </div>
             )}
 

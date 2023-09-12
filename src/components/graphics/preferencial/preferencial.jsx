@@ -152,13 +152,13 @@ export function PreferencialGraphic() {
     <div className={styles.App}>
       <h2 className={styles.title}>Resultados Mirada Preferencial</h2>
       <div className={styles.tabsContainer}>
-        {[1, 2, 3].map((el) => (
+        {[{text: 'Ojo Izquierdo', val: 1}, {text: 'Ojo Derecho', val: 2}, {text: 'Ambos Ojos', val: 3}].map((el) => (
           <button
-            data-selected={selectedTab === el}
-            key={el}
+            data-selected={selectedTab === el.val}
+            key={el.val}
             className={styles.tab}
-            onClick={() => setSelectedTab(el)}>
-            {el}
+            onClick={() => setSelectedTab(el.val)}>
+            {el.text}
           </button>
         ))}
       </div>
@@ -325,8 +325,8 @@ export function PreferencialGraphic() {
         </div>
       </div>
       <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
-        &ldquo;DER&ldquo; Corresponden a los resultados del ojo derecho,
-        &ldquo;IZQ&ldquo; corresponden a los del ojo izquierdo y
+        &ldquo;DER&ldquo; Corresponden a los resultados del estímulo derecho,
+        &ldquo;IZQ&ldquo; corresponden a los del estímulo izquierdo y
         &ldquo;NN&ldquo; no se pudo identificar
         <br></br>
         Color verde corresponde que hay coincidencia y color rojo corresponde

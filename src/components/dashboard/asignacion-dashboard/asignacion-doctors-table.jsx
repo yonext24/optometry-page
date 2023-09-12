@@ -39,7 +39,7 @@ function AsignacionDoctorsTableRender({
             <span>
               Dr. {el.nombre} {el.apellido}
             </span>
-            <Link className={styles.see} to={`/doctor/${el.id}`}>
+            <Link className={styles.see} to={`/profesional/${el.id}`}>
               Ver
             </Link>
             <p>{el.pacientes_asignados.length}</p>
@@ -59,7 +59,7 @@ export function AsignacionDoctorsTable({
   return (
     <div className={styles.doctorsTable} data-loading={doctorsData.loading}>
       <header>
-        <p>Médico</p>
+        <p>Profesional</p>
         <p>Pacientes Asignados</p>
       </header>
       <AsignacionDoctorsTableRender
