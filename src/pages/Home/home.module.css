@@ -43,7 +43,8 @@
   font-size: 27px;
   font-weight: 600;
   text-align: start;
-  color: black
+  color: black;
+  text-align: justify;
 }
 
 .titleContainer {
