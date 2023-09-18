@@ -38,15 +38,15 @@ export function ResultsRow({ data }) {
     } else return { exists: false }
   }, [data.notes])
 
-  console.log({ data })
+  const parsedDate = useMemo(() => {
+    if (!data[1]?.Fecha) return 'Unknown'
+    const [year, month, day] = data[1].Fecha.split('-')
+    return `${day}/${month}/${year.substring(2, 4)}`
+  }, [data])
 
   return (
     <tr>
-      {data[1]?.Fecha ? (
-        <td className={styles.date}>{data[1]?.Fecha?.substring(2)}</td>
-      ) : (
-        <td className={styles.date}>Unknown</td>
-      )}
+      <td className={styles.date}>{parsedDate}</td>
       <td>
         {state.selected_test.name === 'contraste'
           ? 'Sensibilidad al Contraste'
