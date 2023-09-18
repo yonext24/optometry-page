@@ -1,7 +1,10 @@
+import { roleToUserDictCapitalized } from '../../utils/role-to-user-dict'
 import { UserImage } from '../common/entry-placeholder/user-image/user-image'
 import styles from './write-modal-header.module.css'
 
 export function WriteModalHeader({ user, medic }) {
+  console.log({ user })
+
   return (
     <header className={styles.header}>
       <UserImage src={user?.image?.src} />
@@ -10,7 +13,8 @@ export function WriteModalHeader({ user, medic }) {
           {user.nombre} {user.apellido}
         </h4>
         <span>
-          {user.role} {medic && ' - Tu médico asignado.'}
+          {roleToUserDictCapitalized[user.role]}{' '}
+          {medic && ' - Tu profesional asignado.'}
         </span>
       </div>
     </header>

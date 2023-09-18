@@ -1,7 +1,12 @@
 import { PacienteRow } from './paciente-row'
 import styles from './pacientes.module.css'
 
-export function PacientesAdmin({ patients, selectedRowId, setSelectedRowId }) {
+export function PacientesAdmin({
+  patients,
+  selectedRowId,
+  setSelectedRowId,
+  setSelectedPatient,
+}) {
   return (
     <table className={styles.table}>
       <thead>
@@ -18,6 +23,7 @@ export function PacientesAdmin({ patients, selectedRowId, setSelectedRowId }) {
             isSelected={el.id === selectedRowId}
             handleClick={() => {
               setSelectedRowId(el.id)
+              setSelectedPatient(el)
             }}
             {...el}
           />

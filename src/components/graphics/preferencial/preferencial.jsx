@@ -12,6 +12,8 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { ResultsContext } from '../../../contexts/ResultsContext'
+import { usePDF, Margin } from 'react-to-pdf'
+import { DownloadIcon } from '../../icons/download'
 
 export function PreferencialGraphic() {
   const [selectedTab, setSelectedTab] = useState(1)
@@ -119,7 +121,6 @@ export function PreferencialGraphic() {
       setChartData(chartData)
     }
   }, [document])
-  console.log({ highest })
 
   const CustomizedDot = (props) => {
     const { cx, cy, payload } = props
@@ -148,103 +149,128 @@ export function PreferencialGraphic() {
     return <circle cx={cx} cy={cy} r={2} stroke={fill} strokeWidth={3} />
   }
 
+  console.log({ state })
+
+  const { toPDF, targetRef } = usePDF({
+    filename: 'resultados.pdf',
+    page: { margin: Margin.MEDIUM, format: 'A4' },
+  })
+
+  const handlePDF = async () => {
+    await new Promise((res) => setTimeout(res, 200))
+    toPDF()
+  }
+
   return (
     <div className={styles.App}>
-      <h2 className={styles.title}>Resultados Mirada Preferencial</h2>
       <div className={styles.tabsContainer}>
-        {[{text: 'Ojo Izquierdo', val: 1}, {text: 'Ojo Derecho', val: 2}, {text: 'Ambos Ojos', val: 3}].map((el) => (
+        {[{ val: 1 }, { val: 2 }, { val: 3 }].map((el) => (
           <button
             data-selected={selectedTab === el.val}
             key={el.val}
             className={styles.tab}
             onClick={() => setSelectedTab(el.val)}>
-            {el.text}
+            {state.graphic_open[el.val]?.Prueba ?? el.val}
           </button>
         ))}
+        <button className={styles.downloadIcon} onClick={handlePDF}>
+          <DownloadIcon style={{ height: 25, width: 25 }} />
+          <span>PDF</span>
+        </button>
       </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 20,
+        }}
+        ref={targetRef}>
+        <h2 className={styles.title}>Resultados Mirada Preferencial</h2>
 
-      <div className={styles.content}>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row-reverse',
-          }}>
-          {highest && (
-            <div
-              style={{
-                margin: '15px 10px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}>
-              <h4>Indice de agudeza visual</h4>
-              <Table
-                className={
-                  styles.table + ' ' + styles.striped + ' ' + styles.bordere
-                }>
-                <thead>
-                  <tr>
-                    <td>CPD</td>
-                    <td>CPCM</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td
-                      style={{
-                        padding: '15px 20px',
-                        color: 'white',
-                        backgroundColor: 'green',
-                      }}>
-                      {highest.CPD.toFixed(3)}
-                    </td>
-                    <td
-                      style={{
-                        padding: '15px 20px',
-                        color: 'white',
-                        backgroundColor: 'green',
-                      }}>
-                      {highest.CPCM}
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>
-          )}
-          {chartData && (
-            <div className={styles.chartContainer}>
-              <ResponsiveContainer
-                className={styles.chart}
-                width='100%'
-                height={400}>
-                <LineChart
-                  key={Date.now()} // Asegúrate de que este componente se vuelva a renderizar cuando los datos cambien
-                  width={500}
-                  height={300}
-                  data={chartData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}>
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <XAxis dataKey='index' />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type='monotone'
-                    dataKey='CPCM'
-                    stroke='#8884d8'
-                    dot={<CustomizedDot />}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          )}
+        <div className={styles.content}>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row-reverse',
+            }}>
+            {highest && (
+              <div
+                style={{
+                  margin: '15px 10px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10,
+                }}>
+                <h4>Indice de agudeza visual</h4>
+                <Table
+                  className={
+                    styles.table + ' ' + styles.striped + ' ' + styles.bordere
+                  }>
+                  <thead>
+                    <tr>
+                      <td>CPD</td>
+                      <td>CPCM</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td
+                        style={{
+                          padding: '15px 20px',
+                          color: 'white',
+                          backgroundColor: 'green',
+                        }}>
+                        {highest.CPD.toFixed(3)}
+                      </td>
+                      <td
+                        style={{
+                          padding: '15px 20px',
+                          color: 'white',
+                          backgroundColor: 'green',
+                        }}>
+                        {highest.CPCM}
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
+            )}
+            {chartData && (
+              <div className={styles.chartContainer}>
+                <ResponsiveContainer
+                  className={styles.chart}
+                  width='100%'
+                  height={400}>
+                  <LineChart
+                    key={Date.now()} // Asegúrate de que este componente se vuelva a renderizar cuando los datos cambien
+                    width={500}
+                    height={300}
+                    data={chartData}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}>
+                    <CartesianGrid strokeDasharray='3 3' />
+                    <XAxis dataKey='index' />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='CPCM'
+                      stroke='#8884d8'
+                      dot={<CustomizedDot />}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </div>
         </div>
-
         <div
           className={styles.tableContainer}
           style={{ position: 'relative', overflow: 'auto', width: '100%' }}>
@@ -323,51 +349,53 @@ export function PreferencialGraphic() {
             </Table>
           )}
         </div>
-      </div>
-      <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
-        &ldquo;DER&ldquo; Corresponden a los resultados del estímulo derecho,
-        &ldquo;IZQ&ldquo; corresponden a los del estímulo izquierdo y
-        &ldquo;NN&ldquo; no se pudo identificar
-        <br></br>
-        Color verde corresponde que hay coincidencia y color rojo corresponde
-        que no hay.
-      </span>
+        <span style={{ fontSize: 12, textAlign: 'center', marginBottom: 12 }}>
+          &ldquo;DER&ldquo; Corresponden a los resultados del estímulo derecho,
+          &ldquo;IZQ&ldquo; corresponden a los del estímulo izquierdo y
+          &ldquo;NN&ldquo; no se pudo identificar
+          <br></br>
+          Color verde corresponde que hay coincidencia y color rojo corresponde
+          que no hay.
+        </span>
 
-      <div className={styles.tableContainer}>
-        {document && (
-          <div>
-            <Table className={styles.table} striped bordered>
-              <thead>
-                <tr>
-                  <th>Índice</th>
-                  <th>Coincidencias</th>
-                  <th>CPCM</th>
-                  <th>CPD</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(
-                  (Array.isArray(processedData) ? processedData : []) || []
-                ).map((row) => {
-                  const halfCount = (Object.keys(vAndR).length - 2) / 2 / 2
+        <div className={styles.tableContainer}>
+          {document && (
+            <div>
+              <Table className={styles.table} striped bordered>
+                <thead>
+                  <tr>
+                    <th>Índice</th>
+                    <th>Coincidencias</th>
+                    <th>CPCM</th>
+                    <th>CPD</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(
+                    (Array.isArray(processedData) ? processedData : []) || []
+                  ).map((row) => {
+                    const halfCount = (Object.keys(vAndR).length - 2) / 2 / 2
 
-                  return (
-                    <tr
-                      key={row.index}
-                      className={
-                        row.coincidenceCount >= halfCount ? styles.greenRow : ''
-                      }>
-                      <td>{row.index}</td>
-                      <td>{row.coincidenceCount}</td>
-                      <td>{row.CPCM}</td>
-                      <td>{row.CPD.toFixed(3)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </Table>
-          </div>
-        )}
+                    return (
+                      <tr
+                        key={row.index}
+                        className={
+                          row.coincidenceCount >= halfCount
+                            ? styles.greenRow
+                            : ''
+                        }>
+                        <td>{row.index}</td>
+                        <td>{row.coincidenceCount}</td>
+                        <td>{row.CPCM}</td>
+                        <td>{row.CPD.toFixed(3)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </Table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

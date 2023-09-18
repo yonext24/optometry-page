@@ -19,6 +19,7 @@ import { Deberes } from './pages/Deberes/Deberes'
 import { Resultados } from './pages/Resultados/resultados'
 import { PasswordChange } from './components/modals/password-change/password-change'
 import { ResultsContextProvider } from './contexts/ResultsContext'
+import { Calendario } from './pages/Calendario/Calendario'
 
 function App() {
   const [passwordShowing, setPasswordShowing] = useState(false)
@@ -33,7 +34,7 @@ function App() {
   }, [user])
 
   const closeModal = () => setPasswordShowing(false)
-  
+
   return (
     <div className='App'>
       <Navbar />
@@ -44,8 +45,7 @@ function App() {
           path='/dashboard/asignacion'
           element={
             <ProtectedRoute
-              condition={defaultCondition || user?.role === 'admin'}
-            >
+              condition={defaultCondition || user?.role === 'admin'}>
               <DashboardLayout>
                 <Asignacion />
               </DashboardLayout>
@@ -56,8 +56,7 @@ function App() {
           path='/dashboard/register'
           element={
             <ProtectedRoute
-              condition={defaultCondition || user?.role === 'admin'}
-            >
+              condition={defaultCondition || user?.role === 'admin'}>
               <DashboardLayout>
                 <Register />
               </DashboardLayout>
@@ -72,8 +71,7 @@ function App() {
                 defaultCondition ||
                 user?.role === 'admin' ||
                 user?.role === 'doctor'
-              }
-            >
+              }>
               <Pacientes />
             </ProtectedRoute>
           }
@@ -111,6 +109,14 @@ function App() {
           }
         />
         <Route
+          path={'/:id/calendario'}
+          element={
+            <ProtectedRoute condition={true}>
+              <Calendario />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path={'/profesional/:id'}
           element={
             <ProtectedRoute condition={true}>
@@ -130,9 +136,9 @@ function App() {
       </Routes>
       <Footer />
 
-      {
-        passwordShowing && <PasswordChange closeModal={closeModal} id={user.id}/>
-      }
+      {passwordShowing && (
+        <PasswordChange closeModal={closeModal} id={user.id} />
+      )}
 
       <ToastContainer
         position='top-right'

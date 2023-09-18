@@ -4,6 +4,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
+  "prettier.useTabs": true,
+  "prettier.tabWidth": 4,
+  "editor.tabSize": 2,
   "eslint.format.enable": false,
   "eslint.lintTask.enable": true,
   "eslint.validate": [

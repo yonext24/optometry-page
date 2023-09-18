@@ -11,6 +11,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { API_ADMIN_URL } from '../utils/prod-dev-variables'
 import { auth } from '../firebase/config'
+import { roleToUserDict } from '../utils/role-to-user-dict'
 
 export function useGetUserPage({ id, type }) {
   const [pageUser, setPageUser] = useState(null)
@@ -302,7 +303,7 @@ export function useGetUserPage({ id, type }) {
           setEditedFields({})
           toast(
             `Se modificó correctamente el ${
-              type === 'patient' ? 'paciente' : 'doctor'
+              roleToUserDict[type] ?? 'usuario'
             } ${pageUser.nombre} ${pageUser.apellido}`,
           )
         })

@@ -8,6 +8,7 @@
 
 .content {
   flex: 1;
+  width: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@
 }
 
 .tableContainer {
+  width: 100%;
   flex: 1;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -94,6 +96,7 @@
 
 .chartContainer {
   flex: 1;
+  width: 100%;
 }
 
 /* Estilos para el gráfico */
@@ -102,11 +105,12 @@
 }
 
 .tabsContainer {
-  display: flex
+  display: flex;
 }
 
 .tab {
   border-top-left-radius: 10px;
+  padding: 2px 0;
   border-top-right-radius: 10px;
   border: 2px solid black;
   border-left: none;
@@ -116,16 +120,30 @@
 }
 
 .tab:first-of-type {
-  border-left: 2px solid black
+  border-left: 2px solid black;
 }
 
-.tab[data-selected=true] {
+.tab[data-selected='true'] {
   background-color: var(--azul-profundo);
-  color: white
+  color: white;
 }
 
 .title {
   margin: 0 auto 20px auto;
   font-size: 30px;
   font-weight: 600;
+}
+.downloadIcon {
+  align-self: flex-end;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--azul-profundo);
+  color: white;
+  padding: 5px;
+  margin-left: auto;
+  cursor: pointer;
 }

@@ -32,6 +32,11 @@ export function Navbar() {
           includes: `/paciente`,
           href: `/paciente/${user.id}/resultados`,
         },
+        {
+          name: 'Calendario de citas',
+          includes: '/calendario',
+          href: `/${user.id}/calendario`,
+        },
       ]
     return []
   })

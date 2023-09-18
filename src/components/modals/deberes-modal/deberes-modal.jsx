@@ -11,7 +11,7 @@ export function DeberesModal({ pageUser, setPageUser, closeModal }) {
         ...prev,
         deberes: { ...prev.deberes, [slug]: true },
       }))
-      toast('Se asignó correctamente el test al usuario')
+      toast('Se asignó correctamente el test al paciente')
       closeModal()
     })
   }

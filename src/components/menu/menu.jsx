@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import { UserImage } from '../common/entry-placeholder/user-image/user-image'
 import { ResultsIcon } from '../icons/results'
 
-export function Menu({ patient, setIsEditing }) {
+export function Menu({ patient, setIsEditing, setIsAppointment }) {
   const user = useUser()
   console.log(patient)
 
@@ -28,6 +28,13 @@ export function Menu({ patient, setIsEditing }) {
             icon: ResultsIcon,
             text: 'Resultados',
             key: 2,
+          },
+          {
+            type: 'button',
+            onClick: setIsAppointment,
+            icon: EditIcon,
+            text: 'Agendar cita',
+            key: 3,
           },
         ]
       : [
@@ -51,6 +58,13 @@ export function Menu({ patient, setIsEditing }) {
             icon: BookIcon,
             text: 'Deberes',
             key: 2,
+          },
+          {
+            type: 'button',
+            onClick: setIsAppointment,
+            icon: EditIcon,
+            text: 'Agendar cita',
+            key: 3,
           },
         ]
   }, [user, setIsEditing, patient])

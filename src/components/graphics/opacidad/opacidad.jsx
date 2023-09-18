@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Table } from 'react-bootstrap'
+import { usePDF } from 'react-to-pdf'
 import {
   ScatterChart,
   Scatter,
@@ -31,6 +32,7 @@ export function OpacidadGraphic() {
   ]
 
   const { state } = useContext(ResultsContext)
+  const {toPFD, targetRef} = usePDF()
 
   console.log(state)
 
@@ -60,7 +62,8 @@ export function OpacidadGraphic() {
   }, [chartData])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={targetRef}>
+      <button onClick={toPFD}>PDF</button>
       <h2 className={styles.title}>Resultados Sensibilidad al Contraste</h2>
       <div className={styles.tabsContainer}>
       {[{text: 'Ojo Izquierdo', val: 1}, {text: 'Ojo Derecho', val: 2}, {text: 'Ambos Ojos', val: 3}].map((el) => (
