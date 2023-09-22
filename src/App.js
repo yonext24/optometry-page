@@ -20,6 +20,7 @@ import { Resultados } from './pages/Resultados/resultados'
 import { PasswordChange } from './components/modals/password-change/password-change'
 import { ResultsContextProvider } from './contexts/ResultsContext'
 import { Calendario } from './pages/Calendario/Calendario'
+import { Appointment } from './pages/Appointment/Appointment'
 
 function App() {
   const [passwordShowing, setPasswordShowing] = useState(false)
@@ -112,7 +113,17 @@ function App() {
           path={'/:id/calendario'}
           element={
             <ProtectedRoute condition={true}>
-              <Calendario />
+              <UserLayout isDoctor isRelative>
+                <Calendario />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={'/:doctorId/:number/:appointmentId'}
+          element={
+            <ProtectedRoute condition={true}>
+              <Appointment />
             </ProtectedRoute>
           }
         />
@@ -120,7 +131,9 @@ function App() {
           path={'/profesional/:id'}
           element={
             <ProtectedRoute condition={true}>
-              <Usuario type='doctor' />
+              <UserLayout isDoctor isRelative>
+                <Usuario type='doctor' />
+              </UserLayout>
             </ProtectedRoute>
           }
         />

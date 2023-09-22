@@ -21,7 +21,12 @@ export function PacientesPageAdminRender() {
 
   useEffect(() => {
     if (user.role === 'doctor') {
-      setPatients(user.pacientes_asignados)
+      setPatients(
+        user.pacientes_asignados.map((el) => ({
+          ...el,
+          medico_asignado: user,
+        })),
+      )
       return
     }
     setLoading(true)

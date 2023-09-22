@@ -61,6 +61,7 @@ export function ResultsTable({ pageUser }) {
         <thead>
           <tr>
             <td>FECHA</td>
+            <td>HORA</td>
             <td>NOMBRE</td>
             <td>DATOS</td>
             <td>NOTA DE REVISIÓN</td>

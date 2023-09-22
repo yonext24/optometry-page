@@ -64,7 +64,7 @@ export function Menu({ patient, setIsEditing, setIsAppointment }) {
             onClick: setIsAppointment,
             icon: EditIcon,
             text: 'Agendar cita',
-            key: 3,
+            key: 4,
           },
         ]
   }, [user, setIsEditing, patient])

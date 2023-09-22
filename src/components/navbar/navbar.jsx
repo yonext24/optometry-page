@@ -11,9 +11,6 @@ const adminEntrys = [
   { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
   { name: 'Dashboard', includes: '/dashboard', href: '/dashboard/asignacion' },
 ]
-const doctorEntrys = [
-  { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
-]
 
 export function Navbar() {
   const user = useUser()
@@ -24,7 +21,15 @@ export function Navbar() {
     )
       return []
     if (user?.role === 'admin') return adminEntrys
-    if (user?.role === 'doctor') return doctorEntrys
+    if (user?.role === 'doctor')
+      return [
+        { name: 'Pacientes', includes: '/pacientes', href: '/pacientes' },
+        {
+          name: 'Calendario de citas',
+          includes: '/calendario',
+          href: `/${user.id}/calendario`,
+        },
+      ]
     if (user?.role === 'patient')
       return [
         {

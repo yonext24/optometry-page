@@ -67,6 +67,7 @@ export function Login() {
                   id='email'
                   name='email'
                   type='email'
+                  autoFocus
                   placeholder='Email...'
                 />
                 <input

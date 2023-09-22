@@ -149,15 +149,13 @@ export function PreferencialGraphic() {
     return <circle cx={cx} cy={cy} r={2} stroke={fill} strokeWidth={3} />
   }
 
-  console.log({ state })
-
   const { toPDF, targetRef } = usePDF({
     filename: 'resultados.pdf',
     page: { margin: Margin.MEDIUM, format: 'A4' },
   })
 
   const handlePDF = async () => {
-    await new Promise((res) => setTimeout(res, 200))
+    await new Promise((res) => setTimeout(res, 350))
     toPDF()
   }
 

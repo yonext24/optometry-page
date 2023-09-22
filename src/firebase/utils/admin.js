@@ -4,14 +4,6 @@ import { patientsCollection } from '../collections'
 import { getUserRole } from '../auth'
 import { getDocs } from 'firebase/firestore'
 
-// Create
-export async function createAdmin(email, password, name, lastName) {}
-
-// Read
-export async function getAllAdmins() {}
-
-export async function getAdmin(uid) {}
-
 // Upload files
 // Upload Profile Picture
 export async function setAdminProfilePic(uid, file) {

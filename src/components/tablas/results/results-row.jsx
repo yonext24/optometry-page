@@ -44,9 +44,18 @@ export function ResultsRow({ data }) {
     return `${day}/${month}/${year.substring(2, 4)}`
   }, [data])
 
+  const parsedHour = useMemo(() => {
+    if (!data[1]?.Hora) return ''
+    const [hour, minutes] = data[1].Hora.split('-')
+    return `${hour}:${minutes}`
+  }, [data])
+
+  console.log({ parsedHour })
+
   return (
     <tr>
       <td className={styles.date}>{parsedDate}</td>
+      <td className={styles.date}>{parsedHour}</td>
       <td>
         {state.selected_test.name === 'contraste'
           ? 'Sensibilidad al Contraste'
