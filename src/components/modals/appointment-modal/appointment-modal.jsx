@@ -6,6 +6,8 @@ import { createAppointment } from '../../../firebase/utils/appointment'
 import { useUser } from '../../../hooks/useUser'
 import { Spinner } from '../../spinner/spinner'
 import { toast } from 'react-toastify'
+import { updateUser } from '../../../firebase/utils/user'
+import { arrayUnion } from 'firebase/firestore'
 
 export function AppointmentModal({ closeModal, selectedPatient }) {
   const [status, setStatus] = useState(null) // null | loading | error | success
@@ -14,7 +16,7 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
   const user = useUser()
 
   const handleSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault()
       setStatus('loading')
 
@@ -44,16 +46,40 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
 
       const setByAdmin = user.role === 'admin'
 
-      createAppointment({ content, patientData, doctorData, setByAdmin })
-        .then(() => {
+      const url = await createAppointment({
+        content,
+        patientData,
+        doctorData,
+        setByAdmin,
+      })
+        .then((url) => {
           setStatus(null)
           toast('La cita se ha creado correctamente')
+          return url
         })
         .catch((err) => {
           console.log({ err })
           toast.error('Ha ocurrido un error al crear la cita')
           setStatus('error')
         })
+
+      updateUser({
+        id: patient.id,
+        claim: 'patient',
+        update: {
+          notifications: arrayUnion({ type: 'appointment', date, url }),
+        },
+      })
+
+      if (setByAdmin) {
+        updateUser({
+          id: doctor.id,
+          claim: 'doctor',
+          update: {
+            notifications: arrayUnion({ type: 'appointment', date, url }),
+          },
+        })
+      }
     },
     [selectedPatient],
   )

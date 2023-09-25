@@ -20,13 +20,21 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth'
 
+export const getCollection = (claim) => {
+  switch (claim) {
+    case 'admin':
+      return adminCollection
+    case 'doctor':
+      return doctorsCollection
+    case 'patient':
+      return patientsCollection
+    default:
+      throw new Error('No se encontró la colección.')
+  }
+}
+
 export const getUser = async (id, claim) => {
-  const collection =
-    claim === 'admin'
-      ? adminCollection
-      : claim === 'doctor'
-      ? doctorsCollection
-      : patientsCollection
+  const collection = getCollection(claim)
   const docRef = doc(collection, id)
 
   return getDoc(docRef).then((doc) => {
@@ -39,12 +47,7 @@ export const getUser = async (id, claim) => {
   })
 }
 export const updateUser = async ({ id, claim, update }) => {
-  const collection =
-    claim === 'admin'
-      ? adminCollection
-      : claim === 'doctor'
-      ? doctorsCollection
-      : patientsCollection
+  const collection = getCollection(claim)
 
   const docRef = doc(collection, id)
   return updateDoc(docRef, update)
@@ -138,4 +141,21 @@ export const recoverPassword = async (email) => {
     }
   })
   return sendPasswordResetEmail(auth, email)
+}
+
+export const deleteUserAppointmentNotification = async ({
+  userId,
+  url,
+  role,
+}) => {
+  const collection = getCollection(role)
+
+  const userRef = doc(collection, userId)
+
+  const user = await getDoc(userRef).then((snap) => snap.data())
+
+  const newNotifications = user.notifications.filter(
+    (notif) => notif.url !== url,
+  )
+  return updateDoc(userRef, { notifications: newNotifications })
 }

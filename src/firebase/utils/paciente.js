@@ -68,7 +68,7 @@ export const getPatientTests = async (dni, test) => {
   const promises = Object.entries(testDoc).map(async ([_, value]) => {
     const [doc] = await getDocs(collection(docRef, value)).then((docs) => {
       if (docs.empty) {
-        if (!doc.exists()) throw new Error('notfound')
+        throw new Error('notfound')
       }
       return docs.docs.flatMap((doc) => {
         const id = doc.id

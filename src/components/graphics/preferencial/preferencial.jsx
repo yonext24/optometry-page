@@ -156,7 +156,7 @@ export function PreferencialGraphic() {
 
   const handlePDF = async () => {
     await new Promise((res) => setTimeout(res, 350))
-    toPDF()
+    toPDF({})
   }
 
   return (
@@ -173,7 +173,7 @@ export function PreferencialGraphic() {
         ))}
         <button className={styles.downloadIcon} onClick={handlePDF}>
           <DownloadIcon style={{ height: 25, width: 25 }} />
-          <span>PDF</span>
+          <span>PDF</span>P
         </button>
       </div>
       <div

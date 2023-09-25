@@ -6,6 +6,7 @@ import { UserContextProvider } from './contexts/UserContext'
 import './styles/index.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
+
 root.render(
   <UserContextProvider>
     <BrowserRouter>

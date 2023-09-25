@@ -1,3 +1,4 @@
+import { useUser } from '../../hooks/useUser'
 import styles from '../../pages/Appointment/appointment.module.css'
 
 const statusStyles = {
@@ -15,6 +16,8 @@ const statusNames = {
 }
 
 export function AppointmentStatus({ data }) {
+  const user = useUser()
+
   const doctorStatus = data?.status.doctor
   const patientStatus = data?.status.patient
 
@@ -36,6 +39,16 @@ export function AppointmentStatus({ data }) {
             {statusNames[doctorStatus]}
           </div>
         </div>
+      </div>
+
+      <div className={styles.horizontal}>
+        {data.patientData.id === user.id ||
+          (data.doctorData.id === user.id && (
+            <>
+              <button>Confirmar</button>
+              <button>Cancelar</button>
+            </>
+          ))}
       </div>
     </div>
   )

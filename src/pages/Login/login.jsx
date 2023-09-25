@@ -36,6 +36,8 @@ export function Login() {
           ].includes(err.code)
         ) {
           setError('Email o contraseña inválidos.')
+        } else if (err.code === 'auth/too-many-requests') {
+          setError('Demasiados intentos, por favor intenta más tarde.')
         } else setError('Error al iniciar sesión')
       })
       .finally(() => {

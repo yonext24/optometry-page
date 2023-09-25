@@ -87,7 +87,7 @@ export async function deassignPatient (doctor, patient) {
     const patientField = array.find(obj => obj.id === patient.id)
 
     return await updateDoc(docRef, {
-      pacientes_asignados: arrayRemove(patientField),
+      pacientes_asignados: arrayRemove(patientField ?? ''),
     });
 }
 }

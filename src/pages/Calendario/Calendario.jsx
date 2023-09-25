@@ -1,36 +1,11 @@
 import styles from './calendario.module.css'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { useUser } from '../../hooks/useUser'
-import { useEffect, useState } from 'react'
-import { getAllDoctorAppointments } from '../../firebase/utils/appointment'
-import { useNavigate, useParams } from 'react-router-dom'
+import { CalendarEvent } from '../../components/calendar/calendar-event'
+import { useCalendar } from '../../hooks/useCalendar'
 
-export function Calendario() {
-  const [calendarData, setCalendarData] = useState([])
-
-  const user = useUser()
-
-  const navigate = useNavigate()
-  const { id } = useParams()
-
-  useEffect(() => {
-    if (!user) return
-    if (!(user.role !== 'admin' || user.id !== id))
-      navigate('/login', { replace: true })
-    getAllDoctorAppointments(id).then((res) => {
-      if (res.length === 0 || !res) return
-      setCalendarData(
-        res.map((el) => ({
-          ...el[0].content,
-          url: el[0].url,
-          title: `${el[0].patientData.nombre} ${el[0].patientData.apellido}`,
-        })),
-      )
-    })
-  }, [user])
-
-  console.log({ calendarData })
+export function Calendario({ isPatient }) {
+  const { calendarData } = useCalendar({ isPatient })
 
   return (
     <main className={styles.main}>
@@ -41,20 +16,22 @@ export function Calendario() {
         // eventClick={(e) => {
         //   console.log(e.view.getCurrentData())
         // }}
-        eventContent={renderEventContent}
+        eventContent={CalendarEvent}
         locale={'es'}
         events={calendarData}
+        defaultTimedEventDuration={{ minutes: 1 }}
+        buttonText={{
+          day: 'Hoy',
+          prev: 'Anterior',
+          next: 'Siguiente',
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          dayGridMonth: 'Mes',
+          dayGridWeek: 'Semana',
+          dayGridDay: 'Día',
+        }}
       />
     </main>
-  )
-}
-
-function renderEventContent(eventData) {
-  console.log(eventData.event.title)
-  return (
-    <>
-      <b>{eventData.timeText}</b>
-      <i>{eventData.event.title}</i>
-    </>
   )
 }

@@ -49,6 +49,7 @@ export function Resultados() {
         dispatch({ type: 'setData', payload: data })
       })
       .catch((e) => {
+        console.log(e)
         const errMessage =
           e instanceof Error && e.message === 'notfound'
             ? params.id === loggedUser.id

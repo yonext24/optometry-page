@@ -27,7 +27,7 @@ export function Navbar() {
         {
           name: 'Calendario de citas',
           includes: '/calendario',
-          href: `/${user.id}/calendario`,
+          href: `/profesional/${user.id}/calendario`,
         },
       ]
     if (user?.role === 'patient')
@@ -40,7 +40,7 @@ export function Navbar() {
         {
           name: 'Calendario de citas',
           includes: '/calendario',
-          href: `/${user.id}/calendario`,
+          href: `/paciente/${user.id}/calendario`,
         },
       ]
     return []

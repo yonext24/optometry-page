@@ -26,6 +26,13 @@ const renders = {
         to={`/paciente${isRelative ? `/${id}` : ''}`}>
         Perfil
       </Link>
+      <Link
+        className={`${styles.menuEntry} ${
+          routesMatches.calendario ? styles.selected : ''
+        }`}
+        to={`/paciente/${isRelative ? `${id}/` : ''}calendario`}>
+        Calendario de citas
+      </Link>
     </>
   ),
   doctor: ({ routesMatches, isRelative, id }) => (
@@ -41,7 +48,7 @@ const renders = {
         className={`${styles.menuEntry} ${
           routesMatches.calendario ? styles.selected : ''
         }`}
-        to={`/${isRelative ? `${id}/` : ''}calendario`}>
+        to={`/profesional/${isRelative ? `${id}/` : ''}calendario`}>
         Calendario de citas
       </Link>
     </>
@@ -66,7 +73,9 @@ export function UserLayout({ children, isRelative = false, isDoctor = false }) {
           perfil:
             location.pathname ===
             `/${isDoctor ? 'profesional' : 'paciente'}/${params.id}`,
-          calendario: location.pathname === `/${params.id}/calendario`,
+          calendario:
+            location.pathname ===
+            `/${isDoctor ? 'profesional' : 'paciente'}/${params.id}/calendario`,
         }
       : {}
   }, [isRelative, location, params])

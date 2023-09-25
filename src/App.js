@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Footer } from './components/footer/footer'
 import { Navbar } from './components/navbar/navbar'
 import { Home } from './pages/Home/home'
 import { Login } from './pages/Login/login'
 import { ProtectedRoute } from './components/protected-route/protected-route'
-import { useUser } from './hooks/useUser'
 import { USER_POSSIBLE_STATES } from './utils/user-possible-states'
 import { DashboardLayout } from './components/layouts/DashboardLayout'
 import { Pacientes } from './pages/Pacientes/Pacientes'
@@ -21,20 +20,12 @@ import { PasswordChange } from './components/modals/password-change/password-cha
 import { ResultsContextProvider } from './contexts/ResultsContext'
 import { Calendario } from './pages/Calendario/Calendario'
 import { Appointment } from './pages/Appointment/Appointment'
+import { useAppLogic } from './hooks/useAppLogic'
+import { NotifAppointmentModal } from './components/modals/notif-appointment-modal/notif-appointment-modal'
 
 function App() {
-  const [passwordShowing, setPasswordShowing] = useState(false)
-  const user = useUser()
+  const { closeModal, closeNotif, user, notifModalShowing } = useAppLogic()
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
-
-  useEffect(() => {
-    if (!user) return
-    if (!user?.passwordSetted && !localStorage.getItem('pass-setted')) {
-      setPasswordShowing(true)
-    }
-  }, [user])
-
-  const closeModal = () => setPasswordShowing(false)
 
   return (
     <div className='App'>
@@ -110,7 +101,17 @@ function App() {
           }
         />
         <Route
-          path={'/:id/calendario'}
+          path={'/paciente/:id/calendario'}
+          element={
+            <ProtectedRoute condition={true}>
+              <UserLayout isRelative>
+                <Calendario isPatient />
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={'/profesional/:id/calendario'}
           element={
             <ProtectedRoute condition={true}>
               <UserLayout isDoctor isRelative>
@@ -149,8 +150,15 @@ function App() {
       </Routes>
       <Footer />
 
-      {passwordShowing && (
-        <PasswordChange closeModal={closeModal} id={user.id} />
+      {notifModalShowing?.type === 'change-password' && (
+        <PasswordChange closeModal={closeNotif} id={user.id} />
+      )}
+
+      {notifModalShowing && notifModalShowing.type === 'appointment' && (
+        <NotifAppointmentModal
+          closeModal={closeNotif}
+          {...notifModalShowing.params}
+        />
       )}
 
       <ToastContainer
