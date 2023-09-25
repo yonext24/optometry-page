@@ -45,7 +45,7 @@ export function AppointmentStatus({ data }) {
         {data.patientData.id === user.id ||
           (data.doctorData.id === user.id && (
             <>
-              <button>Confirmar</button>
+              <button className={styles.confirm}>Confirmar</button>
               <button>Cancelar</button>
             </>
           ))}
