@@ -24,7 +24,7 @@ import { useAppLogic } from './hooks/useAppLogic'
 import { NotifAppointmentModal } from './components/modals/notif-appointment-modal/notif-appointment-modal'
 
 function App() {
-  const { closeModal, closeNotif, user, notifModalShowing } = useAppLogic()
+  const { closeNotif, user, notifModalShowing } = useAppLogic()
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
 
   return (
