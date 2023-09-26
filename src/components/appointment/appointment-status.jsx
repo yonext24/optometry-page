@@ -1,5 +1,10 @@
+import { useState } from 'react'
 import { useUser } from '../../hooks/useUser'
 import styles from '../../pages/Appointment/appointment.module.css'
+import { Spinner } from '../spinner/spinner'
+import { confirmAppointment } from '../../firebase/utils/appointment'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const statusStyles = {
   pending: {
@@ -15,13 +20,34 @@ const statusNames = {
   confirmed: 'Confirmada',
 }
 
-export function AppointmentStatus({ data }) {
+export function AppointmentStatus({ data, setData }) {
+  const [isLoading, setisLoading] = useState({ patient: false, doctor: false })
   const user = useUser()
 
   const doctorStatus = data?.status.doctor
   const patientStatus = data?.status.patient
 
-  console.log({ doctorStatus, patientStatus, data })
+  const showButtons =
+    data.status[user.role] === 'pending' &&
+    data[`${user.role}Data`].id === user.id
+
+  const params = useParams()
+
+  const handleConfirm = () => {
+    setisLoading((prev) => ({ ...prev, [user.role]: true }))
+    confirmAppointment({ ...params, byDoctor: user.role === 'doctor' })
+      .then(() => {
+        toast('Confirmaste la cita correctamente.')
+        setData((prev) => ({
+          ...prev,
+          status: { ...prev.status, [user.role]: 'confirmed' },
+        }))
+      })
+      .catch((err) => console.log({ err }))
+      .finally(() => {
+        setisLoading((prev) => ({ ...prev, [user.role]: false }))
+      })
+  }
 
   return (
     <div className={styles.estado}>
@@ -41,14 +67,28 @@ export function AppointmentStatus({ data }) {
         </div>
       </div>
 
-      <div className={styles.horizontal}>
-        {data.patientData.id === user.id ||
-          (data.doctorData.id === user.id && (
-            <>
-              <button className={styles.confirm}>Confirmar</button>
-              <button>Cancelar</button>
-            </>
-          ))}
+      <div className={styles.buttons}>
+        {showButtons && (
+          <>
+            <button
+              className={styles.confirm}
+              onClick={handleConfirm}
+              disabled={isLoading[user.role]}>
+              {isLoading[user.role] ? (
+                <Spinner style={{ height: 8, width: 8 }} />
+              ) : (
+                'Confirmar'
+              )}
+            </button>
+            <button disabled={isLoading[user.role]}>
+              {isLoading[user.role] ? (
+                <Spinner style={{ height: 8, width: 8 }} />
+              ) : (
+                'Cancelar'
+              )}
+            </button>
+          </>
+        )}
       </div>
     </div>
   )

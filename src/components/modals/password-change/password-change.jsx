@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react'
 import styles from './password-change.module.css'
 import { PasswordModal } from '../password-modal/password-modal'
+import { deleteUserPasswordChangeNotification } from '../../../firebase/utils/user'
+import { useUser } from '../../../hooks/useUser'
 
 export function PasswordChange({ closeModal, id }) {
   const [passwordChanging, setPasswordChanging] = useState(false)
 
+  const user = useUser()
   useEffect(() => {
-    localStorage.setItem('pass-setted', 'true')
+    return () => {
+      deleteUserPasswordChangeNotification({
+        userId: user.id,
+        role: user.role,
+      }).catch((err) => console.log({ err }))
+    }
   }, [])
   return (
     <>

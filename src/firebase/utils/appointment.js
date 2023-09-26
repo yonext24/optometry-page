@@ -1,11 +1,11 @@
 import { getUserRole } from '../auth'
 import {
   doc,
-  addDoc,
   collection,
   setDoc,
   getDoc,
   getDocs,
+  addDoc,
 } from 'firebase/firestore'
 import { appointmentsCollection } from '../collections'
 
@@ -73,6 +73,8 @@ export const createAppointment = async ({
     Se crea la subcolección con el índice obtenido anteriormente, y se agrega el documento con los datos del appointment
     se crea con addDoc para que tenga un id autogenerado, no por nada en especial, podría haber hecho que se genere con la id del usuario
   */
+
+  console.log({ patientData })
   const subcollectionRef = collection(appointmentRef, `${indexOfAppointment}`)
   const ref = await addDoc(subcollectionRef, {
     content,
@@ -154,7 +156,6 @@ export const getAllPatientAppointments = async ({ patientId, doctorId }) => {
   const promises = keys.map(async (key) => {
     const subcollectionRef = collection(appointmentRef, `${key}`)
     const appointment = await getDocs(subcollectionRef).then((snap) => {
-      console.log({ empty: snap.empty })
       if (snap.empty) return []
       return snap.docs.flatMap((doc) => {
         const id = doc.id

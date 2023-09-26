@@ -143,6 +143,22 @@ export const recoverPassword = async (email) => {
   return sendPasswordResetEmail(auth, email)
 }
 
+export const deleteUserPasswordChangeNotification = async ({
+  userId,
+  role,
+}) => {
+  const collection = getCollection(role)
+
+  const userRef = doc(collection, userId)
+
+  const userData = await getDoc(userRef).then((snap) => snap.data())
+
+  const newNotifications = userData.notifications.filter(
+    (notif) => notif.type !== 'change-password',
+  )
+  return updateDoc(userRef, { notifications: newNotifications })
+}
+
 export const deleteUserAppointmentNotification = async ({
   userId,
   url,

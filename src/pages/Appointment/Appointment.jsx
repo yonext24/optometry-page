@@ -77,7 +77,7 @@ export function Appointment() {
             <p>{data?.content?.descripcion}</p>
           </article>
 
-          <AppointmentStatus data={data} />
+          <AppointmentStatus data={data} setData={setData} />
         </section>
       </UserLoadingRender>
     </main>

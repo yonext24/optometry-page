@@ -109,3 +109,27 @@
   border-radius: 4px;
   background-color: rgb(var(--amarillo));
 }
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.buttons button {
+  padding: 5px 0;
+  width: 100px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  background-color: rgb(18, 176, 47);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: white;
+}
+
+.buttons button:last-of-type {
+  background-color: red;
+}

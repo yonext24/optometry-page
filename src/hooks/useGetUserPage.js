@@ -24,6 +24,8 @@ export function useGetUserPage({ id, type }) {
   const [passwordEditing, setPasswordEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
+  console.log({ id, type })
+
   const navigate = useNavigate()
   const loggedUser = useUser()
 

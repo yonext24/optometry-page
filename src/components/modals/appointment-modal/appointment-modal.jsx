@@ -84,7 +84,7 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
     [selectedPatient],
   )
   const hasNoDoctor = useMemo(() => {
-    return !selectedPatient.medico_asignado
+    return !selectedPatient?.medico_asignado
   }, [selectedPatient])
 
   return (
@@ -142,8 +142,8 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
           {user.role === 'admin' && (
             <p className={styles.advise}>
               Al crear esta cita se le asignará automáticamente al profesional
-              asignado del paciente: {selectedPatient.medico_asignado.nombre}{' '}
-              {selectedPatient.medico_asignado.apellido}
+              asignado del paciente: {selectedPatient.medico_asignado?.nombre}{' '}
+              {selectedPatient.medico_asignado?.apellido}
             </p>
           )}
           <button

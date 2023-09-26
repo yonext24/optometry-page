@@ -64,6 +64,7 @@ export function PacientesPageAdminRender() {
       {isEditing && (
         <ProfileModal
           selectedRowId={selectedRowId}
+          type={selectedPatient.role}
           deletePatient={deletePatient}
           setIsEditing={setIsEditing}
         />

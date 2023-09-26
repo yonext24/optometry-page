@@ -6,7 +6,6 @@ import {
   getAllDoctorAppointments,
   getAllPatientAppointments,
 } from '../firebase/utils/appointment'
-import { toast } from 'react-toastify'
 
 export const useCalendar = ({ isPatient }) => {
   const [calendarData, setCalendarData] = useState([])
@@ -39,7 +38,7 @@ export const useCalendar = ({ isPatient }) => {
               })),
             )
           })
-          .catch((err) => toast.error(err))
+          .catch((err) => console.log({ err }))
       } else {
         getAllDoctorAppointments(id).then((res) => {
           if (res.length === 0 || !res) return
