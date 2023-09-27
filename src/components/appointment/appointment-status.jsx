@@ -13,14 +13,18 @@ const statusStyles = {
   confirmed: {
     backgroundColor: 'rgb(0, 255, 0)',
   },
+  canceled: {
+    backgroundColor: 'rgb(255, 0, 0)',
+  },
 }
 
 const statusNames = {
   pending: 'Pendiente',
   confirmed: 'Confirmada',
+  canceled: 'Cancelada',
 }
 
-export function AppointmentStatus({ data, setData }) {
+export function AppointmentStatus({ data, setData, setIsCancelling }) {
   const [isLoading, setisLoading] = useState({ patient: false, doctor: false })
   const user = useUser()
 
@@ -47,6 +51,9 @@ export function AppointmentStatus({ data, setData }) {
       .finally(() => {
         setisLoading((prev) => ({ ...prev, [user.role]: false }))
       })
+  }
+  const handleCancel = () => {
+    setIsCancelling(true)
   }
 
   return (
@@ -75,14 +82,14 @@ export function AppointmentStatus({ data, setData }) {
               onClick={handleConfirm}
               disabled={isLoading[user.role]}>
               {isLoading[user.role] ? (
-                <Spinner style={{ height: 8, width: 8 }} />
+                <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
               ) : (
                 'Confirmar'
               )}
             </button>
-            <button disabled={isLoading[user.role]}>
+            <button onClick={handleCancel} disabled={isLoading[user.role]}>
               {isLoading[user.role] ? (
-                <Spinner style={{ height: 8, width: 8 }} />
+                <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
               ) : (
                 'Cancelar'
               )}

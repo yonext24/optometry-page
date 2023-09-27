@@ -7,6 +7,7 @@ import { USER_POSSIBLE_STATES } from '../../utils/user-possible-states'
 import { Spinner } from '../../components/spinner/spinner'
 import { AppointmentHeader } from '../../components/appointment/appointment-header'
 import { AppointmentStatus } from '../../components/appointment/appointment-status'
+import { CancelAppointmentModal } from '../../components/modals/cancel-appointment-modal/cancel-appointment-modal'
 
 function UserLoadingRender({ children, user, status, data }) {
   if (user === USER_POSSIBLE_STATES.NOT_KNOWN || status === 'loading' || !data)
@@ -29,6 +30,7 @@ function UserLoadingRender({ children, user, status, data }) {
 export function Appointment() {
   const [status, setStatus] = useState(null)
   const [data, setData] = useState(null)
+  const [isCanceling, setIsCanceling] = useState(false)
 
   const user = useUser()
   const params = useParams()
@@ -77,9 +79,20 @@ export function Appointment() {
             <p>{data?.content?.descripcion}</p>
           </article>
 
-          <AppointmentStatus data={data} setData={setData} />
+          <AppointmentStatus
+            data={data}
+            setData={setData}
+            setIsCancelling={setIsCanceling}
+          />
         </section>
       </UserLoadingRender>
+
+      {isCanceling && (
+        <CancelAppointmentModal
+          closeModal={() => setIsCanceling(false)}
+          setData={setData}
+        />
+      )}
     </main>
   )
 }

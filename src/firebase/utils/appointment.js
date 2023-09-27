@@ -1,12 +1,5 @@
 import { getUserRole } from '../auth'
-import {
-  doc,
-  collection,
-  setDoc,
-  getDoc,
-  getDocs,
-  addDoc,
-} from 'firebase/firestore'
+import { doc, collection, setDoc, getDoc, getDocs } from 'firebase/firestore'
 import { appointmentsCollection } from '../collections'
 
 // id: int
@@ -49,7 +42,7 @@ export const createAppointment = async ({
 
   const appointmentRef = doc(appointmentsCollection, doctorData.id)
 
-  /* Se obtiene el indice del último appointment creado, para saber cual va a ser el índice del siguiente */
+  /* Se obtiene el índice del último appointment creado para saber cuál será el índice del siguiente */
   const indexOfAppointment = await getDoc(appointmentRef).then((snap) => {
     if (!snap.exists()) return 1
     const data = snap.data()
@@ -69,14 +62,17 @@ export const createAppointment = async ({
     { merge: true },
   )
 
-  /*
-    Se crea la subcolección con el índice obtenido anteriormente, y se agrega el documento con los datos del appointment
-    se crea con addDoc para que tenga un id autogenerado, no por nada en especial, podría haber hecho que se genere con la id del usuario
-  */
+  const desiredDocId = patientData.id
 
+  /*
+  Se crea la subcolección con el índice obtenido anteriormente,
+  y se agrega el documento con los datos del appointment,
+  utilizando la ID deseada en lugar de una ID autogenerada.
+*/
   console.log({ patientData })
   const subcollectionRef = collection(appointmentRef, `${indexOfAppointment}`)
-  const ref = await addDoc(subcollectionRef, {
+  const docRef = doc(subcollectionRef, desiredDocId) // Utiliza la ID deseada
+  await setDoc(docRef, {
     content,
     patientData,
     doctorData,
@@ -84,7 +80,7 @@ export const createAppointment = async ({
     status,
   })
 
-  const url = `/${doctorData.id}/${indexOfAppointment}/${ref.id}`
+  const url = `/${doctorData.id}/${indexOfAppointment}/${desiredDocId}`
 
   return url
 }
@@ -126,7 +122,9 @@ export const getAllDoctorAppointments = async (doctorId) => {
     return appointment
   })
 
-  return await Promise.all(promises)
+  return await Promise.all(promises).then((res) =>
+    res.filter((el) => el.length > 0),
+  )
 }
 
 export const getAllPatientAppointments = async ({ patientId, doctorId }) => {
@@ -155,19 +153,22 @@ export const getAllPatientAppointments = async ({ patientId, doctorId }) => {
 
   const promises = keys.map(async (key) => {
     const subcollectionRef = collection(appointmentRef, `${key}`)
-    const appointment = await getDocs(subcollectionRef).then((snap) => {
-      if (snap.empty) return []
-      return snap.docs.flatMap((doc) => {
-        const id = doc.id
-        const data = doc.data()
-        return { ...data, id, url: `/${doctorId}/${key}/${id}` }
-      })
+    const appointmentDoc = doc(subcollectionRef, patientId)
+
+    const appointment = await getDoc(appointmentDoc).then((snap) => {
+      if (!snap.exists()) return []
+      const data = snap.data()
+      const id = snap.id
+      return [{ ...data, id, url: `/${doctorId}/${key}/${id}` }]
+      // Esta devuelto en este formato porque es el formato que devuelve la función getAllDoctorAppointments
     })
 
     return appointment
   })
 
-  return await Promise.all(promises)
+  return await Promise.all(promises).then((res) =>
+    res.filter((el) => el.length > 0),
+  )
 }
 
 export const getSingleAppointment = ({ appointmentId, doctorId, number }) => {
@@ -210,7 +211,7 @@ export const cancelAppointment = async ({
 
   const who = byDoctor ? 'doctor' : 'patient'
 
-  await setDoc(
+  return await setDoc(
     docRef,
     { status: { [who]: 'canceled', [`${who}Reason`]: reason } },
     { merge: true },

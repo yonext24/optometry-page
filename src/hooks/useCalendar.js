@@ -40,17 +40,19 @@ export const useCalendar = ({ isPatient }) => {
           })
           .catch((err) => console.log({ err }))
       } else {
-        getAllDoctorAppointments(id).then((res) => {
-          if (res.length === 0 || !res) return
-          setCalendarData(
-            res.map((el) => ({
-              ...el[0].content,
-              url: el[0].url,
-              title: `${el[0].patientData.nombre} ${el[0].patientData.apellido}`,
-              status: el[0].status,
-            })),
-          )
-        })
+        getAllDoctorAppointments(id)
+          .then((res) => {
+            if (res.length === 0 || !res) return
+            setCalendarData(
+              res.map((el) => ({
+                ...el[0].content,
+                url: el[0].url,
+                title: `${el[0].patientData.nombre} ${el[0].patientData.apellido}`,
+                status: el[0].status,
+              })),
+            )
+          })
+          .catch((err) => console.log({ err }))
       }
     }
 

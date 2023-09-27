@@ -34,7 +34,7 @@ export function Navbar() {
       return [
         {
           name: 'Progreso',
-          includes: `/paciente`,
+          includes: `/resultados`,
           href: `/paciente/${user.id}/resultados`,
         },
         {
