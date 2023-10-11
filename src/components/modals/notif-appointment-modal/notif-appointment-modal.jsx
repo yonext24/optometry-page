@@ -5,7 +5,7 @@ import { useUser } from '../../../hooks/useUser'
 import { useNavigate } from 'react-router-dom'
 import { deleteUserAppointmentNotification } from '../../../firebase/utils/user'
 
-const ModalRender = ({ role, profesional, parsedDate }) => {
+const ModalRender = ({ role, profesional, parsedDate, isPostponement }) => {
   if (role === 'patient')
     return (
       <>
@@ -15,7 +15,10 @@ const ModalRender = ({ role, profesional, parsedDate }) => {
             {profesional.nombre} {profesional.apellido}
           </p>
         )}
-        <p>te ha citado para el día</p>
+        <p>
+          {isPostponement ? 'ha reprogramado una cita' : 'te ha citado'} para el
+          día
+        </p>
         <p className={styles.date}>{parsedDate}</p>
 
         <p className={styles.confirmP}>
@@ -27,13 +30,24 @@ const ModalRender = ({ role, profesional, parsedDate }) => {
 
   return (
     <>
-      <p>Se te ha citado para el día</p>
+      <p>
+        {isPostponement
+          ? 'Se ha reprogramado una de tus citas'
+          : 'Se te ha citado'}{' '}
+        para el día
+      </p>
       <p className={styles.date}>{parsedDate}</p>
     </>
   )
 }
 
-export function NotifAppointmentModal({ date: rawDate, closeModal, url }) {
+export function NotifAppointmentModal({
+  date: rawDate,
+  closeModal,
+  url,
+  isPostponement,
+  id,
+}) {
   const user = useUser()
   const profesional = user.medico_asignado
 
@@ -50,14 +64,12 @@ export function NotifAppointmentModal({ date: rawDate, closeModal, url }) {
       deleteUserAppointmentNotification({
         userId: user.id,
         role: user.role,
-        url: url,
+        id,
       }).catch((e) => {
         console.log({ e })
       })
     }
   }, [])
-
-  console.log(url)
 
   const navigate = useNavigate()
 
@@ -71,13 +83,16 @@ export function NotifAppointmentModal({ date: rawDate, closeModal, url }) {
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <header className={styles.header}>
           <img src='logo.webp' alt='logo' className={styles.logo} height={25} />
-          <h4 className={styles.title}>Se te ha citado</h4>
+          <h4 className={styles.title}>
+            {isPostponement ? 'Se ha reprogramado una cita' : 'Se te ha citado'}
+          </h4>
         </header>
 
         <ModalRender
           role={user.role}
           profesional={profesional}
           parsedDate={parsedDate}
+          isPostponement={isPostponement}
         />
 
         <button onClick={handleNavigate} className={styles.see}>

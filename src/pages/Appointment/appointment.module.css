@@ -130,6 +130,10 @@
   color: white;
 }
 
+.postponement {
+  background-color: gray !important;
+}
+
 .buttons button:last-of-type {
   background-color: red;
 }

@@ -8,12 +8,14 @@ import { appointmentsCollection } from '../collections'
 //  nombre: string
 //  apellido: string
 //  image: string
+//  email: string
 // }
 // patientData: {
 //  id: int
 //  nombre: string
 //  apellido: string
 //  image: string
+//  email: string
 // }
 // content: {
 //  date: datetime
@@ -196,6 +198,26 @@ export const confirmAppointment = async ({
   const who = byDoctor ? 'doctor' : 'patient'
 
   await setDoc(docRef, { status: { [who]: 'confirmed' } }, { merge: true })
+}
+
+export const postponeAppointment = async ({
+  appointmentId,
+  doctorId,
+  number,
+  newDate,
+}) => {
+  const appointmentOwnerRef = doc(appointmentsCollection, doctorId)
+  const appointmentRef = collection(appointmentOwnerRef, `${number}`)
+  const docRef = doc(appointmentRef, appointmentId)
+
+  return await setDoc(
+    docRef,
+    {
+      status: { doctor: 'pending', patient: 'pending' },
+      content: { date: newDate },
+    },
+    { merge: true },
+  )
 }
 
 export const cancelAppointment = async ({

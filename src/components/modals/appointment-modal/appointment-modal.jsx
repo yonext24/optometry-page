@@ -8,6 +8,9 @@ import { Spinner } from '../../spinner/spinner'
 import { toast } from 'react-toastify'
 import { updateUser } from '../../../firebase/utils/user'
 import { arrayUnion } from 'firebase/firestore'
+import { API_APPOINTMENTS } from '../../../utils/prod-dev-variables'
+import { auth } from '../../../firebase/config'
+import { generateId } from '../../../utils/generate-id'
 
 export function AppointmentModal({ closeModal, selectedPatient }) {
   const [status, setStatus] = useState(null) // null | loading | error | success
@@ -21,7 +24,7 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
       setStatus('loading')
 
       const content = Object.fromEntries(new FormData(e.target))
-      const { date } = content
+      const { date, title, description } = content
       if (new Date(date) < Date.now()) {
         toast.error('La fecha de creación debe ser posterior a la actual')
         setStatus(null)
@@ -36,12 +39,14 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
         nombre: doctor?.nombre,
         apellido: doctor?.apellido,
         image: doctor?.image?.src ?? null,
+        email: doctor?.email,
       }
       const patientData = {
         id: patient?.id,
         nombre: patient?.nombre,
         apellido: patient?.apellido,
         image: patient?.image?.src ?? null,
+        email: patient?.email,
       }
 
       const setByAdmin = user.role === 'admin'
@@ -63,12 +68,29 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
           setStatus('error')
         })
 
+      const id = generateId()
       updateUser({
         id: patient.id,
         claim: 'patient',
         update: {
-          notifications: arrayUnion({ type: 'appointment', date, url }),
+          notifications: arrayUnion({ type: 'appointment', date, url, id }),
         },
+      })
+
+      const token = await auth.currentUser.getIdToken(true)
+      fetch(API_APPOINTMENTS, {
+        body: JSON.stringify({
+          link: url,
+          date,
+          to: patient.email,
+          title,
+          description,
+        }),
+        headers: {
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
       })
 
       if (setByAdmin) {
@@ -76,8 +98,17 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
           id: doctor.id,
           claim: 'doctor',
           update: {
-            notifications: arrayUnion({ type: 'appointment', date, url }),
+            notifications: arrayUnion({ type: 'appointment', date, url, id }),
           },
+        })
+
+        fetch(API_APPOINTMENTS, {
+          body: JSON.stringify({ link: url, date, to: doctor.email }),
+          headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
         })
       }
     },

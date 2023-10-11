@@ -28,6 +28,22 @@ export const onAuthStateChanged = async (setState) => {
       if (!role) setState(USER_POSSIBLE_STATES.NOT_LOGGED)
       const userFromFirestore = await getUser(user.uid, role)
 
+      // idTokenResult es necesario para obtener el auth_time, que es la fecha en segundos en la que se autentico el usuario
+      const idTokenResult = await user.getIdTokenResult()
+
+      const authTime = idTokenResult.claims.auth_time * 1000 // Lo convierte a milisegundos
+      const sessionDuration = 1000 * 60 * 60 * 24 // Un día en milisegundos
+      const now = Date.now()
+
+      // Si la fecha actual menos la fecha en la que se autentico el usuario es mayor a la duración de la sesión,
+      // se cierra la sesión
+      if (now - authTime > sessionDuration) {
+        cerrarSesion()
+        setState(USER_POSSIBLE_STATES.NOT_LOGGED)
+        toast.error('Tu sesión ha expirado, por favor inicia sesión de nuevo.')
+        return
+      }
+
       if (!userFromFirestore.active) {
         await cerrarSesion()
         setState(USER_POSSIBLE_STATES.NOT_LOGGED)

@@ -30,7 +30,7 @@ export function useAppLogic() {
 
   useEffect(() => {
     /* 
-      Se encarga de leer la propiedad de notificaciones por primera vez. 
+      Se encarga de leer la propiedad de notificaciones. 
       Está hecho de esta manera para que las modales se puedan presentar de manera infinita dependiendo
       de la cantidad de notificaciones que tenga el usuario
     */

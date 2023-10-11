@@ -161,8 +161,8 @@ export const deleteUserPasswordChangeNotification = async ({
 
 export const deleteUserAppointmentNotification = async ({
   userId,
-  url,
   role,
+  id,
 }) => {
   const collection = getCollection(role)
 
@@ -170,8 +170,6 @@ export const deleteUserAppointmentNotification = async ({
 
   const user = await getDoc(userRef).then((snap) => snap.data())
 
-  const newNotifications = user.notifications.filter(
-    (notif) => notif.url !== url,
-  )
+  const newNotifications = user.notifications.filter((notif) => notif.id !== id)
   return updateDoc(userRef, { notifications: newNotifications })
 }

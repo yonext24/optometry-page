@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUser } from '../../hooks/useUser'
 import styles from '../../pages/Appointment/appointment.module.css'
 import { Spinner } from '../spinner/spinner'
 import { confirmAppointment } from '../../firebase/utils/appointment'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { USER_POSSIBLE_STATES } from '../../utils/user-possible-states'
 
 const statusStyles = {
   pending: {
@@ -24,16 +25,27 @@ const statusNames = {
   canceled: 'Cancelada',
 }
 
-export function AppointmentStatus({ data, setData, setIsCancelling }) {
+export function AppointmentStatus({
+  data,
+  setData,
+  setIsCancelling,
+  setIsPostponing,
+}) {
   const [isLoading, setisLoading] = useState({ patient: false, doctor: false })
   const user = useUser()
 
   const doctorStatus = data?.status.doctor
   const patientStatus = data?.status.patient
 
-  const showButtons =
+  const isCanceled = data?.status[user.role] === 'canceled'
+  const showConfirmation =
+    !isCanceled &&
     data.status[user.role] === 'pending' &&
     data[`${user.role}Data`].id === user.id
+  const showPostponementButton =
+    !isCanceled &&
+    (user.role === 'admin' ||
+      (user.role === 'doctor' && data[`${user.role}Data`].id === user.id))
 
   const params = useParams()
 
@@ -52,9 +64,26 @@ export function AppointmentStatus({ data, setData, setIsCancelling }) {
         setisLoading((prev) => ({ ...prev, [user.role]: false }))
       })
   }
+  const handlePostponement = () => {
+    setIsPostponing(true)
+  }
   const handleCancel = () => {
     setIsCancelling(true)
   }
+
+  const confirm = new URLSearchParams(location.search).get('confirm')
+
+  useEffect(() => {
+    if (user === USER_POSSIBLE_STATES.NOT_KNOWN) return
+    if (!data) return
+    if (
+      user &&
+      confirm &&
+      (data.patientData.id === user.id || data.doctorData.id === user.id)
+    ) {
+      handleConfirm()
+    }
+  }, [user])
 
   return (
     <div className={styles.estado}>
@@ -75,26 +104,38 @@ export function AppointmentStatus({ data, setData, setIsCancelling }) {
       </div>
 
       <div className={styles.buttons}>
-        {showButtons && (
-          <>
-            <button
-              className={styles.confirm}
-              onClick={handleConfirm}
-              disabled={isLoading[user.role]}>
-              {isLoading[user.role] ? (
-                <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
-              ) : (
-                'Confirmar'
-              )}
-            </button>
-            <button onClick={handleCancel} disabled={isLoading[user.role]}>
-              {isLoading[user.role] ? (
-                <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
-              ) : (
-                'Cancelar'
-              )}
-            </button>
-          </>
+        {showConfirmation && (
+          <button
+            className={styles.confirm}
+            onClick={handleConfirm}
+            disabled={isLoading[user.role]}>
+            {isLoading[user.role] ? (
+              <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
+            ) : (
+              'Confirmar'
+            )}
+          </button>
+        )}
+        {showPostponementButton && (
+          <button
+            className={styles.postponement}
+            onClick={handlePostponement}
+            disabled={isLoading[user.role]}>
+            {isLoading[user.role] ? (
+              <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
+            ) : (
+              'Posponer'
+            )}
+          </button>
+        )}
+        {!isCanceled && user.role !== 'admin' && (
+          <button onClick={handleCancel} disabled={isLoading[user.role]}>
+            {isLoading[user.role] ? (
+              <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
+            ) : (
+              'Cancelar'
+            )}
+          </button>
         )}
       </div>
     </div>

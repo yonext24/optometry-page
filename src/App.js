@@ -22,9 +22,15 @@ import { Calendario } from './pages/Calendario/Calendario'
 import { Appointment } from './pages/Appointment/Appointment'
 import { useAppLogic } from './hooks/useAppLogic'
 import { NotifAppointmentModal } from './components/modals/notif-appointment-modal/notif-appointment-modal'
+import useAutoCloseSession from './hooks/useAutoCloseSession'
+import { AutoLogoutModal } from './components/modals/auto-logout-modal/auto-logout-modal'
+import { NotifCancelAppointmentModal } from './components/modals/notif-cancel-appointment-modal/notif-cancel-appointment-modal'
 
 function App() {
   const { closeNotif, user, notifModalShowing } = useAppLogic()
+  const { isLogoutModalShowing, closeLogoutModal } = useAutoCloseSession({
+    secondsToLogout: 60 * 30,
+  })
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
 
   return (
@@ -159,6 +165,24 @@ function App() {
           closeModal={closeNotif}
           {...notifModalShowing.params}
         />
+      )}
+      {notifModalShowing &&
+        notifModalShowing.type === 'postpone-appointment' && (
+          <NotifAppointmentModal
+            closeModal={closeNotif}
+            isPostponement
+            {...notifModalShowing.params}
+          />
+        )}
+      {notifModalShowing && notifModalShowing.type === 'cancel-appointment' && (
+        <NotifCancelAppointmentModal
+          closeModal={closeNotif}
+          {...notifModalShowing.params}
+        />
+      )}
+
+      {isLogoutModalShowing && (
+        <AutoLogoutModal closeModal={closeLogoutModal} />
       )}
 
       <ToastContainer

@@ -9,7 +9,6 @@ import { ResultsIcon } from '../icons/results'
 
 export function Menu({ patient, setIsEditing, setIsAppointment }) {
   const user = useUser()
-  console.log(patient)
 
   const entrys = useMemo(() => {
     if (!patient) return []

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import styles from './appointment.module.css'
 import { useEffect, useMemo, useState } from 'react'
 import { getSingleAppointment } from '../../firebase/utils/appointment'
@@ -8,6 +8,8 @@ import { Spinner } from '../../components/spinner/spinner'
 import { AppointmentHeader } from '../../components/appointment/appointment-header'
 import { AppointmentStatus } from '../../components/appointment/appointment-status'
 import { CancelAppointmentModal } from '../../components/modals/cancel-appointment-modal/cancel-appointment-modal'
+import { LoginModal } from '../../components/modals/login-modal/login-modal'
+import { PostponeAppointmentModal } from '../../components/modals/postpone-appointment-modal/postpone-appointment-modal'
 
 function UserLoadingRender({ children, user, status, data }) {
   if (user === USER_POSSIBLE_STATES.NOT_KNOWN || status === 'loading' || !data)
@@ -31,15 +33,24 @@ export function Appointment() {
   const [status, setStatus] = useState(null)
   const [data, setData] = useState(null)
   const [isCanceling, setIsCanceling] = useState(false)
+  const [isLogging, setIsLogging] = useState(false)
+  const [isPostponing, setIsPostponing] = useState(false)
 
   const user = useUser()
   const params = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
+  const confirm = new URLSearchParams(location.search).get('confirm')
 
   useEffect(() => {
     if (user === USER_POSSIBLE_STATES.NOT_KNOWN) return
-    if (user === USER_POSSIBLE_STATES.NOT_LOGGED)
+    if (user === USER_POSSIBLE_STATES.NOT_LOGGED && !confirm)
       navigate('/login', { replace: true })
+    if (user === USER_POSSIBLE_STATES.NOT_LOGGED && confirm) {
+      console.log('IS LOGGING')
+      setIsLogging(true)
+      return
+    }
     if (!params.appointmentId || !params.doctorId || !params.number) {
       setStatus('error')
       return
@@ -83,6 +94,7 @@ export function Appointment() {
             data={data}
             setData={setData}
             setIsCancelling={setIsCanceling}
+            setIsPostponing={setIsPostponing}
           />
         </section>
       </UserLoadingRender>
@@ -90,7 +102,22 @@ export function Appointment() {
       {isCanceling && (
         <CancelAppointmentModal
           closeModal={() => setIsCanceling(false)}
+          data={data}
           setData={setData}
+        />
+      )}
+      {isPostponing && (
+        <PostponeAppointmentModal
+          closeModal={() => setIsPostponing(false)}
+          data={data}
+          setData={setData}
+        />
+      )}
+      {isLogging && (
+        <LoginModal
+          closeModal={() => {
+            setIsLogging(false)
+          }}
         />
       )}
     </main>
