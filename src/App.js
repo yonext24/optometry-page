@@ -199,7 +199,7 @@ function App() {
 
 export function AutoCloseComponentHandler() {
   const { isLogoutModalShowing, closeLogoutModal } = useAutoCloseSession({
-    secondsToLogout: 10,
+    secondsToLogout: 60 * 30,
   })
 
   if (isLogoutModalShowing)
