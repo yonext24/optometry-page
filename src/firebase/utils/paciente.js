@@ -57,18 +57,37 @@ export const updateTest = async (id, slug, deberes, assign = true) => {
 }
 
 export const getPatientTests = async (dni, test) => {
+  // "test" corresponde al tipo de test: Terapia1 o Terapia2
+  /*
+    La estructura de las colecciones de terapias es un poco compleja, dentro de la coleccion hay documentos que corresponden a
+    los dni's de los pacientes, y dentro de estos documentos hay subcolecciones que corresponden al conteo de las terapias
+    del paciente (1, 2, 3, 4) estas subcolecciones contienen un documento que contiene los campos de los datos de esta terapia
+  */
+
+  // Se recupera la colección de terapias y se busca el documento que corresponde al dni del paciente
   const docRef = doc(collection(db, test), dni)
+  // Es necesario recuperar los datos del documento para después iterar las claves y recuperar los datos de la subcolección
   const testDoc = await getDoc(docRef).then((doc) => {
-    if (!doc.exists()) throw new Error('notfound')
+    if (!doc.exists()) throw new Error('No se encontró el documento')
     const data = doc.data()
     return data
   })
 
+  /*
+    Se itera sobre las claves del documento para recuperar los datos de la subcolección
+    Es importante que en esta parte se está iterando sobre las claves (como cámpos) del documento, que están ahí
+    como índices para saber cuales son las subcolecciones disponibles, no sobre los datos de la subcolección en sí
+    se hace esto porque firebase no ofrece una forma idónea de iterar sobre subcolecciones dentro de un documento
+  */
+
   // eslint-disable-next-line no-unused-vars
   const promises = Object.entries(testDoc).map(async ([_, value]) => {
+    // ^ Se itera con un map para después devolver los valores de la iteración en un array de promesas que se resuelven
+    // con los datos de la subcolección
     const [doc] = await getDocs(collection(docRef, value)).then((docs) => {
+      // Dentro del map se tiene que hacer otra llamada asíncrona para obtener los datos de la subcolección
       if (docs.empty) {
-        throw new Error('notfound')
+        throw new Error('No se encontró el documento')
       }
       return docs.docs.flatMap((doc) => {
         const id = doc.id
@@ -79,6 +98,7 @@ export const getPatientTests = async (dni, test) => {
     return doc
   })
 
+  // Se devuelve la lista de promesas
   return Promise.all(promises)
 }
 

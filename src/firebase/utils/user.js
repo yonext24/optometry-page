@@ -78,10 +78,13 @@ const compressImage = ({ file, width, height, quality = 0.8 }) => {
 }
 
 export const uploadImage = async ({ id, file }) => {
+  // Se genera un nombre único para la imágen, para que no se sobreescriba.
   const fileName = String(Date.now()) + '.' + file.name.split('.')[1]
-  const path = '/profilePics'
+  const path = 'profilePics'
   const imageRef = ref(storage, `/${path}/${id}/${fileName}`)
 
+  // La imágen se comprime para que ocupe menos, y como nunca se va a mostrar como una imágen grande,
+  // no importa que pierda calidad.
   const mainImage = await compressImage({ file, height: 300, width: 300 })
 
   try {
@@ -95,6 +98,8 @@ export const uploadImage = async ({ id, file }) => {
       err instanceof Error
         ? err.message
         : 'Hubo un error al subir la imágen, inténtalo denuevo.'
+
+    // Este error después se handlea en el componente.
     throw new Error(errorMessage)
   }
 }

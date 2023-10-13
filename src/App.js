@@ -28,9 +28,6 @@ import { NotifCancelAppointmentModal } from './components/modals/notif-cancel-ap
 
 function App() {
   const { closeNotif, user, notifModalShowing } = useAppLogic()
-  const { isLogoutModalShowing, closeLogoutModal } = useAutoCloseSession({
-    secondsToLogout: 60 * 30,
-  })
   const defaultCondition = user === USER_POSSIBLE_STATES.NOT_KNOWN
 
   return (
@@ -181,9 +178,7 @@ function App() {
         />
       )}
 
-      {isLogoutModalShowing && (
-        <AutoLogoutModal closeModal={closeLogoutModal} />
-      )}
+      <AutoCloseComponentHandler />
 
       <ToastContainer
         position='top-right'
@@ -200,6 +195,21 @@ function App() {
       />
     </div>
   )
+}
+
+export function AutoCloseComponentHandler() {
+  const { isLogoutModalShowing, closeLogoutModal } = useAutoCloseSession({
+    secondsToLogout: 10,
+  })
+
+  if (isLogoutModalShowing)
+    return (
+      <>
+        <AutoLogoutModal closeModal={closeLogoutModal} />
+      </>
+    )
+
+  return null
 }
 
 export default App
