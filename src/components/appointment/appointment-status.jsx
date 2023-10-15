@@ -124,7 +124,7 @@ export function AppointmentStatus({
             {isLoading[user.role] ? (
               <Spinner style={{ height: 8, width: 8, borderWidth: 1 }} />
             ) : (
-              'Posponer'
+              'Reprogramar'
             )}
           </button>
         )}

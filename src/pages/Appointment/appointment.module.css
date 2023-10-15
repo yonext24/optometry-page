@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .loading {
@@ -80,6 +81,12 @@
   font-weight: 600;
 }
 
+.body p {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
 .estado {
   display: flex;
   flex-direction: column;
@@ -119,8 +126,7 @@
 }
 
 .buttons button {
-  padding: 5px 0;
-  width: 100px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
   border: none;
@@ -136,4 +142,14 @@
 
 .buttons button:last-of-type {
   background-color: red;
+}
+
+.back {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: black;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
 }

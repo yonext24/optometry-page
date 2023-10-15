@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react'
 import styles from './user-profile.module.css'
 import { EditIcon } from '../icons/edit'
 
+const parsedRole = {
+  patient: 'Paciente',
+  doctor: 'Profesional',
+  admin: 'Administrador',
+}
+
 export function NamesEntry({
   setEditedFields,
   nombre,
@@ -76,7 +82,7 @@ export function NamesEntry({
               <EditIcon height={25} width={25} style={{ strokeWidth: 2 }} />
             </button>
           </div>
-          <p>{role === 'patient' ? 'Paciente' : 'Profesional'}</p>
+          <p>{parsedRole[role] ?? ''}</p>
         </>
       )}
     </div>

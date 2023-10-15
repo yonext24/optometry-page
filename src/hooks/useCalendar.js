@@ -8,6 +8,7 @@ import {
 } from '../firebase/utils/appointment'
 
 export const useCalendar = ({ isPatient }) => {
+  const [loading, setLoading] = useState(true)
   const [calendarData, setCalendarData] = useState([])
 
   const user = useUser()
@@ -19,6 +20,8 @@ export const useCalendar = ({ isPatient }) => {
     if (!user) return
     if (!(user.role !== 'admin' || user.id !== id))
       navigate('/login', { replace: true })
+
+    setLoading(true)
 
     const getData = async () => {
       if (isPatient) {
@@ -56,8 +59,10 @@ export const useCalendar = ({ isPatient }) => {
       }
     }
 
-    getData()
+    getData().finally(() => {
+      setLoading(false)
+    })
   }, [user])
 
-  return { calendarData, user }
+  return { calendarData, user, loading }
 }

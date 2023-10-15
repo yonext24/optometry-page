@@ -10,6 +10,7 @@ import { AppointmentStatus } from '../../components/appointment/appointment-stat
 import { CancelAppointmentModal } from '../../components/modals/cancel-appointment-modal/cancel-appointment-modal'
 import { LoginModal } from '../../components/modals/login-modal/login-modal'
 import { PostponeAppointmentModal } from '../../components/modals/postpone-appointment-modal/postpone-appointment-modal'
+import { DownArrowIcon } from '../../components/icons/down-arrow'
 
 function UserLoadingRender({ children, user, status, data }) {
   if (user === USER_POSSIBLE_STATES.NOT_KNOWN || status === 'loading' || !data)
@@ -75,8 +76,15 @@ export function Appointment() {
     return `${day}/${month}/${year} a las ${time}hs`
   }, [data])
 
+  const handleBack = () => {
+    navigate(-1)
+  }
+
   return (
     <main className={styles.main}>
+      <button onClick={handleBack} className={styles.back}>
+        <DownArrowIcon height={30} width={30} style={{transform: 'rotate(90deg)'}} fill='transparent' />
+      </button>
       <UserLoadingRender user={user} status={status} data={data}>
         <section className={styles.card}>
           <span className={styles.date}>{parsedDate}</span>
@@ -87,9 +95,8 @@ export function Appointment() {
           </p>
           <article className={styles.body}>
             <h1>{data?.content?.title}</h1>
-            <p>{data?.content?.descripcion}</p>
+            <p>{data?.content?.description}</p>
           </article>
-
           <AppointmentStatus
             data={data}
             setData={setData}

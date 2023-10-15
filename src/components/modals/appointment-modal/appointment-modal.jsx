@@ -103,7 +103,7 @@ export function AppointmentModal({ closeModal, selectedPatient }) {
         })
 
         fetch(API_APPOINTMENTS, {
-          body: JSON.stringify({ link: url, date, to: doctor.email }),
+          body: JSON.stringify({ link: url, date, to: doctor.email, title, description }),
           headers: {
             Authorization: 'Bearer ' + token,
             'Content-Type': 'application/json',

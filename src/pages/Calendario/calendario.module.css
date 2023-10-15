@@ -19,3 +19,16 @@
   display: flex;
   gap: 5px;
 }
+
+.loading {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  background-color: white;
+  z-index: 10;
+}

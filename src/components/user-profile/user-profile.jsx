@@ -7,6 +7,12 @@ import { PasswordModal } from '../modals/password-modal/password-modal'
 import { DeleteIcon } from '../icons/delete'
 import { DeleteModal } from '../modals/delete-modal/delete-modal'
 
+const parsedRole = {
+  patient: 'Paciente',
+  doctor: 'Profesional',
+  admin: 'Administrador',
+}
+
 export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
   const {
     pageUser: user,
@@ -29,6 +35,7 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
     setPasswordEditing,
     handleDeleteImage,
   } = useGetUserPage({ id, type })
+
 
   return (
     <>
@@ -71,7 +78,7 @@ export function UserProfile({ id, type, closeProfileModal, deletePatient }) {
                   {user.role === 'doctor' ? 'Profesional' : ''} {user.nombre}{' '}
                   {user.apellido}
                 </h1>
-                <p>{user.role === 'patient' ? 'Paciente' : 'Profesional'}</p>
+                <p>{parsedRole[user.role] ?? ''}</p>
               </div>
             )}
 

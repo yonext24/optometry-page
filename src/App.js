@@ -197,6 +197,8 @@ function App() {
   )
 }
 
+// Esto esta en otro componente y no en el app, porque el estado que se encarga de cerrar la sesión
+// hace que todo el arbol de componentes se re-renderice, de esta forma lo evito.
 export function AutoCloseComponentHandler() {
   const { isLogoutModalShowing, closeLogoutModal } = useAutoCloseSession({
     secondsToLogout: 60 * 30,

@@ -3,9 +3,10 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { CalendarEvent } from '../../components/calendar/calendar-event'
 import { useCalendar } from '../../hooks/useCalendar'
+import { Spinner } from '../../components/spinner/spinner'
 
 export function Calendario({ isPatient }) {
-  const { calendarData } = useCalendar({ isPatient })
+  const { calendarData, loading } = useCalendar({ isPatient })
 
   return (
     <main className={styles.main}>
@@ -32,6 +33,12 @@ export function Calendario({ isPatient }) {
           dayGridDay: 'Día',
         }}
       />
+
+      {
+        loading && <div className={styles.loading}>
+          <Spinner />
+        </div>
+      }
     </main>
   )
 }
