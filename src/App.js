@@ -25,6 +25,7 @@ import { NotifAppointmentModal } from './components/modals/notif-appointment-mod
 import useAutoCloseSession from './hooks/useAutoCloseSession'
 import { AutoLogoutModal } from './components/modals/auto-logout-modal/auto-logout-modal'
 import { NotifCancelAppointmentModal } from './components/modals/notif-cancel-appointment-modal/notif-cancel-appointment-modal'
+import { HabeasDataModal } from './components/modals/habeas-data-modal/habeas-data-modal'
 
 function App() {
   const { closeNotif, user, notifModalShowing } = useAppLogic()
@@ -173,6 +174,12 @@ function App() {
         )}
       {notifModalShowing && notifModalShowing.type === 'cancel-appointment' && (
         <NotifCancelAppointmentModal
+          closeModal={closeNotif}
+          {...notifModalShowing.params}
+        />
+      )}
+      {notifModalShowing && notifModalShowing.type === 'habeas-data' && (
+        <HabeasDataModal
           closeModal={closeNotif}
           {...notifModalShowing.params}
         />
